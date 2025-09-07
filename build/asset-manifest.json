@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/Ashinshana_Ishan/static/css/main.f5a3c92d.css",
-    "main.js": "/Ashinshana_Ishan/static/js/main.d569ebb8.js",
+    "main.css": "/Ashinshana_Ishan/static/css/main.aeef905b.css",
+    "main.js": "/Ashinshana_Ishan/static/js/main.b6667892.js",
     "static/js/453.438d9e50.chunk.js": "/Ashinshana_Ishan/static/js/453.438d9e50.chunk.js",
-    "static/media/profile.jpg": "/Ashinshana_Ishan/static/media/profile.79720a1db6909926a60c.jpg",
+    "static/media/profile.jpg": "/Ashinshana_Ishan/static/media/profile.f1785e744accc4d27f4c.jpg",
     "static/media/fun_web.png": "/Ashinshana_Ishan/static/media/fun_web.518b64323f62743efbeb.png",
     "static/media/portfolio.png": "/Ashinshana_Ishan/static/media/portfolio.9394a0862d6877dab9e0.png",
     "static/media/java.png": "/Ashinshana_Ishan/static/media/java.71abe976f94d8d316f1d.png",
     "static/media/bank.png": "/Ashinshana_Ishan/static/media/bank.654fc163ff64a2d2de2a.png",
     "index.html": "/Ashinshana_Ishan/index.html",
-    "main.f5a3c92d.css.map": "/Ashinshana_Ishan/static/css/main.f5a3c92d.css.map",
-    "main.d569ebb8.js.map": "/Ashinshana_Ishan/static/js/main.d569ebb8.js.map",
+    "main.aeef905b.css.map": "/Ashinshana_Ishan/static/css/main.aeef905b.css.map",
+    "main.b6667892.js.map": "/Ashinshana_Ishan/static/js/main.b6667892.js.map",
     "453.438d9e50.chunk.js.map": "/Ashinshana_Ishan/static/js/453.438d9e50.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f5a3c92d.css",
-    "static/js/main.d569ebb8.js"
+    "static/css/main.aeef905b.css",
+    "static/js/main.b6667892.js"
   ]
 }
