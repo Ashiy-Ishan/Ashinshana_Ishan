@@ -33,12 +33,13 @@ const portfolioConfig = {
     { name: "React", icon: "devicon-react-original", level: 10 },
     { name: "Java", icon: "devicon-java-plain", level: 20 },
     { name: "Python", icon: "devicon-python-plain", level: 10 },
-    { name: "HTML5 & CSS3", icon: "devicon-html5-plain", level: 35 },
+    { name: "HTML5 & CSS3", icon: "devicon-html5-plain", level: 25 },
     { name: "JavaScript", icon: "devicon-javascript-plain", level: 5 },
     { name: "Figma", icon: "devicon-figma-plain", level: 20 },
     { name: "Photoshop", icon: "devicon-photoshop-plain", level: 30 },
     { name: "Premiere Pro", icon: "devicon-premierepro-plain", level: 40 },
     { name: "Ballerina", icon: "devicon-ballerina-plain", level: 5 },
+    { name: "Kotline", icon: "devicon-kotlin-plain", level: 2 },
   ],
   projects: [
     {
