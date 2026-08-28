@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured, AUTHORIZED_ADMIN_EMAIL } from '../config/firebase';
 
-const LOCAL_AUTH_KEY = 'ashiy_portfolio_mock_auth';
+const SESSION_AUTH_KEY = 'ashiy_portfolio_session_auth';
 
 export const authService = {
   // Validate authorized admin email
@@ -23,13 +23,10 @@ export const authService = {
   formatAuthError(error) {
     const code = error?.code || '';
     if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
-      return `Invalid password for ${AUTHORIZED_ADMIN_EMAIL}. If you haven't set a password in Firebase Console, please click "Sign in with Google" above.`;
+      return `Invalid credentials for ${AUTHORIZED_ADMIN_EMAIL}. Please check your password and try again.`;
     }
     if (code === 'auth/too-many-requests') {
-      return 'Access temporarily blocked due to many failed attempts. Please try again later or use Google Sign-In.';
-    }
-    if (code === 'auth/popup-closed-by-user') {
-      return 'Google Sign-In popup was closed before completing. Please try again.';
+      return 'Access temporarily blocked due to many failed attempts. Please try again later.';
     }
     return error.message || 'Authentication failed. Please check your credentials.';
   },
@@ -51,17 +48,17 @@ export const authService = {
       }
     } else {
       // Mock Auth Mode for local offline testing
-      if (email.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase() && password.length >= 6) {
+      if (email.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase() && password && password.length >= 6) {
         const mockUser = {
           uid: 'admin-ashinshana-001',
           email: AUTHORIZED_ADMIN_EMAIL,
           displayName: 'Ashiy Ishan (Admin)',
           isDemo: false
         };
-        localStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(mockUser));
+        sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(mockUser));
         return mockUser;
       } else {
-        throw new Error(`Access Denied: Only ${AUTHORIZED_ADMIN_EMAIL} is authorized.`);
+        throw new Error(`Access Denied: Invalid credentials for ${AUTHORIZED_ADMIN_EMAIL}.`);
       }
     }
   },
@@ -82,14 +79,12 @@ export const authService = {
         throw new Error(this.formatAuthError(err));
       }
     } else {
-      // Local Mock Google Sign-In for offline dev
       const mockUser = {
         uid: 'google-admin-ashinshana-001',
         email: AUTHORIZED_ADMIN_EMAIL,
-        displayName: 'Ashiy Ishan (Google Admin)',
-        photoURL: 'https://lh3.googleusercontent.com/a/default-user'
+        displayName: 'Ashiy Ishan (Google Admin)'
       };
-      localStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(mockUser));
+      sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(mockUser));
       return mockUser;
     }
   },
@@ -99,7 +94,8 @@ export const authService = {
     if (isFirebaseConfigured && auth) {
       await signOut(auth);
     }
-    localStorage.removeItem(LOCAL_AUTH_KEY);
+    sessionStorage.removeItem(SESSION_AUTH_KEY);
+    localStorage.removeItem('ashiy_portfolio_mock_auth');
     return true;
   },
 
@@ -132,14 +128,15 @@ export const authService = {
         }
       });
     } else {
-      const localStored = localStorage.getItem(LOCAL_AUTH_KEY);
-      if (localStored) {
+      const stored = sessionStorage.getItem(SESSION_AUTH_KEY) || localStorage.getItem('ashiy_portfolio_mock_auth');
+      if (stored) {
         try {
-          const parsed = JSON.parse(localStored);
+          const parsed = JSON.parse(stored);
           if (parsed.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
             callback(parsed);
           } else {
-            localStorage.removeItem(LOCAL_AUTH_KEY);
+            sessionStorage.removeItem(SESSION_AUTH_KEY);
+            localStorage.removeItem('ashiy_portfolio_mock_auth');
             callback(null);
           }
         } catch (e) {
@@ -161,11 +158,15 @@ export const authService = {
       }
       return null;
     }
-    const localStored = localStorage.getItem(LOCAL_AUTH_KEY);
-    if (localStored) {
-      const parsed = JSON.parse(localStored);
-      if (parsed.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-        return parsed;
+    const stored = sessionStorage.getItem(SESSION_AUTH_KEY) || localStorage.getItem('ashiy_portfolio_mock_auth');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
+          return parsed;
+        }
+      } catch (e) {
+        return null;
       }
     }
     return null;

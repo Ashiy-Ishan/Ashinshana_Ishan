@@ -35,7 +35,15 @@ export const AdminDashboard = ({ onExitAdmin }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (!isAuthenticated) {
+  const handleLogout = async () => {
+    await logout();
+    if (onExitAdmin) {
+      onExitAdmin();
+    }
+  };
+
+  // Strictly guard the entire dashboard view against unauthorized URL access
+  if (!isAuthenticated || !currentUser) {
     return <AdminLogin onCancel={onExitAdmin} />;
   }
 
@@ -133,7 +141,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
               <ExternalLink size={15} />
               <span>Public Site</span>
             </a>
-            <button type="button" className="btn-sidebar-logout" onClick={logout} title="Log out">
+            <button type="button" className="btn-sidebar-logout" onClick={handleLogout} title="Log out">
               <LogOut size={16} />
             </button>
           </div>
@@ -166,7 +174,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
               <ExternalLink size={14} />
               <span>View Live Portfolio</span>
             </a>
-            <button type="button" className="btn-top-logout" onClick={logout}>
+            <button type="button" className="btn-top-logout" onClick={handleLogout}>
               <LogOut size={14} />
               <span>Logout</span>
             </button>

@@ -1,5 +1,5 @@
 // src/data/initialData.js
-import profilePhoto from '../Iamage/profile.jpg';
+import profilePhoto from '../Iamage/profile.png';
 import rPhoto from '../Iamage/r.jpg';
 import portfolioImg from '../Iamage/portfolio.png';
 import bankImg from '../Iamage/bank.png';
