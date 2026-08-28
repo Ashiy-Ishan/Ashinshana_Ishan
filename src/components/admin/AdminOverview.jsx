@@ -1,5 +1,5 @@
 // src/components/admin/AdminOverview.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Code2, 
   Workflow, 
@@ -8,9 +8,13 @@ import {
   Image, 
   Trash2, 
   CheckCircle,
-  Layers
+  Layers,
+  Database,
+  Cloud,
+  Loader2
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { IMAGEKIT_URL_ENDPOINT } from '../../config/imagekit';
 
 export const AdminOverview = ({ onNavigateTab }) => {
   const { 
@@ -21,8 +25,26 @@ export const AdminOverview = ({ onNavigateTab }) => {
     youtubeVideos, 
     contactMessages, 
     gallery,
-    deleteContactMessage 
+    deleteContactMessage,
+    syncAllToFirestore 
   } = usePortfolio();
+
+  const [syncing, setSyncing] = useState(false);
+  const [syncSuccess, setSyncSuccess] = useState(false);
+
+  const handleSyncFirestore = async () => {
+    try {
+      setSyncing(true);
+      setSyncSuccess(false);
+      await syncAllToFirestore();
+      setSyncSuccess(true);
+      setTimeout(() => setSyncSuccess(false), 4000);
+    } catch (err) {
+      alert(`Firestore sync error: ${err.message}`);
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const stats = [
     {
@@ -71,6 +93,44 @@ export const AdminOverview = ({ onNavigateTab }) => {
           <p className="admin-pane-desc">
             Welcome, <strong>{profile?.name}</strong>. Here is the operational state of your personal brand platform.
           </p>
+        </div>
+
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleSyncFirestore}
+          disabled={syncing}
+        >
+          {syncing ? (
+            <>
+              <Loader2 size={16} className="animate-spin" />
+              <span>Syncing to Firestore...</span>
+            </>
+          ) : (
+            <>
+              <Database size={16} />
+              <span>{syncSuccess ? 'Cloud Sync Complete!' : 'Sync All Data to Cloud Firestore'}</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Cloud Integration Banner */}
+      <div className="cloud-services-banner">
+        <div className="cloud-service-card">
+          <Database size={20} className="service-icon firestore" />
+          <div>
+            <strong className="service-name">Firebase Cloud Firestore</strong>
+            <p className="service-sub">Project: <code>ashinshanaishan-dad93</code> (Realtime Sync Active)</p>
+          </div>
+        </div>
+
+        <div className="cloud-service-card">
+          <Cloud size={20} className="service-icon imagekit" />
+          <div>
+            <strong className="service-name">ImageKit.io Media CDN</strong>
+            <p className="service-sub">Endpoint: <code>{IMAGEKIT_URL_ENDPOINT}</code></p>
+          </div>
         </div>
       </div>
 

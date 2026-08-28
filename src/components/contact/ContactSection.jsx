@@ -5,10 +5,9 @@ import {
   Send, 
   CheckCircle, 
   AlertCircle, 
-  Loader2, 
-  Phone
+  Loader2 
 } from 'lucide-react';
-import { Github, Linkedin, Youtube, Instagram, Facebook } from '../common/Icons';
+import { Github, Linkedin, Youtube, Instagram, Facebook, Whatsapp } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 export const ContactSection = () => {
@@ -49,7 +48,7 @@ export const ContactSection = () => {
       setStatus({
         submitting: false,
         success: false,
-        error: 'Could not send directly. You can also contact me directly via email below.'
+        error: 'Could not send directly. You can also connect via direct email or social channels below.'
       });
     }
   };
@@ -59,7 +58,7 @@ export const ContactSection = () => {
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
-    window.location.href = `mailto:${profile?.email || 'ashinshanaishan.uni@gmail.com'}?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${profile?.email || 'ashinshanaishan@gmail.com'}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -75,47 +74,15 @@ export const ContactSection = () => {
       </div>
 
       <div className="contact-grid-wrapper">
-        {/* Left Column: Direct Contact Info & Socials */}
+        {/* Left Column: Social Media & Direct Channels */}
         <div className="contact-info-panel">
           <div className="contact-panel-card">
-            <h3 className="panel-title">Direct Channels</h3>
+            <h3 className="panel-title">Social & Professional Hub</h3>
             <p className="panel-desc">
-              Feel free to reach out directly through any of these networks. I usually respond within 24–48 hours.
+              Connect with me across official networks or send an encrypted message directly through the contact terminal.
             </p>
 
-            <div className="contact-methods-list">
-              {profile?.email && (
-                <a href={`mailto:${profile.email}`} className="contact-method-item">
-                  <div className="method-icon-box email">
-                    <Mail size={18} />
-                  </div>
-                  <div className="method-meta">
-                    <span className="method-label">Official Email</span>
-                    <span className="method-value">{profile.email}</span>
-                  </div>
-                </a>
-              )}
-
-              {profile?.whatsapp && (
-                <a 
-                  href={`https://wa.me/${profile.whatsapp}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="contact-method-item"
-                >
-                  <div className="method-icon-box whatsapp">
-                    <Phone size={18} />
-                  </div>
-                  <div className="method-meta">
-                    <span className="method-label">WhatsApp Direct</span>
-                    <span className="method-value">+{profile.whatsapp}</span>
-                  </div>
-                </a>
-              )}
-            </div>
-
             <div className="social-hub-wrapper">
-              <h4 className="social-hub-title">Professional & Creative Profiles</h4>
               <div className="social-hub-grid">
                 {profile?.github && (
                   <a
@@ -123,7 +90,7 @@ export const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-hub-btn github"
-                    title="GitHub"
+                    title="GitHub Repository & Code"
                   >
                     <Github size={18} />
                     <span>GitHub</span>
@@ -136,7 +103,7 @@ export const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-hub-btn linkedin"
-                    title="LinkedIn"
+                    title="LinkedIn Professional Profile"
                   >
                     <Linkedin size={18} />
                     <span>LinkedIn</span>
@@ -149,10 +116,23 @@ export const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-hub-btn youtube"
-                    title="YouTube"
+                    title="YouTube Channel"
                   >
                     <Youtube size={18} />
                     <span>YouTube</span>
+                  </a>
+                )}
+
+                {profile?.whatsapp && (
+                  <a
+                    href={`https://wa.me/${profile.whatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-hub-btn whatsapp"
+                    title="WhatsApp Direct Message"
+                  >
+                    <Whatsapp size={18} />
+                    <span>WhatsApp</span>
                   </a>
                 )}
 
@@ -162,7 +142,7 @@ export const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-hub-btn instagram"
-                    title="Instagram"
+                    title="Instagram Profile"
                   >
                     <Instagram size={18} />
                     <span>Instagram</span>
@@ -175,10 +155,21 @@ export const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-hub-btn facebook"
-                    title="Facebook"
+                    title="Facebook Profile"
                   >
                     <Facebook size={18} />
                     <span>Facebook</span>
+                  </a>
+                )}
+
+                {profile?.email && (
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="social-hub-btn email"
+                    title="Send Email"
+                  >
+                    <Mail size={18} />
+                    <span>Email Direct</span>
                   </a>
                 )}
               </div>
@@ -212,7 +203,7 @@ export const ContactSection = () => {
                     onClick={handleDirectEmail}
                     className="btn-link-fallback"
                   >
-                    Launch Default Email Client
+                    Launch Email Client
                   </button>
                 </div>
               </div>
@@ -292,14 +283,6 @@ export const ContactSection = () => {
                     <span>Send Message</span>
                   </>
                 )}
-              </button>
-
-              <button
-                type="button"
-                className="btn btn-secondary-text"
-                onClick={handleDirectEmail}
-              >
-                <span>Or send via Gmail / Mail Client</span>
               </button>
             </div>
           </form>

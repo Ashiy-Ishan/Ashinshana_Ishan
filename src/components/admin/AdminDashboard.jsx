@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
   User, 
+  Camera,
   Layers, 
   Workflow, 
   Package, 
@@ -20,6 +21,7 @@ import { useAuth } from '../../context/AuthContext';
 import { AdminLogin } from './AdminLogin';
 import { AdminOverview } from './AdminOverview';
 import { AdminProfile } from './AdminProfile';
+import { AdminHeroImages } from './AdminHeroImages';
 import { AdminSkills } from './AdminSkills';
 import { AdminProjects } from './AdminProjects';
 import { AdminPublished } from './AdminPublished';
@@ -39,6 +41,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
 
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={18} /> },
+    { id: 'hero-images', label: 'Role Portrait Images', icon: <Camera size={18} /> },
     { id: 'profile', label: 'Profile & Identity', icon: <User size={18} /> },
     { id: 'skills', label: 'Developer Skills', icon: <Layers size={18} /> },
     { id: 'projects', label: 'Projects Showcase', icon: <Workflow size={18} /> },
@@ -53,6 +56,8 @@ export const AdminDashboard = ({ onExitAdmin }) => {
     switch (activeTab) {
       case 'overview':
         return <AdminOverview onNavigateTab={(tab) => setActiveTab(tab)} />;
+      case 'hero-images':
+        return <AdminHeroImages />;
       case 'profile':
         return <AdminProfile />;
       case 'skills':

@@ -4,12 +4,13 @@ import { AboutSection } from '../about/AboutSection';
 import { DeveloperSection } from '../developer/DeveloperSection';
 import { CreatorSection } from '../creator/CreatorSection';
 import { ContactSection } from '../contact/ContactSection';
+import { PersonalAchievements } from '../personal/PersonalAchievements';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 export const RoleContent = ({ selectedRole }) => {
   const { siteSettings } = usePortfolio();
   const [displayRole, setDisplayRole] = useState(selectedRole);
-  const [transitionState, setTransitionState] = useState('entering'); // 'exiting', 'entering', 'active'
+  const [transitionState, setTransitionState] = useState('active'); // Start active immediately to prevent lag
 
   useEffect(() => {
     if (selectedRole !== displayRole) {
@@ -82,6 +83,9 @@ const PersonalContent = ({ siteSettings }) => {
     <div className="role-view personal-role-view">
       <AboutSection />
 
+      {/* Batch Certificates & Achievements Section */}
+      <PersonalAchievements />
+
       {/* Personal Contact & Connections */}
       {siteSettings?.showContactForm !== false && (
         <ContactSection />
@@ -89,4 +93,3 @@ const PersonalContent = ({ siteSettings }) => {
     </div>
   );
 };
-

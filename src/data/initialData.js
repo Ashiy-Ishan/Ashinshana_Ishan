@@ -28,7 +28,7 @@ export const initialData = {
     heroImagePersonal: profilePhoto,
     highResPhoto: rPhoto,
     resumeUrl: 'https://github.com/Ashiy-Ishan',
-    email: 'ashinshanaishan.uni@gmail.com',
+    email: 'ashinshanaishan@gmail.com',
     whatsapp: '94759428249',
     github: 'https://github.com/Ashiy-Ishan',
     linkedin: 'https://www.linkedin.com/in/ashinshana-ishan-73b228318',

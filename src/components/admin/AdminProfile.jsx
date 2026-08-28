@@ -173,43 +173,64 @@ export const AdminProfile = () => {
         {/* Section 3: Hero Portraits Image Configuration */}
         <div className="admin-form-card">
           <h3 className="card-section-title">
-            <Image size={18} /> Hero Portraits Image Sources
+            <Image size={18} /> Hero & Role Identity Image Manager
           </h3>
           <p className="card-sub-info">
-            Enter direct image URLs or relative asset paths for the 3 identity modes.
+            Manage and update website portrait images for Personal, Developer, and Creator roles. Supports ImageKit.io CDN URLs and custom web links.
           </p>
 
           <div className="form-grid-3">
-            <div className="form-field">
-              <label>Personal / Center Hero Image</label>
+            {/* Personal Role Image */}
+            <div className="form-field role-image-box">
+              <label>Personal Role Image</label>
+              <div className="role-thumb-preview">
+                <img
+                  src={formData.heroImagePersonal || formData.personalImage || formData.profileImage}
+                  alt="Personal Role Preview"
+                />
+              </div>
               <input
                 type="text"
                 name="heroImagePersonal"
                 value={formData.heroImagePersonal || ''}
                 onChange={handleChange}
-                placeholder="Image URL or path"
+                placeholder="https://ik.imagekit.io/x2eerczu0/... or image URL"
               />
             </div>
 
-            <div className="form-field">
-              <label>Developer Hero Image</label>
+            {/* Developer Role Image */}
+            <div className="form-field role-image-box">
+              <label>Developer Role Image</label>
+              <div className="role-thumb-preview">
+                <img
+                  src={formData.heroImageDeveloper || formData.developerImage || formData.profileImage}
+                  alt="Developer Role Preview"
+                />
+              </div>
               <input
                 type="text"
                 name="heroImageDeveloper"
                 value={formData.heroImageDeveloper || ''}
                 onChange={handleChange}
-                placeholder="Image URL or path"
+                placeholder="https://ik.imagekit.io/x2eerczu0/... or image URL"
               />
             </div>
 
-            <div className="form-field">
-              <label>Creator / YouTuber Hero Image</label>
+            {/* Creator Role Image */}
+            <div className="form-field role-image-box">
+              <label>Creator / YouTuber Role Image</label>
+              <div className="role-thumb-preview">
+                <img
+                  src={formData.heroImageCreator || formData.creatorImage || formData.profileImage}
+                  alt="Creator Role Preview"
+                />
+              </div>
               <input
                 type="text"
                 name="heroImageCreator"
                 value={formData.heroImageCreator || ''}
                 onChange={handleChange}
-                placeholder="Image URL or path"
+                placeholder="https://ik.imagekit.io/x2eerczu0/... or image URL"
               />
             </div>
           </div>

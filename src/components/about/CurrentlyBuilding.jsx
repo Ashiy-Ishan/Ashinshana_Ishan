@@ -48,7 +48,7 @@ export const CurrentlyBuilding = () => {
   ];
 
   return (
-    <div className="currently-building-container">
+    <section id="currently" className="currently-building-container">
       <div className="currently-header">
         <div className="live-pulse-wrapper">
           <span className="live-pulse-dot" />
@@ -78,6 +78,6 @@ export const CurrentlyBuilding = () => {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };

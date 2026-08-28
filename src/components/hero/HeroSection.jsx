@@ -9,22 +9,25 @@ import {
   Terminal, 
   Play, 
   ArrowRight, 
-  ChevronDown 
+  ChevronDown,
+  GraduationCap,
+  Cpu,
+  Film
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 export const HeroSection = ({ activeRole, setActiveRole }) => {
-  const { profile } = usePortfolio();
+  const { profile, youtubeChannel } = usePortfolio();
 
   const roleDetails = {
     personal: {
-      tag: 'SPLIT / COMBINED IDENTITY',
+      tag: 'PERSONAL & UNDERGRADUATE IDENTITY',
       badgeClass: 'badge-split',
       headlinePrefix: "I'M",
       highlight: 'ASHIY ISHAN',
       subtitle: 'Developer • Creator • Builder',
       statement: profile?.statement || 'I build software, create content, and turn ideas into things people can use.',
-      primaryBtnText: 'Explore Universe',
+      primaryBtnText: 'Explore My Journey',
       primaryBtnHref: '#about',
       secondaryBtnText: 'Get In Touch',
       secondaryBtnHref: '#contact',
@@ -41,7 +44,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
       primaryBtnText: 'View Dev Projects',
       primaryBtnHref: '#projects',
       secondaryBtnText: 'Technical Skills',
-      secondaryBtnHref: '#developer',
+      secondaryBtnHref: '#skills',
       accentGlow: 'glow-developer',
       techBadge: '<code /> React • Java • Python • Cloud'
     },
@@ -94,33 +97,24 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
             <span className="hero-motto-sub">{profile?.motto || 'I BUILD. I CREATE. I SHARE.'}</span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="hero-headline">
-            <span className="headline-prefix">{current.headlinePrefix} </span>
-            <span className="headline-highlight gradient-text">{current.highlight}</span>
-          </h1>
+          {/* Main Headline with smooth role text morphing */}
+          <div className="hero-headline-wrap">
+            <h1 className={`hero-headline role-text-${activeRole}`}>
+              <span className="headline-prefix">{current.headlinePrefix} </span>
+              <span className="headline-highlight gradient-text">{current.highlight}</span>
+            </h1>
+          </div>
 
           {/* Subtitle / Title */}
-          <h2 className="hero-subhead">{current.subtitle}</h2>
+          <h2 className={`hero-subhead role-text-${activeRole}`}>{current.subtitle}</h2>
 
           {/* Core Philosophy Statement */}
-          <p className="hero-statement">{current.statement}</p>
+          <p className={`hero-statement role-text-${activeRole}`}>{current.statement}</p>
 
-          {/* Role Selectors: DEVELOPER, PERSONAL, CREATOR */}
+          {/* Role Selectors: PERSONAL, DEVELOPER, CREATOR */}
           <div className="role-selector-container">
             <p className="selector-label">EXPLORE IDENTITY SIDES:</p>
             <div className="role-tabs" role="tablist" aria-label="Identity Switcher">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeRole === 'developer'}
-                className={`role-tab-btn tab-dev ${activeRole === 'developer' ? 'active' : ''}`}
-                onClick={() => setActiveRole('developer')}
-              >
-                <Code2 size={18} />
-                <span>DEVELOPER</span>
-              </button>
-
               <button
                 type="button"
                 role="tab"
@@ -130,6 +124,17 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
               >
                 <User size={18} />
                 <span>PERSONAL</span>
+              </button>
+
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeRole === 'developer'}
+                className={`role-tab-btn tab-dev ${activeRole === 'developer' ? 'active' : ''}`}
+                onClick={() => setActiveRole('developer')}
+              >
+                <Code2 size={18} />
+                <span>DEVELOPER</span>
               </button>
 
               <button
@@ -166,33 +171,46 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
           </div>
         </div>
 
-        {/* Right Column: 3-Side Cinematic Interactive Portrait Compositor */}
+        {/* Right Column: Clean Floating Role Image (No Outer Enclosing Card) */}
         <div className="hero-visual-col" aria-hidden="true">
           <div className={`portrait-stage role-${activeRole}`}>
             {/* Ambient Backlight Halo */}
             <div className="portrait-halo" />
 
-            {/* Interactive Portrait Layers */}
-            {/* 1. Personal / Split Portrait (Center / Default) */}
-            <div className={`portrait-card layer-personal ${activeRole === 'personal' ? 'dominant' : 'background'}`}>
+            {/* 1. Personal / Split Clean Image Layer */}
+            <div className={`clean-role-image-wrapper layer-personal ${activeRole === 'personal' ? 'dominant' : 'background'}`}>
               <img
                 src={personalImg}
                 alt="Ashiy Ishan Personal Identity"
-                className="portrait-img"
+                className="clean-role-portrait"
               />
-              <div className="portrait-vignette" />
               <div className="portrait-badge badge-personal">
                 <Sparkles size={14} />
-                <span>Split Core: Dev & Creator</span>
+                <span>Undergraduate & Creator</span>
               </div>
+
+              {/* Live Role Widget: Personal Academic Radar */}
+              {activeRole === 'personal' && (
+                <div className="role-live-widget widget-personal animate-pop">
+                  <div className="widget-header">
+                    <GraduationCap size={16} className="widget-icon" />
+                    <span className="widget-title">SUSL Computing</span>
+                    <span className="live-dot pulse-blue" />
+                  </div>
+                  <div className="widget-body">
+                    <p className="widget-main-stat">BSc Hons (IS)</p>
+                    <p className="widget-sub-stat">Sabaragamuwa University '26</p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* 2. Developer Portrait (Tech & Software Focus) */}
-            <div className={`portrait-card layer-developer ${activeRole === 'developer' ? 'dominant' : 'background'}`}>
+            {/* 2. Developer Clean Image Layer */}
+            <div className={`clean-role-image-wrapper layer-developer ${activeRole === 'developer' ? 'dominant' : 'background'}`}>
               <img
                 src={developerImg}
                 alt="Ashiy Ishan Software Developer"
-                className="portrait-img"
+                className="clean-role-portrait"
               />
               <div className="developer-overlay-hud">
                 <div className="hud-code-snippet">
@@ -200,21 +218,40 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                   <span>const role = 'Builder';</span>
                 </div>
               </div>
-              <div className="portrait-vignette" />
               <div className="portrait-badge badge-dev">
                 <Code2 size={14} />
                 <span>Software Developer</span>
               </div>
+
+              {/* Live Role Widget: Developer Telemetry HUD */}
+              {activeRole === 'developer' && (
+                <div className="role-live-widget widget-dev animate-pop">
+                  <div className="widget-header">
+                    <Cpu size={16} className="widget-icon" />
+                    <span className="widget-title">Engine Telemetry</span>
+                    <span className="live-dot pulse-green" />
+                  </div>
+                  <div className="widget-body">
+                    <div className="telemetry-row">
+                      <span className="lbl">Status:</span>
+                      <span className="val green">99.9% Active</span>
+                    </div>
+                    <div className="telemetry-row">
+                      <span className="lbl">Stack:</span>
+                      <span className="val">React • Java • MySQL</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* 3. YouTuber / Creator Portrait (Creator Focus with Floating Camera Element) */}
-            <div className={`portrait-card layer-creator ${activeRole === 'creator' ? 'dominant' : 'background'}`}>
+            {/* 3. YouTuber / Creator Clean Image Layer */}
+            <div className={`clean-role-image-wrapper layer-creator ${activeRole === 'creator' ? 'dominant' : 'background'}`}>
               <img
                 src={creatorImg}
                 alt="Ashiy Ishan Tech Creator"
-                className="portrait-img"
+                className="clean-role-portrait"
               />
-              {/* Subtle Creative Element: Professional Camera floating beside/behind shoulder (does not cover face) */}
               <div className="floating-camera-prop" title="Content Creator Camera">
                 <div className="camera-housing">
                   <Camera size={26} className="camera-icon" />
@@ -224,15 +261,44 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                   <Play size={10} /> 4K 60FPS
                 </div>
               </div>
-              <div className="portrait-vignette" />
+
               <div className="portrait-badge badge-creator">
                 <Video size={14} />
                 <span>YouTube Creator</span>
               </div>
+
+              {/* Live Role Widget: Creator Channel Stats */}
+              {activeRole === 'creator' && (
+                <div className="role-live-widget widget-creator animate-pop">
+                  <div className="widget-header">
+                    <Film size={16} className="widget-icon" />
+                    <span className="widget-title">YouTube Studio</span>
+                    <span className="live-dot pulse-red" />
+                  </div>
+                  <div className="widget-body">
+                    <div className="telemetry-row">
+                      <span className="lbl">Subscribers:</span>
+                      <span className="val red">{youtubeChannel?.subscribers || '1.5K+'}</span>
+                    </div>
+                    <div className="telemetry-row">
+                      <span className="lbl">Total Views:</span>
+                      <span className="val">{youtubeChannel?.views || '48K+'}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Quick click-to-switch miniature triggers on the portrait stage */}
+            {/* Quick click-to-switch miniature triggers */}
             <div className="stage-switch-triggers">
+              <button 
+                type="button"
+                className={`stage-trigger ${activeRole === 'personal' ? 'active' : ''}`}
+                onClick={() => setActiveRole('personal')}
+                title="Switch to Personal Mode"
+              >
+                <User size={14} /> PERSONAL
+              </button>
               <button 
                 type="button"
                 className={`stage-trigger ${activeRole === 'developer' ? 'active' : ''}`}
@@ -240,14 +306,6 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 title="Switch to Developer Mode"
               >
                 <Code2 size={14} /> DEV
-              </button>
-              <button 
-                type="button"
-                className={`stage-trigger ${activeRole === 'personal' ? 'active' : ''}`}
-                onClick={() => setActiveRole('personal')}
-                title="Switch to Personal Split Mode"
-              >
-                <User size={14} /> ALL
               </button>
               <button 
                 type="button"
@@ -266,10 +324,10 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
       <button 
         type="button" 
         className="scroll-down-cue" 
-        onClick={() => scrollTo('#about')}
-        aria-label="Scroll to About Section"
+        onClick={() => scrollTo(current.primaryBtnHref)}
+        aria-label="Scroll down to content"
       >
-        <span className="scroll-cue-text">SCROLL TO DISCOVER</span>
+        <span className="scroll-cue-text">DISCOVER MORE</span>
         <ChevronDown size={20} className="scroll-cue-icon" />
       </button>
     </section>

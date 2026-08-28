@@ -36,6 +36,55 @@ const setCachedData = (key, value) => {
 };
 
 export const portfolioService = {
+  // --- Sync All Baseline Data to Cloud Firestore ---
+  async syncAllToFirestore() {
+    if (!isFirebaseConfigured || !db) {
+      throw new Error('Firestore is not configured. Please check your credentials.');
+    }
+
+    // 1. Profile
+    await setDoc(doc(db, 'profiles', 'main'), initialData.profile, { merge: true });
+
+    // 2. Skills
+    for (const skill of initialData.skills) {
+      await setDoc(doc(db, 'skills', skill.id), skill, { merge: true });
+    }
+
+    // 3. Projects
+    for (const project of initialData.projects) {
+      await setDoc(doc(db, 'projects', project.id), project, { merge: true });
+    }
+
+    // 4. Published Projects
+    for (const pub of initialData.publishedProjects) {
+      await setDoc(doc(db, 'publishedProjects', pub.id), pub, { merge: true });
+    }
+
+    // 5. YouTube Channel & Videos
+    await setDoc(doc(db, 'youtubeChannel', 'main'), initialData.youtubeChannel, { merge: true });
+    for (const video of initialData.youtubeVideos) {
+      await setDoc(doc(db, 'youtubeVideos', video.id), video, { merge: true });
+    }
+
+    // 6. Currently Building Radar
+    await setDoc(doc(db, 'currentlyBuilding', 'main'), initialData.currentlyBuilding, { merge: true });
+
+    // 7. Timeline
+    for (const item of initialData.timeline) {
+      await setDoc(doc(db, 'timeline', item.id), item, { merge: true });
+    }
+
+    // 8. Gallery
+    for (const item of initialData.gallery) {
+      await setDoc(doc(db, 'gallery', item.id), item, { merge: true });
+    }
+
+    // 9. Site Settings
+    await setDoc(doc(db, 'siteSettings', 'main'), initialData.siteSettings, { merge: true });
+
+    return true;
+  },
+
   // --- Profile ---
   async getProfile() {
     if (isFirebaseConfigured && db) {
@@ -46,6 +95,9 @@ export const portfolioService = {
           const data = { ...initialData.profile, ...docSnap.data() };
           setCachedData('profile', data);
           return data;
+        } else {
+          // Auto-seed profile if doc doesn't exist yet
+          await setDoc(docRef, initialData.profile);
         }
       } catch (err) {
         console.warn('Failed to fetch profile from Firestore, using cache/seed:', err);

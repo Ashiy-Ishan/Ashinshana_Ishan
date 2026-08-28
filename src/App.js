@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import { AuthProvider } from './context/AuthContext';
 import { PortfolioProvider } from './context/PortfolioContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { HeroSection } from './components/hero/HeroSection';
@@ -11,7 +12,7 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 
 // Inner component with portfolio state & active section tracking
 function PortfolioApp() {
-  const [activeRole, setActiveRole] = useState('personal'); // 'personal', 'developer', 'creator'
+  const [activeRole, setActiveRole] = useState('personal'); // Initial default role: 'personal'
   const [activeSection, setActiveSection] = useState('home');
   const [isAdminView, setIsAdminView] = useState(false);
 
@@ -98,11 +99,13 @@ function PortfolioApp() {
 
 function App() {
   return (
-    <AuthProvider>
-      <PortfolioProvider>
-        <PortfolioApp />
-      </PortfolioProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <PortfolioProvider>
+          <PortfolioApp />
+        </PortfolioProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

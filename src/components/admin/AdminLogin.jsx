@@ -1,12 +1,12 @@
 // src/components/admin/AdminLogin.jsx
 import React, { useState } from 'react';
-import { Lock, Mail, Shield, AlertCircle, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
+import { Lock, Mail, Shield, AlertCircle, ArrowLeft, Loader2, KeyRound } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { isFirebaseConfigured } from '../../config/firebase';
+import { AUTHORIZED_ADMIN_EMAIL } from '../../config/firebase';
 
 export const AdminLogin = ({ onCancel }) => {
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(AUTHORIZED_ADMIN_EMAIL);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -33,20 +33,15 @@ export const AdminLogin = ({ onCancel }) => {
             <Shield size={32} />
           </div>
           <h2 className="login-title">Ashiy Ishan Portfolio CMS</h2>
-          <p className="login-subtitle">Authenticate to manage content, media, and settings.</p>
+          <p className="login-subtitle">Restricted Administrator Authentication Portal</p>
         </div>
 
-        {!isFirebaseConfigured && (
-          <div className="demo-auth-alert">
-            <Sparkles size={16} />
-            <div>
-              <strong>Resilient Offline / Demo Mode Active</strong>
-              <p>
-                Enter any administrator email and password (minimum 6 chars) to access the interactive CMS dashboard.
-              </p>
-            </div>
-          </div>
-        )}
+        <div className="admin-access-notice">
+          <KeyRound size={16} className="notice-icon" />
+          <p>
+            Only <strong>{AUTHORIZED_ADMIN_EMAIL}</strong> is authorized to log in and edit portfolio details.
+          </p>
+        </div>
 
         {error && (
           <div className="form-alert error">
@@ -55,9 +50,10 @@ export const AdminLogin = ({ onCancel }) => {
           </div>
         )}
 
+        {/* Standard Email & Password Login */}
         <form onSubmit={handleSubmit} className="admin-login-form">
           <div className="form-field">
-            <label htmlFor="admin-email">Admin Email</label>
+            <label htmlFor="admin-email">Authorized Gmail Address</label>
             <div className="input-icon-wrap">
               <Mail size={18} className="input-icon" />
               <input
@@ -65,7 +61,7 @@ export const AdminLogin = ({ onCancel }) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@ashiyishan.dev"
+                placeholder={AUTHORIZED_ADMIN_EMAIL}
                 required
                 disabled={loading}
               />
