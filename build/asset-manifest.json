@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Ashinshana_Ishan/static/css/main.a1930fb4.css",
-    "main.js": "/Ashinshana_Ishan/static/js/main.f6e08af3.js",
+    "main.css": "/Ashinshana_Ishan/static/css/main.f28eab86.css",
+    "main.js": "/Ashinshana_Ishan/static/js/main.216d2d6d.js",
     "static/js/206.e251589c.chunk.js": "/Ashinshana_Ishan/static/js/206.e251589c.chunk.js",
     "static/media/person.png": "/Ashinshana_Ishan/static/media/person.e8c9106d789e3fa5b374.png",
     "static/media/r.jpg": "/Ashinshana_Ishan/static/media/r.7b613c38868be934556b.jpg",
@@ -16,7 +16,7 @@
     "index.html": "/Ashinshana_Ishan/index.html"
   },
   "entrypoints": [
-    "static/css/main.a1930fb4.css",
-    "static/js/main.f6e08af3.js"
+    "static/css/main.f28eab86.css",
+    "static/js/main.216d2d6d.js"
   ]
 }

@@ -249,10 +249,6 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 alt="Ashiy Ishan Personal Identity"
                 className="clean-role-portrait"
               />
-              <div className="portrait-badge badge-personal">
-                <Sparkles size={14} />
-                <span>Undergraduate & Creator</span>
-              </div>
             </div>
 
             {/* 2. Developer Clean Image Layer */}
@@ -262,10 +258,6 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 alt="Ashiy Ishan Software Developer"
                 className="clean-role-portrait"
               />
-              <div className="portrait-badge badge-dev">
-                <Code2 size={14} />
-                <span>Software Developer</span>
-              </div>
             </div>
 
             {/* 3. YouTuber / Creator Clean Image Layer */}
@@ -275,38 +267,6 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 alt="Ashiy Ishan Tech Creator"
                 className="clean-role-portrait"
               />
-              <div className="portrait-badge badge-creator">
-                <Video size={14} />
-                <span>YouTube Creator</span>
-              </div>
-            </div>
-
-            {/* Quick click-to-switch miniature triggers */}
-            <div className="stage-switch-triggers">
-              <button 
-                type="button"
-                className={`stage-trigger ${activeRole === 'personal' ? 'active' : ''}`}
-                onClick={() => setActiveRole('personal')}
-                title="Switch to Personal Mode"
-              >
-                <User size={14} /> PERSONAL
-              </button>
-              <button 
-                type="button"
-                className={`stage-trigger ${activeRole === 'developer' ? 'active' : ''}`}
-                onClick={() => setActiveRole('developer')}
-                title="Switch to Developer Mode"
-              >
-                <Code2 size={14} /> DEV
-              </button>
-              <button 
-                type="button"
-                className={`stage-trigger ${activeRole === 'creator' ? 'active' : ''}`}
-                onClick={() => setActiveRole('creator')}
-                title="Switch to Creator Mode"
-              >
-                <Video size={14} /> CREATOR
-              </button>
             </div>
           </div>
         </div>
