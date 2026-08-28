@@ -7,12 +7,14 @@ import {
   Sparkles, 
   Camera, 
   Terminal, 
-  Play, 
   ArrowRight, 
   ChevronDown,
   GraduationCap,
   Cpu,
-  Film
+  Film,
+  Compass,
+  Layers,
+  Flame
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -78,11 +80,74 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
 
   return (
     <section id="home" className={`hero-section ${current.accentGlow}`} aria-label="Hero Introduction">
-      {/* Background ambient lighting effects */}
+      {/* Background ambient lighting & exactly 3 floating background role pills */}
       <div className="hero-ambient-lights">
         <div className={`ambient-orb orb-primary ${activeRole}`} />
         <div className={`ambient-orb orb-secondary ${activeRole}`} />
         <div className="grid-overlay" />
+
+        {/* 3 Floating Ambient Props for Personal Mode */}
+        {activeRole === 'personal' && (
+          <div className="ambient-floating-props-layer">
+            <div className="role-ambient-pill prop-personal-1 float-slow">
+              <GraduationCap size={16} className="pill-icon-blue" />
+              <span>SUSL '26 • Computing & IS</span>
+              <span className="live-dot pulse-blue" />
+            </div>
+
+            <div className="role-ambient-pill prop-personal-2 float-reverse">
+              <Sparkles size={15} className="pill-icon-cyan" />
+              <span>I BUILD. I CREATE. I SHARE.</span>
+            </div>
+
+            <div className="role-ambient-pill prop-personal-3 float-pulse">
+              <Compass size={15} className="pill-icon-indigo" />
+              <span>Sri Lanka • Digital Builder</span>
+            </div>
+          </div>
+        )}
+
+        {/* 3 Floating Ambient Props for Developer Mode */}
+        {activeRole === 'developer' && (
+          <div className="ambient-floating-props-layer">
+            <div className="role-ambient-pill prop-dev-1 float-slow">
+              <Terminal size={15} className="pill-icon-green" />
+              <span>const role = 'Builder';</span>
+              <span className="live-dot pulse-green" />
+            </div>
+
+            <div className="role-ambient-pill prop-dev-2 float-reverse">
+              <Cpu size={15} className="pill-icon-cyan" />
+              <span>99.9% Active Engine</span>
+            </div>
+
+            <div className="role-ambient-pill prop-dev-3 float-pulse">
+              <Layers size={15} className="pill-icon-blue" />
+              <span>React 19 • Java • Cloud</span>
+            </div>
+          </div>
+        )}
+
+        {/* 3 Floating Ambient Props for Creator Mode */}
+        {activeRole === 'creator' && (
+          <div className="ambient-floating-props-layer">
+            <div className="role-ambient-pill prop-creator-1 float-slow">
+              <Camera size={16} className="pill-icon-red" />
+              <span className="rec-dot-pulse" />
+              <span>▶ 4K 60FPS REC</span>
+            </div>
+
+            <div className="role-ambient-pill prop-creator-2 float-reverse">
+              <Film size={15} className="pill-icon-pink" />
+              <span>YouTube Studio • {youtubeChannel?.subscribers || '1.5K+'} Subs</span>
+            </div>
+
+            <div className="role-ambient-pill prop-creator-3 float-pulse">
+              <Flame size={15} className="pill-icon-amber" />
+              <span>Tutorials & Workflow</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="hero-content-wrapper">
@@ -171,7 +236,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
           </div>
         </div>
 
-        {/* Right Column: Clean Floating Role Image (No Outer Enclosing Card) */}
+        {/* Right Column: Clean Role Image Stage (No Overlay Props On Top of Image) */}
         <div className="hero-visual-col" aria-hidden="true">
           <div className={`portrait-stage role-${activeRole}`}>
             {/* Ambient Backlight Halo */}
@@ -188,21 +253,6 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 <Sparkles size={14} />
                 <span>Undergraduate & Creator</span>
               </div>
-
-              {/* Live Role Widget: Personal Academic Radar */}
-              {activeRole === 'personal' && (
-                <div className="role-live-widget widget-personal animate-pop">
-                  <div className="widget-header">
-                    <GraduationCap size={16} className="widget-icon" />
-                    <span className="widget-title">SUSL Computing</span>
-                    <span className="live-dot pulse-blue" />
-                  </div>
-                  <div className="widget-body">
-                    <p className="widget-main-stat">BSc Hons (IS)</p>
-                    <p className="widget-sub-stat">Sabaragamuwa University '26</p>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* 2. Developer Clean Image Layer */}
@@ -212,37 +262,10 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 alt="Ashiy Ishan Software Developer"
                 className="clean-role-portrait"
               />
-              <div className="developer-overlay-hud">
-                <div className="hud-code-snippet">
-                  <Terminal size={14} />
-                  <span>const role = 'Builder';</span>
-                </div>
-              </div>
               <div className="portrait-badge badge-dev">
                 <Code2 size={14} />
                 <span>Software Developer</span>
               </div>
-
-              {/* Live Role Widget: Developer Telemetry HUD */}
-              {activeRole === 'developer' && (
-                <div className="role-live-widget widget-dev animate-pop">
-                  <div className="widget-header">
-                    <Cpu size={16} className="widget-icon" />
-                    <span className="widget-title">Engine Telemetry</span>
-                    <span className="live-dot pulse-green" />
-                  </div>
-                  <div className="widget-body">
-                    <div className="telemetry-row">
-                      <span className="lbl">Status:</span>
-                      <span className="val green">99.9% Active</span>
-                    </div>
-                    <div className="telemetry-row">
-                      <span className="lbl">Stack:</span>
-                      <span className="val">React • Java • MySQL</span>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* 3. YouTuber / Creator Clean Image Layer */}
@@ -252,41 +275,10 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 alt="Ashiy Ishan Tech Creator"
                 className="clean-role-portrait"
               />
-              <div className="floating-camera-prop" title="Content Creator Camera">
-                <div className="camera-housing">
-                  <Camera size={26} className="camera-icon" />
-                  <div className="camera-rec-light" />
-                </div>
-                <div className="camera-label">
-                  <Play size={10} /> 4K 60FPS
-                </div>
-              </div>
-
               <div className="portrait-badge badge-creator">
                 <Video size={14} />
                 <span>YouTube Creator</span>
               </div>
-
-              {/* Live Role Widget: Creator Channel Stats */}
-              {activeRole === 'creator' && (
-                <div className="role-live-widget widget-creator animate-pop">
-                  <div className="widget-header">
-                    <Film size={16} className="widget-icon" />
-                    <span className="widget-title">YouTube Studio</span>
-                    <span className="live-dot pulse-red" />
-                  </div>
-                  <div className="widget-body">
-                    <div className="telemetry-row">
-                      <span className="lbl">Subscribers:</span>
-                      <span className="val red">{youtubeChannel?.subscribers || '1.5K+'}</span>
-                    </div>
-                    <div className="telemetry-row">
-                      <span className="lbl">Total Views:</span>
-                      <span className="val">{youtubeChannel?.views || '48K+'}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Quick click-to-switch miniature triggers */}

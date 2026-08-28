@@ -1,12 +1,11 @@
 // src/components/admin/AdminLogin.jsx
 import React, { useState } from 'react';
-import { Lock, Mail, Shield, AlertCircle, ArrowLeft, Loader2, KeyRound } from 'lucide-react';
+import { Lock, Mail, Shield, AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { AUTHORIZED_ADMIN_EMAIL } from '../../config/firebase';
 
 export const AdminLogin = ({ onCancel }) => {
   const { login } = useAuth();
-  const [email, setEmail] = useState(AUTHORIZED_ADMIN_EMAIL);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -36,13 +35,6 @@ export const AdminLogin = ({ onCancel }) => {
           <p className="login-subtitle">Restricted Administrator Authentication Portal</p>
         </div>
 
-        <div className="admin-access-notice">
-          <KeyRound size={16} className="notice-icon" />
-          <p>
-            Only <strong>{AUTHORIZED_ADMIN_EMAIL}</strong> is authorized to log in and edit portfolio details.
-          </p>
-        </div>
-
         {error && (
           <div className="form-alert error">
             <AlertCircle size={18} />
@@ -53,7 +45,7 @@ export const AdminLogin = ({ onCancel }) => {
         {/* Standard Email & Password Login */}
         <form onSubmit={handleSubmit} className="admin-login-form">
           <div className="form-field">
-            <label htmlFor="admin-email">Authorized Gmail Address</label>
+            <label htmlFor="admin-email">Authorized Email Address</label>
             <div className="input-icon-wrap">
               <Mail size={18} className="input-icon" />
               <input
@@ -61,7 +53,7 @@ export const AdminLogin = ({ onCancel }) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={AUTHORIZED_ADMIN_EMAIL}
+                placeholder="admin@domain.com"
                 required
                 disabled={loading}
               />

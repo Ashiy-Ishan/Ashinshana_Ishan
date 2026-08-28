@@ -4,10 +4,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext(null);
 
 export const THEME_OPTIONS = [
-  { id: 'dark', name: 'Dark Cyber', icon: '🌙' },
-  { id: 'cyberpunk', name: 'Neon Cyberpunk', icon: '⚡' },
-  { id: 'midnight', name: 'Midnight Navy', icon: '🌌' },
-  { id: 'light', name: 'Modern Light', icon: '☀️' }
+  { id: 'dark', name: 'Dark Mode' },
+  { id: 'light', name: 'Light Mode' }
 ];
 
 export const ThemeProvider = ({ children }) => {

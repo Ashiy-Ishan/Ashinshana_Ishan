@@ -4270,3 +4270,79 @@ body {
   box-shadow: var(--shadow-elevated);
 }
 
+/* ==========================================================================
+   ROLE-SPECIFIC FLOATING AMBIENT PROPS (BACKGROUND FLOATING WIDGETS)
+   ========================================================================== */
+.ambient-floating-props-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.role-ambient-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 20px;
+  background: var(--bg-surface-glass);
+  border: 1px solid var(--border-medium);
+  box-shadow: var(--shadow-subtle);
+  backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: floatRandomPill 5s ease-in-out infinite alternate;
+}
+
+.pill-icon-blue { color: #38bdf8; }
+.pill-icon-cyan { color: #00d2ff; }
+.pill-icon-indigo { color: #818cf8; }
+.pill-icon-green { color: #34d399; }
+.pill-icon-red { color: #ff0055; }
+.pill-icon-pink { color: #f43f5e; }
+.pill-icon-amber { color: #fbbf24; }
+
+.prop-personal-1 { top: 16%; left: 4%; animation-duration: 6s; }
+.prop-personal-2 { bottom: 22%; left: 3%; animation-duration: 7.5s; animation-delay: 1s; }
+.prop-personal-3 { top: 28%; right: 4%; animation-duration: 5.5s; animation-delay: 0.5s; }
+
+.prop-dev-1 { top: 18%; left: 4%; animation-duration: 6.5s; }
+.prop-dev-2 { bottom: 20%; left: 5%; animation-duration: 5.2s; animation-delay: 1.2s; }
+.prop-dev-3 { top: 25%; right: 4%; animation-duration: 7s; animation-delay: 0.4s; }
+
+.prop-creator-1 { top: 15%; left: 4%; animation-duration: 5.5s; }
+.prop-creator-2 { bottom: 22%; left: 4%; animation-duration: 7.2s; animation-delay: 0.8s; }
+.prop-creator-3 { top: 28%; right: 4%; animation-duration: 6.2s; animation-delay: 1.4s; }
+
+@keyframes floatRandomPill {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(10px) rotate(-1.5deg);
+  }
+}
+
+.rec-dot-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff0055;
+  box-shadow: 0 0 10px #ff0055;
+  animation: recPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes recPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+

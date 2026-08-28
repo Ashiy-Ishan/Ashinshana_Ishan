@@ -19,7 +19,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Role-adapted navigation links with exact requested Personal navigation order
+  // Role-adapted navigation links
   const getNavItems = () => {
     switch (activeRole) {
       case 'developer':
@@ -116,7 +116,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
             </ul>
           </nav>
 
-          {/* Theme Dropdown */}
+          {/* Theme Dropdown without Emojis */}
           <div className="theme-switcher-wrapper">
             <button
               type="button"
@@ -125,14 +125,13 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
               title="Select Theme Mode"
             >
               <Palette size={15} className="palette-icon" />
-              <span className="theme-icon-symbol">{activeThemeObj.icon}</span>
               <span className="theme-btn-label">{activeThemeObj.name}</span>
               <ChevronDown size={14} className={`chevron-icon ${themeDropdownOpen ? 'open' : ''}`} />
             </button>
 
             {themeDropdownOpen && (
               <div className="theme-dropdown-menu">
-                <div className="theme-menu-header">Select Theme Palette</div>
+                <div className="theme-menu-header">Theme Mode</div>
                 {themes.map((t) => (
                   <button
                     key={t.id}
@@ -143,7 +142,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                       setThemeDropdownOpen(false);
                     }}
                   >
-                    <span className="theme-opt-icon">{t.icon}</span>
                     <span className="theme-opt-name">{t.name}</span>
                   </button>
                 ))}
@@ -208,9 +206,9 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </div>
         </div>
 
-        {/* Mobile Theme Selector */}
+        {/* Mobile Theme Selector without Emojis */}
         <div className="mobile-theme-selector">
-          <p className="mobile-role-title">Theme Palette:</p>
+          <p className="mobile-role-title">Theme Mode:</p>
           <div className="mobile-theme-buttons">
             {themes.map((t) => (
               <button
@@ -222,7 +220,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                   setMobileMenuOpen(false);
                 }}
               >
-                <span>{t.icon}</span> {t.name}
+                {t.name}
               </button>
             ))}
           </div>

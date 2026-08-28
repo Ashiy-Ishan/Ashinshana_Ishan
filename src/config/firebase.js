@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-LHEX5KRY9N"
 };
 
-// Admin Gmail Restriction
+// Admin Email Restriction
 export const AUTHORIZED_ADMIN_EMAIL = 'ashinshanaishan@gmail.com';
 
 // Check if Firebase credentials are valid
