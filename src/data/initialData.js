@@ -1,4 +1,8 @@
 // src/data/initialData.js
+import personImg from '../Iamage/person.png';
+import developerImg from '../Iamage/developer.png';
+import youtuberImg from '../Iamage/youtuber.png';
+import curlymaxLogo from '../Iamage/curlymax.png';
 import profilePhoto from '../Iamage/profile.png';
 import rPhoto from '../Iamage/r.jpg';
 import portfolioImg from '../Iamage/portfolio.png';
@@ -19,13 +23,13 @@ export const initialData = {
     university: 'Sabaragamuwa University of Sri Lanka',
     degree: 'BSc (Hons) in Computing / Information Systems',
     status: 'Undergraduate & Tech Creator',
-    profileImage: profilePhoto,
-    developerImage: profilePhoto,
-    creatorImage: profilePhoto,
-    personalImage: profilePhoto,
-    heroImageDeveloper: profilePhoto,
-    heroImageCreator: profilePhoto,
-    heroImagePersonal: profilePhoto,
+    profileImage: personImg,
+    developerImage: developerImg,
+    creatorImage: youtuberImg,
+    personalImage: personImg,
+    heroImageDeveloper: developerImg,
+    heroImageCreator: youtuberImg,
+    heroImagePersonal: personImg,
     highResPhoto: rPhoto,
     resumeUrl: 'https://github.com/Ashiy-Ishan',
     email: 'ashinshanaishan@gmail.com',
@@ -325,11 +329,11 @@ export const initialData = {
   ],
 
   youtubeChannel: {
-    channelName: 'Ashiy Ishan',
-    handle: '@AshiyIshan',
+    channelName: 'Curly Max',
+    handle: '@CurlyMax',
     channelUrl: 'https://www.youtube.com/@AshiyIshan',
-    channelImage: profilePhoto,
-    description: 'Welcome to my creative space where I share coding tutorials, software engineering insights, developer setups, UI/UX breakdowns, and tech experiments.',
+    channelImage: curlymaxLogo,
+    description: 'Welcome to Curly Max! Sharing coding tutorials, full-stack software engineering, developer workflows, UI/UX breakdowns, and tech experiments.',
     subscribers: '1.5K+',
     views: '48K+',
     videos: '25+',

@@ -1,6 +1,6 @@
 // src/components/admin/AdminHeroImages.jsx
-import React, { useState } from 'react';
-import { Save, Check, User, Code2, Video, Upload, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Save, Check, User, Code2, Video, Upload, Image as ImageIcon, AlertCircle, Loader2 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { uploadImageToImageKit } from '../../services/imagekitService';
 
@@ -15,6 +15,18 @@ export const AdminHeroImages = () => {
   const [uploadingRole, setUploadingRole] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  // Sync state when Firestore profile updates
+  useEffect(() => {
+    if (profile) {
+      setImages({
+        heroImagePersonal: profile.heroImagePersonal || profile.personalImage || profile.profileImage || '',
+        heroImageDeveloper: profile.heroImageDeveloper || profile.developerImage || '',
+        heroImageCreator: profile.heroImageCreator || profile.creatorImage || ''
+      });
+    }
+  }, [profile]);
 
   const handleUrlChange = (roleKey, value) => {
     setImages(prev => ({ ...prev, [roleKey]: value }));
@@ -22,13 +34,14 @@ export const AdminHeroImages = () => {
 
   const handleFileUpload = async (roleKey, file) => {
     if (!file) return;
+    setErrorMessage(null);
     setUploadingRole(roleKey);
     try {
       const folderName = `hero-${roleKey.replace('heroImage', '').toLowerCase()}`;
       const uploadedUrl = await uploadImageToImageKit(file, folderName);
       setImages(prev => ({ ...prev, [roleKey]: uploadedUrl }));
     } catch (err) {
-      alert(`Error uploading image to ImageKit: ${err.message}`);
+      setErrorMessage(`Upload error: ${err.message}`);
     } finally {
       setUploadingRole(null);
     }
@@ -36,6 +49,7 @@ export const AdminHeroImages = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(null);
     setSaving(true);
     try {
       await updateProfile({
@@ -44,9 +58,9 @@ export const AdminHeroImages = () => {
         heroImageCreator: images.heroImageCreator
       });
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      setTimeout(() => setSaveSuccess(false), 3500);
     } catch (err) {
-      alert('Error updating role images: ' + err.message);
+      setErrorMessage(`Error saving role images: ${err.message}`);
     } finally {
       setSaving(false);
     }
@@ -95,6 +109,13 @@ export const AdminHeroImages = () => {
           </div>
         )}
 
+        {errorMessage && (
+          <div className="form-alert error">
+            <AlertCircle size={18} />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
         <div className="role-images-grid">
           {roleConfigs.map((config) => {
             const currentUrl = images[config.key];
@@ -139,13 +160,22 @@ export const AdminHeroImages = () => {
                   </div>
 
                   <div className="file-upload-box">
-                    <label className="upload-btn-label">
-                      <Upload size={14} />
-                      <span>{isUploading ? 'Uploading to ImageKit...' : 'Upload New File'}</span>
+                    <label className={`upload-btn-label ${isUploading ? 'uploading' : ''}`}>
+                      {isUploading ? (
+                        <>
+                          <Loader2 size={14} className="animate-spin" />
+                          <span>Uploading to ImageKit...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload size={14} />
+                          <span>Upload New File</span>
+                        </>
+                      )}
                       <input
                         type="file"
                         accept="image/*"
-                        disabled={isUploading}
+                        disabled={isUploading || saving}
                         onChange={(e) => handleFileUpload(config.key, e.target.files[0])}
                         className="file-hidden-input"
                       />
@@ -158,13 +188,21 @@ export const AdminHeroImages = () => {
         </div>
 
         <div className="admin-form-actions">
-          <button type="submit" className="btn btn-primary" disabled={saving}>
-            <Save size={16} />
-            <span>{saving ? 'Saving Changes...' : 'Save Role Images'}</span>
+          <button type="submit" className="btn btn-primary" disabled={saving || Boolean(uploadingRole)}>
+            {saving ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span>Saving Changes...</span>
+              </>
+            ) : (
+              <>
+                <Save size={16} />
+                <span>Save Role Images</span>
+              </>
+            )}
           </button>
         </div>
       </form>
     </div>
   );
 };
-

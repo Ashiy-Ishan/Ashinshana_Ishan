@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if the requesting user is the authorized administrator
+    function isAdmin() {
+      return request.auth != null && 
+             request.auth.token.email != null &&
+             request.auth.token.email.lower() == 'ashinshanaishan@gmail.com';
+    }
+
+    // Helper function to validate uploaded file size & image format
+    function isValidImage() {
+      return request.resource.size <= 5 * 1024 * 1024 &&
+             request.resource.contentType.matches('image/.*');
+    }
+
+    match /{allPaths=**} {
+      // Anyone can read images
+      allow read: if true;
+      // Only authorized admin can upload/update/delete images with size & format validation
+      allow create, update: if isAdmin() && isValidImage();
+      allow delete: if isAdmin();
+    }
+  }
+}
+
