@@ -57,52 +57,142 @@ export const AboutSection = () => {
 
   return (
     <section id="about" className="section-container about-section" aria-label="About Ashinshana Ishan">
+      {/* Section Header */}
       <div className="section-heading-wrap">
-        <span className="section-tag">PERSONAL & JOURNEY</span>
+        <div className="section-pill-tag tag-personal">
+          <Sparkles size={14} />
+          <span>PERSONAL & JOURNEY</span>
+        </div>
         <h2 className="section-title">
-          ABOUT <span className="title-gradient">ASHINSHANA ISHAN</span>
+          ABOUT <span className="title-gradient personal-gradient">ASHINSHANA ISHAN</span>
         </h2>
         <p className="section-subtext">
           Undergraduate software engineer, tech creator, and digital builder bridging technical systems with visual media.
         </p>
       </div>
 
-      <div className="about-grid-layout">
-        {/* Left Column: Bio Card & Details */}
-        <div className="about-bio-card">
-          <div className="bio-photo-header">
-            <div className="bio-avatar-ring">
-              <img 
-                src={profile?.profileImage} 
-                alt={profile?.fullName || profile?.name || 'Ashinshana Ishan'} 
-                className="bio-avatar-img"
-              />
-            </div>
-            <div className="bio-header-meta">
-              <h3 className="bio-name">{profile?.name}</h3>
-              <p className="bio-legal-name">({profile?.fullName})</p>
-              <p className="bio-status-badge">
-                <span className="dot-pulse" />
-                {profile?.status || 'Undergraduate & Creator'}
-              </p>
+      {/* Personal Profile Header Card (Positioned & Symmetrical to Channel Card) */}
+      <div className="personal-profile-header">
+        <div className="personal-profile-left">
+          <div className="personal-avatar-wrapper">
+            <img 
+              src={profile?.personalImage || profile?.heroImagePersonal || profile?.profileImage} 
+              alt={profile?.fullName || profile?.name || 'Ashinshana Ishan'} 
+              className="personal-avatar-img"
+            />
+            <div className="personal-verified-badge" title="Undergraduate & Tech Creator">
+              <GraduationCap size={15} />
             </div>
           </div>
 
-          <div className="bio-body">
-            <p className="bio-paragraph">
-              {profile?.bio}
+          <div className="personal-profile-text">
+            <div className="personal-title-row">
+              <h3 className="personal-channel-name">{profile?.fullName || profile?.name || 'Ashinshana Ishan'}</h3>
+              <span className="personal-handle-badge">Undergraduate '26</span>
+            </div>
+            <p className="personal-bio-text">
+              {profile?.bio || 'Undergraduate at Sabaragamuwa University of Sri Lanka passionate about modern web development, backend engineering, UI/UX design, and tech content creation. I enjoy turning complex ideas into elegant, user-focused digital experiences.'}
             </p>
+          </div>
+        </div>
 
+        {/* High-Impact Action Button */}
+        <div className="personal-cta-wrap">
+          {profile?.resumeUrl ? (
+            <a
+              href={profile.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-personal-resume btn-personal-glow"
+            >
+              <div className="personal-icon-box">
+                <FileText size={22} className="personal-icon-svg" />
+              </div>
+              <div className="personal-btn-text">
+                <span className="personal-btn-primary">VIEW RESUME / CV</span>
+                <span className="personal-btn-sub">OFFICIAL CREDENTIALS</span>
+              </div>
+              <ArrowUpRight size={16} className="personal-btn-arrow" />
+            </a>
+          ) : (
+            <a href="#contact" className="btn btn-personal-resume btn-personal-glow">
+              <div className="personal-icon-box">
+                <Compass size={22} className="personal-icon-svg" />
+              </div>
+              <div className="personal-btn-text">
+                <span className="personal-btn-primary">GET IN TOUCH</span>
+                <span className="personal-btn-sub">CONNECT DIRECTLY</span>
+              </div>
+              <ArrowUpRight size={16} className="personal-btn-arrow" />
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Personal Insights & Highlights Grid (Positioned matching Channel stats) */}
+      <div className="personal-insights-grid">
+        <div className="personal-stat-card">
+          <div className="stat-icon-wrapper degree">
+            <GraduationCap size={22} />
+          </div>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">BSc</span>
+              <span className="stat-count-suffix">(Hons)</span>
+            </div>
+            <span className="stat-label-text">Computing & IS '26</span>
+          </div>
+        </div>
+
+        <div className="personal-stat-card">
+          <div className="stat-icon-wrapper location">
+            <MapPin size={22} />
+          </div>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">SUSL</span>
+            </div>
+            <span className="stat-label-text">Sabaragamuwa Univ</span>
+          </div>
+        </div>
+
+        <div className="personal-stat-card">
+          <div className="stat-icon-wrapper motto">
+            <Compass size={22} />
+          </div>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">Builder</span>
+            </div>
+            <span className="stat-label-text">"I BUILD. CREATE. SHARE."</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="about-grid-layout">
+        {/* Left Column: Bio Card & Details */}
+        <div className="about-bio-card">
+          <h3 className="about-card-title" style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.25rem', color: 'var(--text-primary)' }}>
+            Academic Background & Identity
+          </h3>
+
+          <div className="bio-body">
             <div className="bio-facts-list">
               <div className="fact-item">
                 <GraduationCap size={18} className="fact-icon" />
                 <div>
-                  <span className="fact-label">Education</span>
+                  <span className="fact-label">University</span>
                   <p className="fact-val">{profile?.university || 'Sabaragamuwa University of Sri Lanka'}</p>
                   <p className="fact-sub">{profile?.degree || 'BSc (Hons) in Computing'}</p>
-                  <p className="fact-sub" style={{ marginTop: '0.25rem', opacity: 0.85 }}>
-                    {profile?.school || 'Bandaranayake College, Gampaha'} (2014 - 2022)
-                  </p>
+                </div>
+              </div>
+
+              <div className="fact-item">
+                <Award size={18} className="fact-icon" />
+                <div>
+                  <span className="fact-label">Secondary Education</span>
+                  <p className="fact-val">{profile?.school || 'Bandaranayake College, Gampaha'}</p>
+                  <p className="fact-sub">{profile?.alStream || 'G.C.E. (A/L) Physical Science Stream (2014 - 2022)'}</p>
                 </div>
               </div>
 
@@ -124,19 +214,7 @@ export const AboutSection = () => {
             </div>
 
             <div className="bio-actions">
-              {profile?.resumeUrl && (
-                <a
-                  href={profile.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline"
-                >
-                  <FileText size={16} />
-                  <span>View Resume / CV</span>
-                  <ArrowUpRight size={16} />
-                </a>
-              )}
-              <a href="#contact" className="btn btn-primary">
+              <a href="#contact" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                 <span>Let's Connect</span>
               </a>
             </div>

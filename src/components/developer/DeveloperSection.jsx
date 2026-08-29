@@ -5,14 +5,17 @@ import {
   Cpu, 
   Workflow, 
   Layers, 
+  ExternalLink,
+  GitBranch
 } from 'lucide-react';
+import { Github } from '../common/Icons';
+import { usePortfolio } from '../../context/PortfolioContext';
 import { SkillsGrid } from './SkillsGrid';
 import { ProjectsShowcase } from './ProjectsShowcase';
 import { PublishedProjects } from './PublishedProjects';
 
-
 export const DeveloperSection = () => {
-  
+  const { profile } = usePortfolio();
 
   return (
     <section id="developer" className="section-container developer-section" aria-label="Developer Experience">
@@ -30,31 +33,89 @@ export const DeveloperSection = () => {
         </p>
       </div>
 
-      {/* Developer Engineering Ethos & Stats Card */}
-      <div className="dev-ethos-card">
-        <div className="ethos-left">
-          <div className="ethos-badge">
-            <Cpu size={18} />
-            <span>DEVELOPMENT PHILOSOPHY</span>
+      {/* Developer Profile Header Card (Positioned & Symmetrical to Channel Card) */}
+      <div className="dev-profile-header">
+        <div className="dev-profile-left">
+          <div className="dev-avatar-wrapper">
+            <img
+              src={profile?.developerImage || profile?.heroImageDeveloper || profile?.profileImage}
+              alt={profile?.fullName || 'Ashinshana Ishan Software Engineer'}
+              className="dev-avatar-img"
+            />
+            <div className="dev-verified-badge" title="Full-Stack Developer">
+              <Terminal size={15} />
+            </div>
           </div>
-          <h3 className="ethos-title">Clean Code. Scalable Architecture. Pragmatic Problem Solving.</h3>
-          <p className="ethos-desc">
-            I specialize in full-stack web applications, relational and document databases, object-oriented system modeling in Java, and reactive client interfaces in React. Every line of code is structured for readability, testability, and real-world utility.
-          </p>
+
+          <div className="dev-profile-text">
+            <div className="dev-title-row">
+              <h3 className="dev-channel-name">{profile?.name || 'Ashinshana'}</h3>
+              <span className="dev-handle-badge">@ashiy_ish / Dev</span>
+            </div>
+            <p className="dev-bio-text">
+              Specializing in full-stack web applications, relational and document databases, object-oriented system modeling in Java, and reactive client interfaces in React. Every line of code is structured for readability, testability, and real-world utility.
+            </p>
+          </div>
         </div>
 
-        <div className="ethos-stats-grid">
-          <div className="ethos-stat-box">
-            <span className="stat-num">100%</span>
-            <span className="stat-lbl">Curiosity & Dedication</span>
+        {/* High-Impact GitHub / Code Action Button */}
+        <div className="dev-cta-wrap">
+          <a
+            href={profile?.github || 'https://github.com/Ashiy-Ishan'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-github btn-dev-glow"
+          >
+            <div className="dev-icon-box">
+              <Github size={22} className="dev-icon-svg" />
+            </div>
+            <div className="dev-btn-text">
+              <span className="dev-btn-primary">VISIT GITHUB PROFILE</span>
+              <span className="dev-btn-sub">REPOSITORIES & ARCHITECTURE</span>
+            </div>
+            <ExternalLink size={16} className="dev-btn-arrow" />
+          </a>
+        </div>
+      </div>
+
+      {/* Developer Insights & Performance Grid (Positioned matching Channel stats) */}
+      <div className="dev-insights-grid">
+        <div className="dev-stat-card">
+          <div className="stat-icon-wrapper tech-stack">
+            <Cpu size={22} />
           </div>
-          <div className="ethos-stat-box">
-            <span className="stat-num">Full-Stack</span>
-            <span className="stat-lbl">Web & Backend Engineering</span>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">15</span>
+              <span className="stat-count-suffix">+</span>
+            </div>
+            <span className="stat-label-text">Tech Stacks & Tools</span>
           </div>
-          <div className="ethos-stat-box">
-            <span className="stat-num">Open Source</span>
-            <span className="stat-lbl">Community Mindset</span>
+        </div>
+
+        <div className="dev-stat-card">
+          <div className="stat-icon-wrapper architecture">
+            <Layers size={22} />
+          </div>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">100</span>
+              <span className="stat-count-suffix">%</span>
+            </div>
+            <span className="stat-label-text">Modular Architecture</span>
+          </div>
+        </div>
+
+        <div className="dev-stat-card">
+          <div className="stat-icon-wrapper repositories">
+            <GitBranch size={22} />
+          </div>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">20</span>
+              <span className="stat-count-suffix">+</span>
+            </div>
+            <span className="stat-label-text">Git Repos & Projects</span>
           </div>
         </div>
       </div>
@@ -96,3 +157,4 @@ export const DeveloperSection = () => {
     </section>
   );
 };
+

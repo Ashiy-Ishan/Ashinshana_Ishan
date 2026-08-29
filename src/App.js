@@ -9,12 +9,14 @@ import { Footer } from './components/common/Footer';
 import { HeroSection } from './components/hero/HeroSection';
 import { RoleContent } from './components/role/RoleContent';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { LoadingScreen } from './components/common/LoadingScreen';
 
 // Inner component with portfolio state & active section tracking
 function PortfolioApp() {
   const [activeRole, setActiveRole] = useState('personal'); // Initial default role: 'personal'
   const [activeSection, setActiveSection] = useState('home');
   const [isAdminView, setIsAdminView] = useState(false);
+  const [appLoading, setAppLoading] = useState(true);
 
   // Monitor URL Hash for #/admin or section jumps
   useEffect(() => {
@@ -75,6 +77,10 @@ function PortfolioApp() {
 
   return (
     <div className="site-wrapper">
+      {appLoading && (
+        <LoadingScreen onFinished={() => setAppLoading(false)} />
+      )}
+
       <Navbar 
         activeSection={activeSection} 
         activeRole={activeRole} 

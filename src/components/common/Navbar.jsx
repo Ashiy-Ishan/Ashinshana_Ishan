@@ -19,6 +19,18 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   // Role-adapted navigation links
   const getNavItems = () => {
     switch (activeRole) {
@@ -151,81 +163,96 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
       </div>
 
       {/* Mobile Menu Drawer */}
-      <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`}>
+      <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`} aria-hidden={!mobileMenuOpen}>
         <div className="mobile-drawer-header">
-          <a 
-            href="#home" 
-            className="brand-logo-a" 
-            onClick={(e) => {
-              handleNavClick(e, '#home');
-              setMobileMenuOpen(false);
-            }}
-            aria-label="Ashinshana Ishan Home"
-          >
-            <span className="brand-letter-a">A</span>
-          </a>
-          <div>
-            <span className="brand-primary">{profile?.name || 'ASHINSHANA'}</span>
-            <span className="drawer-subtitle">{profile?.title || 'Developer • Creator • Builder'}</span>
+          <div className="mobile-drawer-brand">
+            <a 
+              href="#home" 
+              className="brand-logo-a" 
+              onClick={(e) => {
+                handleNavClick(e, '#home');
+                setMobileMenuOpen(false);
+              }}
+              aria-label="Ashinshana Ishan Home"
+            >
+              <span className="brand-letter-a">A</span>
+            </a>
+            <div className="mobile-drawer-title-wrap">
+              <span className="brand-primary">{profile?.name || 'ASHINSHANA'}</span>
+              <span className="drawer-subtitle">{profile?.title || 'Developer • Creator • Builder'}</span>
+            </div>
           </div>
+          <button
+            type="button"
+            className="mobile-drawer-close-btn"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close navigation menu"
+          >
+            <X size={20} />
+          </button>
         </div>
 
         {/* Role Quick Switcher in Mobile Nav */}
         <div className="mobile-role-selector">
-          <p className="mobile-role-title">Select Role Mode:</p>
+          <p className="mobile-role-title">IDENTITY MODE:</p>
           <div className="mobile-role-buttons">
             <button
               type="button"
-              className={`mobile-role-btn ${activeRole === 'personal' ? 'active' : ''}`}
+              className={`mobile-role-btn role-btn-personal ${activeRole === 'personal' ? 'active' : ''}`}
               onClick={() => {
                 if (onSelectRole) onSelectRole('personal');
                 setMobileMenuOpen(false);
               }}
             >
-              <Sparkles size={16} />
+              <Sparkles size={15} />
               <span>Personal</span>
             </button>
             <button
               type="button"
-              className={`mobile-role-btn ${activeRole === 'developer' ? 'active' : ''}`}
+              className={`mobile-role-btn role-btn-dev ${activeRole === 'developer' ? 'active' : ''}`}
               onClick={() => {
                 if (onSelectRole) onSelectRole('developer');
                 setMobileMenuOpen(false);
               }}
             >
-              <Code2 size={16} />
+              <Code2 size={15} />
               <span>Developer</span>
             </button>
             <button
               type="button"
-              className={`mobile-role-btn ${activeRole === 'creator' ? 'active' : ''}`}
+              className={`mobile-role-btn role-btn-creator ${activeRole === 'creator' ? 'active' : ''}`}
               onClick={() => {
                 if (onSelectRole) onSelectRole('creator');
                 setMobileMenuOpen(false);
               }}
             >
-              <Video size={16} />
+              <Video size={15} />
               <span>Creator</span>
             </button>
           </div>
         </div>
 
-        <nav className="mobile-nav-links">
-          {navItems.map((item) => (
-            <a
-              key={item.id}
-              href={item.href}
-              className={`mobile-link ${activeSection === item.id ? 'active' : ''}`}
-              onClick={(e) => handleNavClick(e, item.href)}
-            >
-              <span>{item.label}</span>
-            </a>
-          ))}
-        </nav>
+        {/* Navigation Section Links */}
+        <div className="mobile-nav-section-wrapper">
+          <p className="mobile-role-title">NAVIGATION:</p>
+          <nav className="mobile-nav-links" aria-label="Mobile Navigation Links">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className={`mobile-link ${activeSection === item.id ? 'active' : ''}`}
+                onClick={(e) => handleNavClick(e, item.href)}
+              >
+                <span className="mobile-link-dot" />
+                <span className="mobile-link-text">{item.label}</span>
+              </a>
+            ))}
+          </nav>
+        </div>
 
         {/* Mobile Theme Toggle */}
         <div className="mobile-theme-selector">
-          <p className="mobile-role-title">Theme Mode:</p>
+          <p className="mobile-role-title">THEME MODE:</p>
           <div className="mobile-theme-row">
             {themes.map((t) => (
               <button
@@ -234,6 +261,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                 className={`mobile-theme-btn ${theme === t.id ? 'active' : ''}`}
                 onClick={() => changeTheme(t.id)}
               >
+                <span className="theme-opt-dot" style={{ background: t.accent }} />
                 <span>{t.name}</span>
               </button>
             ))}
@@ -241,10 +269,12 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
         </div>
       </div>
 
+      {/* Backdrop */}
       {mobileMenuOpen && (
         <div 
           className="mobile-backdrop"
           onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
         />
       )}
     </header>

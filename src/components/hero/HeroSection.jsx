@@ -251,11 +251,14 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
           </div>
         </div>
 
-        {/* Right Column: Clean Role Image Stage (No Overlay Props On Top of Image) */}
+        {/* Right Column: Clean Role Image Stage with Ambient Body Light & Dark-Blue Bottom Blend */}
         <div className="hero-visual-col" aria-hidden="true">
           <div className={`portrait-stage role-${activeRole}`}>
             {/* Ambient Backlight Halo */}
             <div className="portrait-halo" />
+
+            {/* Dynamic Role Body Light Aura */}
+            <div className={`portrait-body-aura aura-${activeRole}`} />
 
             {/* 1. Personal / Split Clean Image Layer */}
             <div className={`clean-role-image-wrapper layer-personal ${activeRole === 'personal' ? 'dominant' : 'background'}`}>
@@ -295,6 +298,9 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 }}
               />
             </div>
+
+            {/* Realistic Ambient Floor Mist (Seamless 360° Radial Feathering Behind Floor Base) */}
+            <div className={`portrait-floor-mist mist-${activeRole}`} />
           </div>
         </div>
       </div>

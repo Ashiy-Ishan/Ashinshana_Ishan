@@ -85,6 +85,7 @@ export const AdminHeroImages = () => {
       key: 'heroImagePersonal',
       title: 'Personal Role Image',
       subtitle: 'Main hero portrait shown in Personal & Undergraduate mode',
+      tag: 'PERSONAL MODE',
       icon: <User size={20} className="icon-personal" />,
       colorClass: 'card-personal-role'
     },
@@ -92,6 +93,7 @@ export const AdminHeroImages = () => {
       key: 'heroImageDeveloper',
       title: 'Developer Role Image',
       subtitle: 'Hero portrait shown in Software Engineering mode',
+      tag: 'DEVELOPER MODE',
       icon: <Code2 size={20} className="icon-dev" />,
       colorClass: 'card-dev-role'
     },
@@ -99,6 +101,7 @@ export const AdminHeroImages = () => {
       key: 'heroImageCreator',
       title: 'Creator Role Image',
       subtitle: 'Hero portrait shown in YouTuber & Content Creator mode',
+      tag: 'CREATOR MODE',
       icon: <Video size={20} className="icon-creator" />,
       colorClass: 'card-creator-role'
     }
@@ -139,8 +142,13 @@ export const AdminHeroImages = () => {
               <div key={config.key} className={`role-image-card ${config.colorClass}`}>
                 <div className="role-card-header">
                   {config.icon}
-                  <div>
-                    <h3 className="role-card-title">{config.title}</h3>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                      <h3 className="role-card-title">{config.title}</h3>
+                      <span className="role-badge-pill" style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', padding: '0.2rem 0.5rem', borderRadius: '6px', background: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontWeight: 700 }}>
+                        {config.tag}
+                      </span>
+                    </div>
                     <p className="role-card-subtitle">{config.subtitle}</p>
                   </div>
                 </div>
