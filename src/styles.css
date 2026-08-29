@@ -1048,6 +1048,8 @@ body {
   overflow: visible !important;
   transition: all 0.6s var(--ease-cinematic);
   z-index: 2;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 62%, rgba(0, 0, 0, 0.65) 80%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 62%, rgba(0, 0, 0, 0.65) 80%, rgba(0, 0, 0, 0) 100%);
 }
 
 .clean-role-image-wrapper.dominant {
@@ -4224,7 +4226,7 @@ body {
 @media (max-width: 1024px) {
   .hero-content-wrapper {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
     text-align: center;
   }
 
@@ -4250,12 +4252,14 @@ body {
 
   .portrait-stage {
     width: 100%;
-    max-width: 460px;
-    height: 520px;
+    max-width: 440px;
+    height: 480px;
+    margin: 0 auto;
   }
 
   .about-grid-layout {
     grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 
   .dev-ethos-card {
@@ -4266,6 +4270,7 @@ body {
     flex-direction: column;
     text-align: center;
     gap: 2rem;
+    padding: 2rem 1.5rem;
   }
 
   .creator-profile-left {
@@ -4298,6 +4303,7 @@ body {
     position: fixed;
     left: -100%;
     transition: left var(--transition-smooth);
+    z-index: 1000;
   }
 
   .admin-sidebar.open {
@@ -4322,32 +4328,209 @@ body {
     display: block;
   }
 
+  .section-container {
+    padding: 4rem 1.25rem;
+  }
+
   .section-title {
     font-size: 2rem;
+    word-break: break-word;
+  }
+
+  .hero-section {
+    padding: 5.5rem 1rem 3rem 1rem;
+    min-height: auto;
+  }
+
+  .hero-headline {
+    font-size: clamp(2rem, 7.5vw, 3.2rem);
+    word-break: break-word;
+  }
+
+  .hero-subhead {
+    font-size: 1.1rem;
+  }
+
+  .hero-statement {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .role-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .role-tab-btn {
+    flex: 1 1 30%;
+    min-width: 90px;
+    padding: 0.55rem 0.5rem;
+    font-size: 0.75rem;
+    justify-content: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-actions .btn {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
+
+  .portrait-stage {
+    width: 100%;
+    max-width: 340px;
+    height: 380px;
+    margin: 0 auto;
+  }
+  
+  .clean-role-portrait {
+    max-height: 440px;
+  }
+
+  .clean-role-portrait.portrait-personal {
+    transform: translateY(-20px) scale(1.08);
+  }
+
+  .clean-role-portrait.portrait-developer {
+    transform: translateY(-5px) scale(1.08);
+  }
+
+  .ambient-floating-props-layer {
+    display: none;
+  }
+
+  .timeline-wrapper {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .timeline-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .timeline-filters {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.4rem;
+  }
+
+  .timeline-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .timeline-filters .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .timeline-items {
+    padding-left: 0.25rem;
+  }
+
+  .node-content {
+    margin-left: 2rem;
+  }
+
+  .project-category-tabs {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+    justify-content: flex-start !important;
+  }
+
+  .project-category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-tab-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .projects-editorial-grid, .achievements-grid, .published-grid, .videos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.75rem;
   }
 
   .form-grid-2, .form-grid-3, .form-fields-grid, .toggle-list-grid {
     grid-template-columns: 1fr;
   }
 
-  .portrait-stage {
-    width: 100%;
-    max-width: 380px;
-    height: 440px;
-  }
-  
-  .clean-role-portrait.portrait-personal {
-    transform: translateY(-20px);
-  }
-
-  .floating-camera-prop {
-    top: 5%;
-    right: -10px;
-    padding: 0.5rem 0.75rem;
-  }
-
   .admin-content-pane-wrapper {
-    padding: 1.25rem;
+    padding: 1rem;
+  }
+
+  .admin-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .admin-modal-box {
+    max-width: 96vw;
+    max-height: 92vh;
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 3rem 1rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-headline {
+    font-size: 1.95rem;
+  }
+
+  .portrait-stage {
+    max-width: 280px;
+    height: 320px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    max-width: 280px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .role-tabs {
+    gap: 0.3rem;
+  }
+
+  .role-tab-btn {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.35rem;
   }
 }
 

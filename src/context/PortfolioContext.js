@@ -238,6 +238,12 @@ export const PortfolioProvider = ({ children }) => {
     return updated;
   };
 
+  const syncAllTimeline = async () => {
+    const synced = await portfolioService.syncAllTimelineToFirestore();
+    setTimeline(synced);
+    return synced;
+  };
+
   const saveTimelineItem = async (item) => {
     const saved = await portfolioService.saveTimelineItem(item);
     const updated = await portfolioService.getTimeline();
@@ -328,6 +334,7 @@ export const PortfolioProvider = ({ children }) => {
     saveYouTubeVideo,
     deleteYouTubeVideo,
     updateCurrentlyBuilding,
+    syncAllTimeline,
     saveTimelineItem,
     deleteTimelineItem,
     saveGalleryItem,

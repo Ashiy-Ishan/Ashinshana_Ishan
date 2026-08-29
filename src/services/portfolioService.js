@@ -502,9 +502,34 @@ export const portfolioService = {
     return getCachedData('timeline', initialData.timeline);
   },
 
+  async syncAllTimelineToFirestore() {
+    if (isFirebaseConfigured && db) {
+      for (let i = 0; i < initialData.timeline.length; i++) {
+        const item = initialData.timeline[i];
+        const timeId = item.id || `time-${i + 1}`;
+        await setDoc(doc(db, 'timeline', timeId), { ...item, id: timeId }, { merge: true });
+      }
+    }
+    setCachedData('timeline', initialData.timeline);
+    return initialData.timeline;
+  },
+
   async saveTimelineItem(item) {
     let saved = { ...item };
     if (isFirebaseConfigured && db) {
+      try {
+        const currentSnap = await getDocs(collection(db, 'timeline'));
+        if (currentSnap.empty && initialData.timeline) {
+          for (let i = 0; i < initialData.timeline.length; i++) {
+            const it = initialData.timeline[i];
+            const tId = it.id || `time-${i + 1}`;
+            await setDoc(doc(db, 'timeline', tId), { ...it, id: tId }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default timeline check warning:', checkErr);
+      }
+
       if (item.id && !item.id.startsWith('temp-')) {
         const docRef = doc(db, 'timeline', item.id);
         await setDoc(docRef, saved, { merge: true });

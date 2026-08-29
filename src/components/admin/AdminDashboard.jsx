@@ -10,6 +10,7 @@ import {
   Hammer, 
   Image as ImageIcon, 
   Award,
+  Milestone,
   Settings, 
   LogOut, 
   ExternalLink, 
@@ -24,10 +25,11 @@ import { AdminProfile } from './AdminProfile';
 import { AdminSkills } from './AdminSkills';
 import { AdminProjects } from './AdminProjects';
 import { AdminPublished } from './AdminPublished';
+import { AdminAchievements } from './AdminAchievements';
+import { AdminTimeline } from './AdminTimeline';
 import { AdminCreator } from './AdminCreator';
 import { AdminBuilding } from './AdminBuilding';
 import { AdminGallery } from './AdminGallery';
-import { AdminAchievements } from './AdminAchievements';
 import { AdminSettings } from './AdminSettings';
 
 export const AdminDashboard = ({ onExitAdmin }) => {
@@ -61,6 +63,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={18} /> },
     { id: 'profile', label: 'Profile & Identity', icon: <User size={18} /> },
+    { id: 'timeline', label: 'Journey Timeline', icon: <Milestone size={18} /> },
     { id: 'skills', label: 'Developer Skills', icon: <Layers size={18} /> },
     { id: 'projects', label: 'Projects Showcase', icon: <Workflow size={18} /> },
     { id: 'published', label: 'Published Releases', icon: <Package size={18} /> },
@@ -77,6 +80,8 @@ export const AdminDashboard = ({ onExitAdmin }) => {
         return <AdminOverview onNavigateTab={(tab) => setActiveTab(tab)} />;
       case 'profile':
         return <AdminProfile />;
+      case 'timeline':
+        return <AdminTimeline />;
       case 'skills':
         return <AdminSkills />;
       case 'projects':
