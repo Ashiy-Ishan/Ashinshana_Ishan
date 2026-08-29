@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Save, Check, User, Image, Sparkles, Link2 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { ImageUploadField } from './ImageUploadField';
+import { initialData } from '../../data/initialData';
 
 export const AdminProfile = () => {
   const { profile, updateProfile } = usePortfolio();
-  const [formData, setFormData] = useState({ ...profile });
+  const [formData, setFormData] = useState({ 
+    ...initialData.profile, 
+    ...(profile || {}) 
+  });
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    if (profile) {
+      setFormData(prev => ({
+        ...initialData.profile,
+        ...profile
+      }));
+    }
+  }, [profile]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

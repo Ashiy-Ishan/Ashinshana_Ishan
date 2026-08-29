@@ -105,17 +105,24 @@ export const AdminOverview = ({ onNavigateTab }) => {
         >
           {syncing ? (
             <>
-              <Loader2 size={16} className="animate-spin" />
-              <span>Syncing to Firestore...</span>
+              <Loader2 size={16} className="spinner-spin" />
+              <span>Syncing Data...</span>
             </>
           ) : (
             <>
               <Database size={16} />
-              <span>{syncSuccess ? 'Cloud Sync Complete!' : 'Sync All Data to Cloud Firestore'}</span>
+              <span>{syncSuccess ? 'Sync Complete!' : 'Sync All Data to Cloud Firestore'}</span>
             </>
           )}
         </button>
       </div>
+
+      {syncSuccess && (
+        <div className="form-alert success" style={{ padding: '0.85rem 1.25rem', borderRadius: '12px', marginBottom: '1.25rem' }}>
+          <CheckCircle size={18} />
+          <span>{syncMessage || 'All collections successfully synchronized!'}</span>
+        </div>
+      )}
 
       {/* Cloud Integration Banner */}
       <div className="cloud-services-banner">

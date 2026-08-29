@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Save, Check, User, Code2, Video, Upload, Image as ImageIcon, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { uploadImageToImageKit } from '../../services/imagekitService';
+import { initialData } from '../../data/initialData';
 
 export const AdminHeroImages = () => {
   const { profile, updateProfile } = usePortfolio();
   const [images, setImages] = useState({
-    heroImagePersonal: profile?.heroImagePersonal || profile?.personalImage || profile?.profileImage || '',
-    heroImageDeveloper: profile?.heroImageDeveloper || profile?.developerImage || '',
-    heroImageCreator: profile?.heroImageCreator || profile?.creatorImage || ''
+    heroImagePersonal: profile?.heroImagePersonal || profile?.personalImage || profile?.profileImage || initialData.profile.heroImagePersonal || '',
+    heroImageDeveloper: profile?.heroImageDeveloper || profile?.developerImage || initialData.profile.heroImageDeveloper || '',
+    heroImageCreator: profile?.heroImageCreator || profile?.creatorImage || initialData.profile.heroImageCreator || ''
   });
 
   const [uploadingRole, setUploadingRole] = useState(null);
@@ -21,9 +22,9 @@ export const AdminHeroImages = () => {
   useEffect(() => {
     if (profile) {
       setImages({
-        heroImagePersonal: profile.heroImagePersonal || profile.personalImage || profile.profileImage || '',
-        heroImageDeveloper: profile.heroImageDeveloper || profile.developerImage || '',
-        heroImageCreator: profile.heroImageCreator || profile.creatorImage || ''
+        heroImagePersonal: profile.heroImagePersonal || profile.personalImage || profile.profileImage || initialData.profile.heroImagePersonal || '',
+        heroImageDeveloper: profile.heroImageDeveloper || profile.developerImage || initialData.profile.heroImageDeveloper || '',
+        heroImageCreator: profile.heroImageCreator || profile.creatorImage || initialData.profile.heroImageCreator || ''
       });
     }
   }, [profile]);
@@ -150,7 +151,11 @@ export const AdminHeroImages = () => {
                     <img 
                       src={currentUrl} 
                       alt={config.title} 
-                      className="role-preview-img" 
+                      className="role-preview-img"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = initialData.profile[config.key] || '';
+                      }}
                     />
                   ) : (
                     <div className="role-preview-placeholder">

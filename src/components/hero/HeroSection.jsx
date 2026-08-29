@@ -17,6 +17,7 @@ import {
   Flame
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { initialData } from '../../data/initialData';
 
 export const HeroSection = ({ activeRole, setActiveRole }) => {
   const { profile, youtubeChannel } = usePortfolio();
@@ -68,10 +69,24 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
 
   const current = roleDetails[activeRole] || roleDetails.personal;
 
-  // Resolve images dynamically with safe fallbacks
-  const personalImg = profile?.heroImagePersonal || profile?.personalImage || profile?.profileImage;
-  const developerImg = profile?.heroImageDeveloper || profile?.developerImage || personalImg;
-  const creatorImg = profile?.heroImageCreator || profile?.creatorImage || personalImg;
+  // Resolve images dynamically with guaranteed baseline asset fallbacks
+  const personalImg = (profile?.heroImagePersonal && typeof profile.heroImagePersonal === 'string' && profile.heroImagePersonal.trim()) 
+    || (profile?.personalImage && typeof profile.personalImage === 'string' && profile.personalImage.trim()) 
+    || (profile?.profileImage && typeof profile.profileImage === 'string' && profile.profileImage.trim()) 
+    || initialData.profile.heroImagePersonal 
+    || initialData.profile.profileImage;
+
+  const developerImg = (profile?.heroImageDeveloper && typeof profile.heroImageDeveloper === 'string' && profile.heroImageDeveloper.trim()) 
+    || (profile?.developerImage && typeof profile.developerImage === 'string' && profile.developerImage.trim()) 
+    || initialData.profile.heroImageDeveloper 
+    || initialData.profile.developerImage 
+    || personalImg;
+
+  const creatorImg = (profile?.heroImageCreator && typeof profile.heroImageCreator === 'string' && profile.heroImageCreator.trim()) 
+    || (profile?.creatorImage && typeof profile.creatorImage === 'string' && profile.creatorImage.trim()) 
+    || initialData.profile.heroImageCreator 
+    || initialData.profile.creatorImage 
+    || personalImg;
 
   const scrollTo = (href) => {
     const el = document.querySelector(href);
@@ -248,6 +263,10 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 src={personalImg}
                 alt="Ashinshana Ishan Personal Identity"
                 className="clean-role-portrait portrait-personal"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = initialData.profile.heroImagePersonal;
+                }}
               />
             </div>
 
@@ -257,6 +276,10 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 src={developerImg}
                 alt="Ashinshana Ishan Software Developer"
                 className="clean-role-portrait portrait-developer"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = initialData.profile.heroImageDeveloper;
+                }}
               />
             </div>
 
@@ -266,6 +289,10 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
                 src={creatorImg}
                 alt="Ashinshana Ishan Tech Creator"
                 className="clean-role-portrait portrait-creator"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = initialData.profile.heroImageCreator;
+                }}
               />
             </div>
           </div>
