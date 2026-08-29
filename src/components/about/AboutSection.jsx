@@ -60,6 +60,15 @@ export const AboutSection = () => {
     }
   };
 
+  const cleanFullName = (profile?.fullName || profile?.name || 'Ashinshana Ishan')
+    .replace(/Ashiy\s*Ishan/gi, 'Ashinshana Ishan')
+    .replace(/AshiyIshan/gi, 'Ashinshana Ishan')
+    .replace(/Ashiy/gi, 'Ashinshana');
+
+  const cleanBio = (profile?.bio || 'Undergraduate at Sabaragamuwa University of Sri Lanka passionate about modern web development, backend engineering, UI/UX design, and tech content creation. I enjoy turning complex ideas into elegant, user-focused digital experiences.')
+    .replace(/Ashiy\s*Ishan/gi, 'Ashinshana Ishan')
+    .replace(/AshiyIshan/gi, 'Ashinshana Ishan');
+
   return (
     <section id="about" className="section-container about-section" aria-label="About Ashinshana Ishan">
       {/* Section Header */}
@@ -82,7 +91,7 @@ export const AboutSection = () => {
           <div className="personal-avatar-wrapper">
             <img 
               src={profile?.personalImage || profile?.heroImagePersonal || profile?.profileImage} 
-              alt={profile?.fullName || 'Ashinshana Ishan'} 
+              alt={cleanFullName} 
               className="personal-avatar-img"
             />
             <div className="personal-verified-badge" title="Undergraduate & Tech Creator">
@@ -92,11 +101,11 @@ export const AboutSection = () => {
 
           <div className="personal-profile-text">
             <div className="personal-title-row">
-              <h3 className="personal-channel-name">{profile?.fullName || 'Ashinshana Ishan'}</h3>
+              <h3 className="personal-channel-name">{cleanFullName}</h3>
               <span className="personal-handle-badge">Undergraduate '26</span>
             </div>
             <p className="personal-bio-text">
-              {profile?.bio || 'Undergraduate at Sabaragamuwa University of Sri Lanka passionate about modern web development, backend engineering, UI/UX design, and tech content creation. I enjoy turning complex ideas into elegant, user-focused digital experiences.'}
+              {cleanBio}
             </p>
           </div>
         </div>

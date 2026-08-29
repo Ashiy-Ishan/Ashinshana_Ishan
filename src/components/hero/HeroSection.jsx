@@ -299,6 +299,9 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
               />
             </div>
 
+            {/* Realistic Ground Contact Floor Shadow Under Character Base */}
+            <div className="portrait-ground-floor-shadow" />
+
             {/* Realistic Ambient Floor Mist (Seamless 360° Radial Feathering Behind Floor Base) */}
             <div className={`portrait-floor-mist mist-${activeRole}`} />
           </div>

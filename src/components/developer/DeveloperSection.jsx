@@ -17,6 +17,11 @@ import { PublishedProjects } from './PublishedProjects';
 export const DeveloperSection = () => {
   const { profile } = usePortfolio();
 
+  const cleanDevName = (profile?.name || 'Ashinshana')
+    .replace(/Ashiy\s*Ishan/gi, 'Ashinshana')
+    .replace(/AshiyIshan/gi, 'Ashinshana')
+    .replace(/Ashiy/gi, 'Ashinshana');
+
   return (
     <section id="developer" className="section-container developer-section" aria-label="Developer Experience">
       {/* Section Header */}
@@ -39,7 +44,7 @@ export const DeveloperSection = () => {
           <div className="dev-avatar-wrapper">
             <img
               src={profile?.developerImage || profile?.heroImageDeveloper || profile?.profileImage}
-              alt={profile?.fullName || 'Ashinshana Ishan Software Engineer'}
+              alt={`${cleanDevName} Software Engineer`}
               className="dev-avatar-img"
             />
             <div className="dev-verified-badge" title="Full-Stack Developer">
@@ -49,7 +54,7 @@ export const DeveloperSection = () => {
 
           <div className="dev-profile-text">
             <div className="dev-title-row">
-              <h3 className="dev-channel-name">{profile?.name || 'Ashinshana'}</h3>
+              <h3 className="dev-channel-name">{cleanDevName}</h3>
               <span className="dev-handle-badge">@ashiy_ish / Dev</span>
             </div>
             <p className="dev-bio-text">

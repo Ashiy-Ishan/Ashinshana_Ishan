@@ -1238,6 +1238,22 @@ body {
   }
 }
 
+/* Realistic Contact Ground Floor Shadow beneath character/chair */
+.portrait-ground-floor-shadow {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 540px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse 55% 45% at 50% 50%, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 35%, rgba(0, 0, 0, 0.3) 65%, transparent 80%);
+  filter: blur(12px);
+  z-index: 5;
+  pointer-events: none;
+  transition: all 0.5s var(--ease-cinematic);
+}
+
 /* Realistic Ambient Floor Mist (Seamless 360° Radial Feathering Behind Floor Base) */
 .portrait-floor-mist {
   position: absolute;
@@ -5127,18 +5143,29 @@ body {
   .clean-role-portrait {
     max-height: 360px;
     object-fit: contain;
+    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.75)) !important;
   }
 
   .clean-role-portrait.portrait-personal {
     transform: translateY(0) scale(1.02);
+    filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.22)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0.8)) !important;
   }
 
   .clean-role-portrait.portrait-developer {
     transform: translateY(0) scale(1.02);
+    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.22)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0.8)) !important;
   }
 
   .clean-role-portrait.portrait-creator {
     transform: translateY(0) scale(1.02);
+    filter: drop-shadow(0 0 15px rgba(255, 51, 102, 0.22)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0.8)) !important;
+  }
+
+  .portrait-ground-floor-shadow {
+    width: 290px;
+    height: 40px;
+    bottom: -5px;
+    filter: blur(10px);
   }
 
   .ambient-floating-props-layer {
@@ -5220,9 +5247,46 @@ body {
     gap: 1.5rem;
   }
 
+  /* Mobile Skills Grid - Only show icons in compact tile grid */
+  .skills-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.65rem;
+  }
+
+  .skill-card-modern {
+    padding: 0.85rem 0.5rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 12px;
+    min-height: 70px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .skill-card-header {
+    margin-bottom: 0;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .skill-badges {
+    display: none !important;
+  }
+
+  .skill-icon-wrapper {
+    font-size: 2.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .skill-card-body {
+    display: none !important;
+  }
+
   .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.65rem;
   }
 
   /* Admin Responsive Styles */
