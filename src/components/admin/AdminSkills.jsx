@@ -1,7 +1,8 @@
 // src/components/admin/AdminSkills.jsx
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Star, Check, X, Sparkles } from 'lucide-react';
-import { Ballerina, PremierePro, Photoshop } from '../common/Icons';
+import { PremierePro, Photoshop } from '../common/Icons';
+import ballerinaImg from '../../Iamage/ballerina.jpeg';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 export const AdminSkills = () => {
@@ -15,8 +16,15 @@ export const AdminSkills = () => {
     const icon = (skill.icon || '').toLowerCase();
     const name = (skill.name || '').toLowerCase();
 
-    if (icon.includes('ballerina') || name.includes('ballerina')) {
-      return <Ballerina size={20} />;
+    if (skill.imageUrl || icon.includes('ballerina') || name.includes('ballerina')) {
+      const imgSrc = skill.imageUrl || ballerinaImg;
+      return (
+        <img
+          src={imgSrc}
+          alt={skill.name || 'Ballerina'}
+          style={{ width: '22px', height: '22px', objectFit: 'contain', borderRadius: '4px' }}
+        />
+      );
     }
     if (icon.includes('premiere') || name.includes('premiere')) {
       return <PremierePro size={20} />;

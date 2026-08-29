@@ -9,6 +9,7 @@ import portfolioImg from '../Iamage/portfolio.png';
 import bankImg from '../Iamage/bank.png';
 import javaImg from '../Iamage/java.png';
 import funWebImg from '../Iamage/fun_web.png';
+import ballerinaImg from '../Iamage/ballerina.jpeg';
 
 export const initialData = {
   profile: {
@@ -147,6 +148,7 @@ export const initialData = {
       name: 'Ballerina',
       category: 'Backend',
       icon: 'devicon-ballerina-plain',
+      imageUrl: ballerinaImg,
       description: 'Cloud-native integration, microservices, network-aware programming.',
       level: 'Intermediate',
       order: 9,

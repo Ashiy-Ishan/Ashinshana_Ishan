@@ -116,9 +116,17 @@
   font-weight: 800;
 }
 
+[data-theme="neo"] .skill-card-modern,
 [data-theme="neo"] .skill-card-modern.is-featured {
-  border-color: rgba(0, 240, 255, 0.45);
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.16);
+  box-shadow: none;
+}
+
+[data-theme="neo"] .skill-card-modern:hover,
+[data-theme="neo"] .skill-card-modern.is-featured:hover {
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.5), 0 12px 35px rgba(0, 240, 255, 0.22) !important;
+  transform: translateY(-5px);
 }
 
 [data-theme="neo"] .currently-building-container {
@@ -1713,22 +1721,23 @@ body {
 }
 
 .skill-card-modern {
-  background: var(--bg-surface);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: 14px;
   padding: 1.5rem;
   position: relative;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
   display: flex;
   flex-direction: column;
 }
-.skill-card-modern:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-medium);
-}
 .skill-card-modern.is-featured {
-  border-color: var(--accent-dev);
+  border: 1px solid var(--border-subtle);
   background: var(--bg-surface-elevated);
+}
+.skill-card-modern:hover {
+  transform: translateY(-5px);
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.4), 0 10px 28px rgba(0, 240, 255, 0.15) !important;
 }
 
 .skill-card-header {
@@ -4457,13 +4466,18 @@ body {
 .achievement-card,
 .currently-card {
   background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-medium);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
   padding: 1.5rem;
   transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
 }
 
-.skill-card-modern:hover,
+.skill-card-modern:hover {
+  transform: translateY(-5px);
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.45), 0 10px 30px rgba(0, 240, 255, 0.18) !important;
+}
+
 .project-card-modern:hover,
 .published-item-card:hover,
 .achievement-card:hover,
