@@ -2,34 +2,11 @@
 import React from 'react';
 import { ExternalLink, Calendar, GraduationCap, ShieldCheck } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { initialData } from '../../data/initialData';
 
 export const PersonalAchievements = () => {
   const { achievements } = usePortfolio();
-
-  const items = achievements || [
-    {
-      id: 'ach-1',
-      title: 'BSc (Hons) Computing & Information Systems Batch Certificate',
-      issuer: 'Sabaragamuwa University of Sri Lanka',
-      date: '2023 - 2026',
-      category: 'Academic & University',
-      description: 'Official academic enrollment and batch certification in Computing and Information Systems, specializing in software engineering, database management systems, and system design.',
-      badge: 'Batch Certificate',
-      imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/'
-    },
-    {
-      id: 'ach-2',
-      title: 'Full-Stack Web Development & Software Architecture Certification',
-      issuer: 'Online Professional Academy & Dev Community',
-      date: '2024',
-      category: 'Professional Software Engineering',
-      description: 'Certified in modern React 19 frontend engineering, RESTful backend microservices, SQL/NoSQL databases, and cloud deployment pipelines.',
-      badge: 'Certified Developer',
-      imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://github.com/Ashiy-Ishan'
-    }
-  ];
+  const items = (achievements && achievements.length > 0) ? achievements : initialData.achievements;
 
   return (
     <section id="achievements" className="section-container personal-achievements-section">

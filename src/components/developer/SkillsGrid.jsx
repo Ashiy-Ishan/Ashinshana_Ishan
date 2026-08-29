@@ -1,10 +1,11 @@
 // src/components/developer/SkillsGrid.jsx
 import React, { useState } from 'react';
 import { Layers, Star, Sparkles } from 'lucide-react';
+import { Ballerina, PremierePro, Photoshop } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 export const SkillsGrid = () => {
-  const { skills, } = usePortfolio();
+  const { skills } = usePortfolio();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
@@ -19,6 +20,25 @@ export const SkillsGrid = () => {
     const matchFeatured = !featuredOnly || skill.featured;
     return matchCat && matchFeatured;
   });
+
+  const renderSkillIcon = (skill) => {
+    const icon = (skill.icon || '').toLowerCase();
+    const name = (skill.name || '').toLowerCase();
+
+    if (icon.includes('ballerina') || name.includes('ballerina')) {
+      return <Ballerina size={32} />;
+    }
+    if (icon.includes('premiere') || name.includes('premiere')) {
+      return <PremierePro size={32} />;
+    }
+    if (icon.includes('photoshop') || name.includes('photoshop')) {
+      return <Photoshop size={32} />;
+    }
+    if (skill.icon && skill.icon.startsWith('devicon-')) {
+      return <i className={`${skill.icon} colored dev-icon-render`} />;
+    }
+    return <Sparkles size={24} className="dev-icon-fallback" />;
+  };
 
   return (
     <div className="skills-showcase-container">
@@ -61,11 +81,7 @@ export const SkillsGrid = () => {
           >
             <div className="skill-card-header">
               <div className="skill-icon-wrapper">
-                {skill.icon && skill.icon.startsWith('devicon-') ? (
-                  <i className={`${skill.icon} colored dev-icon-render`} />
-                ) : (
-                  <Sparkles size={24} className="dev-icon-fallback" />
-                )}
+                {renderSkillIcon(skill)}
               </div>
               <div className="skill-badges">
                 {skill.featured && (

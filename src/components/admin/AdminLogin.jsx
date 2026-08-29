@@ -31,7 +31,7 @@ export const AdminLogin = ({ onCancel }) => {
           <div className="admin-shield-icon">
             <Shield size={32} />
           </div>
-          <h2 className="login-title">Ashiy Ishan Portfolio CMS</h2>
+          <h2 className="login-title">Ashinshana Ishan Portfolio CMS</h2>
           <p className="login-subtitle">Restricted Administrator Authentication Portal</p>
         </div>
 

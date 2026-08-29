@@ -9,41 +9,74 @@ service cloud.firestore {
              request.auth.token.email.lower() == 'ashinshanaishan@gmail.com';
     }
 
-    // Public portfolio documents - Read by anyone, Write restricted to authorized admin
-    match /portfolio/{document=**} {
+    // 1. Core Profile & Hero Identity
+    match /profiles/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
+    // 2. Technical Skills Catalog
     match /skills/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
+    // 3. Dev & Open-Source Projects
     match /projects/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /published/{document=**} {
+    // 4. Live / Published Platforms
+    match /publishedProjects/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /building/{document=**} {
+    // 5. YouTube Channel Hub & Videos
+    match /youtubeChannel/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /youtubeVideos/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    match /achievements/{document=**} {
+    // 6. Currently Building Radar
+    match /currentlyBuilding/{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
+    // 7. Academic & Career Timeline
+    match /timeline/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 8. Visual Gallery & Highlights
     match /gallery/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 9. Site Configuration & Feature Flags
+    match /siteSettings/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 10. Contact Inquiries (Public creation, Admin management)
+    match /contactMessages/{document=**} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Catch-all safety fallback: Public read, Admin write
+    match /{document=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
   }
 }
-

@@ -8,6 +8,7 @@ export const AdminProfile = () => {
   const [formData, setFormData] = useState({ ...profile });
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,12 +18,19 @@ export const AdminProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    setErrorMessage(null);
     try {
       await updateProfile(formData);
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
     } catch (err) {
-      alert('Error updating profile: ' + err.message);
+      console.error('Profile update failed:', err);
+      const isPermission = err?.message?.includes('insufficient permissions') || err?.code === 'permission-denied';
+      if (isPermission) {
+        setErrorMessage('Firebase Permission Error: Ensure you are logged into Firebase with ashinshanaishan@gmail.com and firestore.rules have been deployed to your Firebase console.');
+      } else {
+        setErrorMessage('Error updating profile: ' + (err.message || 'Unknown error occurred.'));
+      }
     } finally {
       setSaving(false);
     }
@@ -44,6 +52,12 @@ export const AdminProfile = () => {
           <div className="form-alert success">
             <Check size={18} />
             <span>Profile successfully updated and synchronized!</span>
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="form-alert error" style={{ background: 'rgba(255, 51, 102, 0.15)', border: '1px solid rgba(255, 51, 102, 0.4)', color: '#ff6b8b', padding: '1rem', borderRadius: '12px', marginBottom: '1.5rem' }}>
+            <span>{errorMessage}</span>
           </div>
         )}
 

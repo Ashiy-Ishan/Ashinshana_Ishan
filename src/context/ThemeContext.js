@@ -4,18 +4,17 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext(null);
 
 export const THEME_OPTIONS = [
-  { id: 'dark', name: 'Dark Mode' },
-  { id: 'neo', name: 'Neo Mode' }
+  { id: 'neo', name: 'Neo Mode' },
+  { id: 'dark', name: 'Dark Mode' }
 ];
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('ashiy_portfolio_theme');
-    // If saved theme was light or invalid, default to dark
-    if (saved === 'light' || !THEME_OPTIONS.some(t => t.id === saved)) {
-      return 'dark';
+    if (!saved || saved === 'light' || !THEME_OPTIONS.some(t => t.id === saved)) {
+      return 'neo';
     }
-    return saved || 'dark';
+    return saved || 'neo';
   });
 
   useEffect(() => {

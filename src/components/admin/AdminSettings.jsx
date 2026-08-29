@@ -7,9 +7,9 @@ export const AdminSettings = () => {
   const { siteSettings, updateSiteSettings } = usePortfolio();
 
   const [formData, setFormData] = useState({
-    siteTitle: siteSettings?.siteTitle || 'Ashiy Ishan | Developer • Creator • Builder',
+    siteTitle: siteSettings?.siteTitle || 'Ashinshana Ishan | Developer • Creator • Builder',
     tagline: siteSettings?.tagline || 'I BUILD. I CREATE. I SHARE.',
-    metaDescription: siteSettings?.metaDescription || 'Ashiy Ishan is a software developer and content creator.',
+    metaDescription: siteSettings?.metaDescription || 'Ashinshana Ishan is a software developer and content creator.',
     accentColor: siteSettings?.accentColor || '#00d2ff',
     developerAccent: siteSettings?.developerAccent || '#38bdf8',
     creatorAccent: siteSettings?.creatorAccent || '#ff3366',
@@ -69,7 +69,7 @@ export const AdminSettings = () => {
               name="siteTitle"
               value={formData.siteTitle}
               onChange={handleChange}
-              placeholder="Ashiy Ishan | Developer • Creator • Builder"
+              placeholder="Ashinshana Ishan | Developer • Creator • Builder"
             />
           </div>
 
@@ -91,7 +91,7 @@ export const AdminSettings = () => {
               value={formData.metaDescription}
               onChange={handleChange}
               rows={3}
-              placeholder="Ashiy Ishan is a software developer, creator, and Sabaragamuwa University computing undergraduate..."
+              placeholder="Ashinshana Ishan is a software developer, creator, and Sabaragamuwa University computing undergraduate..."
             />
           </div>
         </div>

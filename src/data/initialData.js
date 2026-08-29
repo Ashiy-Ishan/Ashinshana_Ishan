@@ -13,15 +13,17 @@ import funWebImg from '../Iamage/fun_web.png';
 export const initialData = {
   profile: {
     id: 'main',
-    name: 'Ashiy Ishan',
+    name: 'Ashinshana',
     fullName: 'Ashinshana Ishan',
     title: 'Developer • Creator • Builder',
     motto: 'I BUILD. I CREATE. I SHARE.',
     statement: 'I build software, create content, and turn ideas into things people can use.',
-    bio: "I'm a passionate undergraduate at Sabaragamuwa University of Sri Lanka, deeply focused on modern web development, backend engineering, UI/UX design, and technology content creation. I love turning complex logic into elegant, human-centric software.",
+    bio: "I’m an undergraduate at Sabaragamuwa University of Sri Lanka, passionate about modern web development, backend engineering, UI/UX design, and tech content creation. I enjoy turning complex ideas into elegant, user-focused digital experiences.",
     location: 'Sri Lanka',
     university: 'Sabaragamuwa University of Sri Lanka',
     degree: 'BSc (Hons) in Computing / Information Systems',
+    school: 'Bandaranayake College, Gampaha',
+    alStream: 'G.C.E. (A/L) Physical Science Stream (2014 - 2022)',
     status: 'Undergraduate & Tech Creator',
     profileImage: personImg,
     developerImage: developerImg,
@@ -31,12 +33,12 @@ export const initialData = {
     heroImageCreator: youtuberImg,
     heroImagePersonal: personImg,
     highResPhoto: rPhoto,
-    resumeUrl: 'https://github.com/Ashiy-Ishan',
+    resumeUrl: 'https://drive.google.com/file/d/1kfXhS5lFAV9yJSBghOLv_vswnreFRutB/view?usp=sharing',
     email: 'ashinshanaishan@gmail.com',
     whatsapp: '94759428249',
     github: 'https://github.com/Ashiy-Ishan',
     linkedin: 'https://www.linkedin.com/in/ashinshana-ishan-73b228318',
-    youtube: 'https://www.youtube.com/@AshiyIshan',
+    youtube: 'https://www.youtube.com/@ashiy_ish',
     instagram: 'https://www.instagram.com/a_s_h_i_y_ishan/',
     facebook: 'https://web.facebook.com/profile.php?id=61553251979579',
     dynamicRoles: [
@@ -44,7 +46,8 @@ export const initialData = {
       'YouTube Creator',
       'Full-Stack Builder',
       'UI/UX Designer',
-      'Tech Enthusiast'
+      'Tech Enthusiast',
+      'Internet of Things'
     ]
   },
 
@@ -223,6 +226,74 @@ export const initialData = {
 
   projects: [
     {
+      id: 'proj-lumina-chat',
+      title: 'Lumina Instant Messaging (Individual)',
+      shortDescription: 'Fast real-time chat app designed to handle thousands of concurrent users with low latency.',
+      description: 'Built a fast real-time chat app designed to handle thousands of users at once. Used Go for low-latency messaging, Redis for instant status updates, a Next.js frontend, PostgreSQL to save chat history, and Docker for smooth cloud deployment.',
+      imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+      technologies: ['Go', 'Kotlin', 'PostgreSQL', 'Redis', 'Docker', 'AWS', 'Render', 'Next.js'],
+      category: 'Backend',
+      githubUrl: 'https://github.com/Ashiy-Ishan',
+      liveUrl: '',
+      demoUrl: '',
+      date: '2025',
+      status: 'Ongoing',
+      featured: true,
+      published: true,
+      order: 1
+    },
+    {
+      id: 'proj-shortm-automation',
+      title: 'ShortM (Individual)',
+      shortDescription: 'Automated YouTube Shorts creation, subtitle generation, and direct publishing desktop app.',
+      description: 'A Windows and Linux application that automates YouTube Shorts creation, subtitle generation, and direct uploading to YouTube. It simplifies the entire workflow, saving time and reducing manual effort.',
+      imageUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80',
+      technologies: ['Python', 'Flask', 'JavaScript', 'HTML5', 'CSS3', 'YouTube API'],
+      category: 'Desktop',
+      githubUrl: 'https://github.com/Ashiy-Ishan',
+      liveUrl: '',
+      demoUrl: '',
+      date: '2025',
+      status: 'Ongoing',
+      featured: true,
+      published: true,
+      order: 2
+    },
+    {
+      id: 'proj-agelink-iot',
+      title: 'AgeLink - IoT Smart Health Assistant for Elderly Care',
+      shortDescription: 'Dual-connectivity IoT device (ESP32) and companion mobile app designed to solve medication non-adherence among the elderly.',
+      description: 'Designed and prototyped AgeLink, an IoT health assistant. Features ESP32 embedded C++ firmware with Wi-Fi/GSM (SIM800L) dual-connectivity, Firebase Realtime Database sync, LittleFS offline JSON resilience, I2S audio via MAX98357 amplifier, and PDPA/GDPR compliant privacy architecture.',
+      imageUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+      technologies: ['C++', 'ESP32', 'IoT', 'Firebase', 'Embedded Systems', 'FreeRTOS', 'Flutter'],
+      category: 'IoT',
+      githubUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Project/1686683068/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ',
+      liveUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Project/1686683068/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ',
+      demoUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Project/1686683068/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ',
+      date: '2025',
+      status: 'In Development',
+      featured: true,
+      published: true,
+      order: 1
+    },
+    {
+      id: 'proj-smart-ai-alarm',
+      title: 'Smart AI Alarm System',
+      shortDescription: 'Production-ready IoT-enabled smart alarm clock dynamically calculating optimal wake-up times using Machine Learning.',
+      description: 'Collaborated in a 5-person team to engineer an IoT-enabled smart alarm clock powered by LightGBM machine learning heuristics, Flutter cross-platform mobile app, Python Flask backend, ESP32 hardware with DHT/motion sensors, OLED display, and Google Maps/Calendar/OpenWeather APIs.',
+      imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+      technologies: ['Python', 'Flask', 'Flutter', 'LightGBM', 'ESP32', 'Firebase', 'MongoDB', 'IoT'],
+      category: 'AI',
+      githubUrl: 'https://github.com/Ashiy-Ishan',
+      liveUrl: 'https://www.linkedin.com/in/ashinshana-ishan/',
+      demoUrl: 'https://www.linkedin.com/in/ashinshana-ishan/',
+      date: '2025',
+      status: 'Live',
+      featured: true,
+      published: true,
+      order: 2
+    },
+    {
       id: 'proj-portfolio-v2',
       title: 'Cinematic Personal Brand Portfolio & CMS',
       shortDescription: 'A dynamic, high-performance portfolio featuring interactive role transitions, custom Firebase CMS, and responsive dark aesthetics.',
@@ -237,41 +308,41 @@ export const initialData = {
       status: 'Live',
       featured: true,
       published: true,
-      order: 1
+      order: 3
     },
     {
       id: 'proj-ecommerce-backend',
-      title: 'E-Commerce & Banking Backend System',
-      shortDescription: 'Robust backend architecture for transaction processing and e-commerce banking workflows with secure database operations.',
-      description: 'Developed an enterprise-grade backend infrastructure handling account transactions, product inventory, order routing, and relational data management in MySQL.',
+      title: 'Slithering Transaction Core',
+      shortDescription: 'Microservice-oriented banking logic engine supporting atomic data manipulation and resilient service boundaries.',
+      description: 'Microservice-oriented banking logic engine supporting atomic data manipulation and resilient service boundaries. Engineered backend infrastructure handling account transactions, product inventory, and relational data management in MySQL.',
       imageUrl: bankImg,
-      technologies: ['JavaScript', 'Ballerina', 'MySQL', 'REST API'],
+      technologies: ['Ballerina', 'JavaScript', 'MySQL', 'REST API'],
       category: 'Backend',
       githubUrl: 'https://github.com/Ashiy-Ishan/iwb096-slithering.git',
       liveUrl: '',
       demoUrl: '',
-      date: '2024',
+      date: '2024-11',
       status: 'Open Source',
-      featured: true,
+      featured: false,
       published: true,
-      order: 2
+      order: 4
     },
     {
       id: 'proj-java-maths',
-      title: 'Mini Java Maths Problem Generator for Kids',
-      shortDescription: 'An interactive mathematical training application designed to foster arithmetic agility in young learners.',
-      description: 'Engineered a Java application generating randomized addition, subtraction, and multiplication challenges with scoring feedback and dynamic difficulty progression.',
+      title: 'Kids Math Trainer CLI & GUI',
+      shortDescription: 'Educational software generating arithmetic challenge sets with instant validation.',
+      description: 'Educational software generating arithmetic challenge sets with instant validation. Engineered a Java application generating randomized addition, subtraction, and multiplication challenges with scoring feedback and dynamic difficulty progression.',
       imageUrl: javaImg,
-      technologies: ['Java', 'OOP', 'GUI', 'Algorithms'],
+      technologies: ['Java 17 Standard Edition', 'OOP', 'GUI', 'Algorithms'],
       category: 'Desktop',
       githubUrl: 'https://github.com/Ashiy-Ishan/Java_mini-Project.git',
       liveUrl: '',
       demoUrl: '',
-      date: '2024',
+      date: '2024-06',
       status: 'Released',
       featured: false,
       published: true,
-      order: 3
+      order: 5
     },
     {
       id: 'proj-funweb',
@@ -288,14 +359,14 @@ export const initialData = {
       status: 'Live',
       featured: false,
       published: true,
-      order: 4
+      order: 6
     }
   ],
 
   publishedProjects: [
     {
       id: 'pub-1',
-      name: 'Ashiy Portfolio CMS Engine',
+      name: 'Ashinshana Portfolio CMS Engine',
       version: 'v2.0.0',
       releaseDate: '2025-02',
       technology: 'React 19, Firebase Firestore, CSS Modern Modules',
@@ -303,84 +374,62 @@ export const initialData = {
       liveDemo: 'https://Ashiy-Ishan.github.io/Ashinshana_Ishan/',
       status: 'Live',
       description: 'An interactive personal brand portfolio engine with dynamic role switching and headless Firestore CMS management.'
-    },
-    {
-      id: 'pub-2',
-      name: 'Slithering Transaction Core',
-      version: 'v1.1.0',
-      releaseDate: '2024-11',
-      technology: 'Ballerina, JavaScript, MySQL',
-      github: 'https://github.com/Ashiy-Ishan/iwb096-slithering.git',
-      liveDemo: '',
-      status: 'Open Source',
-      description: 'Microservice-oriented banking logic engine supporting atomic data manipulation and resilient service boundaries.'
-    },
-    {
-      id: 'pub-3',
-      name: 'Kids Math Trainer CLI & GUI',
-      version: 'v1.0.0',
-      releaseDate: '2024-06',
-      technology: 'Java 17 Standard Edition',
-      github: 'https://github.com/Ashiy-Ishan/Java_mini-Project.git',
-      liveDemo: '',
-      status: 'Released',
-      description: 'Educational software generating arithmetic challenge sets with instant validation.'
     }
   ],
 
   youtubeChannel: {
-    channelName: 'Curly Max',
-    handle: '@CurlyMax',
-    channelUrl: 'https://www.youtube.com/@AshiyIshan',
+    channelName: 'CURLYmax',
+    handle: '@ashiy_ish',
+    channelUrl: 'https://www.youtube.com/@ashiy_ish/videos',
     channelImage: curlymaxLogo,
-    description: 'Welcome to Curly Max! Sharing coding tutorials, full-stack software engineering, developer workflows, UI/UX breakdowns, and tech experiments.',
-    subscribers: '1.5K+',
-    views: '48K+',
-    videos: '25+',
+    description: 'Official YouTube channel of CURLYmax featuring competition demos, hackathon project presentations, IoT architectures, and technical flows & architectural explanations.',
+    subscribers: '60',
+    views: '800+',
+    videos: '3',
     featuredVideoId: 'video-1'
   },
 
   youtubeVideos: [
     {
       id: 'video-1',
-      youtubeId: 'dQw4w9WgXcQ',
-      title: 'Building a Full-Stack React & Firebase Application From Scratch',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80',
-      description: 'A complete step-by-step walkthrough on building scalable React applications backed by Firestore and Firebase Auth.',
-      publishedAt: '2025-01-15',
-      duration: '18:42',
-      views: '4.2K',
-      url: 'https://www.youtube.com/@AshiyIshan',
+      youtubeId: 'pxNniyob8v8',
+      title: 'Slithering || Bank Loan Tracking System',
+      thumbnailUrl: 'https://img.youtube.com/vi/pxNniyob8v8/hqdefault.jpg',
+      description: 'Web-based Bank Loan Tracking System (BLS) presentation focused on technical flows: dual-role authentication (Admin & User), end-to-end loan status progress tracking, and Ballerina API integration architecture.',
+      publishedAt: '2024-10-20',
+      duration: '6:36',
+      views: '250+',
+      url: 'https://youtu.be/pxNniyob8v8',
       featured: true,
-      category: 'Featured',
+      category: 'Competition',
       order: 1
     },
     {
       id: 'video-2',
-      youtubeId: 'dQw4w9WgXcQ',
-      title: 'Modern UI/UX Design in Figma: From Concept to Clean Code',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
-      description: 'How I design modern developer interfaces, choose harmonious color schemes, and translate Figma frames into responsive CSS.',
-      publishedAt: '2024-12-20',
-      duration: '14:15',
-      views: '3.8K',
-      url: 'https://www.youtube.com/@AshiyIshan',
+      youtubeId: 'g0GK9anwC6k',
+      title: 'KING Codes | Webify.me',
+      thumbnailUrl: 'https://img.youtube.com/vi/g0GK9anwC6k/hqdefault.jpg',
+      description: 'AI-powered presentation slide generation platform demo focused on technical flows: Google Gemini API pipeline, SHA-256 secure auth handshake, React interactive canvas, and Ballerina/Python microservices.',
+      publishedAt: '2025-08-31',
+      duration: '9:19',
+      views: '320+',
+      url: 'https://youtu.be/g0GK9anwC6k',
       featured: true,
-      category: 'Popular',
+      category: 'Competition',
       order: 2
     },
     {
       id: 'video-3',
-      youtubeId: 'dQw4w9WgXcQ',
-      title: 'Top 5 Java Best Practices Every Student Should Know',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
-      description: 'Clear explanations on object-oriented architecture, clean code structure, and debugging strategies in Java.',
-      publishedAt: '2024-11-10',
-      duration: '12:08',
-      views: '5.1K',
-      url: 'https://www.youtube.com/@AshiyIshan',
-      featured: false,
-      category: 'Latest',
+      youtubeId: 'Dg8cj1AjC2k',
+      title: 'AgeLink: Empowering Elderly Independence | Team XTurbo | HackElite 3.0',
+      thumbnailUrl: 'https://img.youtube.com/vi/Dg8cj1AjC2k/hqdefault.jpg',
+      description: 'IoT-enabled smart medication dispenser and elderly monitoring solution walkthrough focused on technical flows: ESP32 Wi-Fi/GSM dual-connectivity fallback, LittleFS offline state machines, and real-time Firebase sync.',
+      publishedAt: '2026-08-11',
+      duration: '7:00',
+      views: '280+',
+      url: 'https://youtu.be/Dg8cj1AjC2k',
+      featured: true,
+      category: 'Competition',
       order: 3
     }
   ],
@@ -388,28 +437,45 @@ export const initialData = {
   currentlyBuilding: {
     id: 'main',
     building: {
-      title: 'High-Performance Portfolio & Headless CMS',
-      description: 'Cinematic personal brand platform with real-time Firestore synchronization and GitHub Pages hosting.',
-      badge: 'Active Development'
+      title: 'Lumina Instant Messaging (Individual)',
+      badge: 'ONGOING',
+      role: 'Full-Stack & Systems Engineer',
+      tech: 'Go, Kotlin, PostgreSQL, Redis, Docker, AWS/Render',
+      description: 'Built a fast real-time chat app designed to handle thousands of users at once. Used Go for low-latency messaging, Redis for instant status updates, a Next.js frontend, PostgreSQL to save chat history, and Docker for smooth cloud deployment.'
     },
     learning: {
-      title: 'Cloud Distributed Systems & Cloud Functions',
-      description: 'Diving deep into serverless compute architectures and advanced caching layers.',
-      badge: 'Continuous Learning'
+      title: 'ShortM (Individual)',
+      badge: 'ONGOING',
+      role: 'Full Stack Developer',
+      tech: 'HTML, CSS, JS, Python, Flask',
+      description: 'A Windows and Linux application that automates YouTube Shorts creation, subtitle generation, and direct uploading to YouTube. It simplifies the entire workflow, saving time and reducing manual effort.'
     },
     creating: {
-      title: 'YouTube Coding Series: Modern Web Architecture',
-      description: 'Producing visual guides for undergraduates and aspiring developers.',
-      badge: 'Content Creation'
+      title: 'Technical Flows & Architectural Walkthroughs',
+      badge: 'Content',
+      role: 'Tech Creator',
+      tech: 'Figma, Premiere Pro, System Diagrams',
+      description: 'Producing video breakdowns focused on technical flows, systems architecture explanations, and interactive live demos.'
     },
     exploring: {
       title: 'Generative AI Integration & IoT Edge Devices',
-      description: 'Testing multimodal AI models and hardware micro-controllers for smart automation.',
-      badge: 'Research'
+      badge: 'R&D',
+      role: 'Researcher',
+      tech: 'ESP32, Gemini API, FreeRTOS, Embedded C++',
+      description: 'Testing multimodal AI models and hardware micro-controllers for smart automation and edge telemetry.'
     }
   },
 
   timeline: [
+    {
+      id: 'time-school',
+      year: '2014 - 2022',
+      title: 'Bandaranayake College, Gampaha',
+      subtitle: 'G.C.E. (A/L) Examination in Physical Science Stream',
+      description: 'Completed secondary education in the Physical Science stream (2014 - 2022), developing core analytical problem solving, higher mathematics, and physics fundamentals.',
+      type: 'education',
+      badge: 'School'
+    },
     {
       id: 'time-1',
       year: '2023 - Present',
@@ -420,19 +486,10 @@ export const initialData = {
       badge: 'University'
     },
     {
-      id: 'time-2',
-      year: '2024',
-      title: 'Launched Open Source & Backend Projects',
-      subtitle: 'Slithering Banking Engine & Java Mini Projects',
-      description: 'Released open source repositories on GitHub, refining practical experience in Java OOP and Ballerina cloud integrations.',
-      type: 'project',
-      badge: 'Milestone'
-    },
-    {
       id: 'time-3',
       year: '2024 - 2025',
       title: 'Content Creation & YouTube Tech Channel',
-      subtitle: 'Ashiy Ishan Tech & Tutorials',
+      subtitle: 'Ashinshana Ishan Tech & Tutorials',
       description: 'Expanded into tech education, producing video breakdowns, UI design tutorials in Figma, and frontend coding sessions.',
       type: 'creator',
       badge: 'Content'
@@ -451,7 +508,7 @@ export const initialData = {
   gallery: [
     {
       id: 'img-1',
-      title: 'Profile Portrait (Ashiy Ishan)',
+      title: 'Profile Portrait (Ashinshana Ishan)',
       category: 'Portrait',
       url: profilePhoto,
       isHeroImage: true,
@@ -501,10 +558,123 @@ export const initialData = {
     }
   ],
 
+  achievements: [
+    {
+      id: 'cert-tensorforge',
+      title: '1st Runner Up in TENSORFORGE',
+      issuer: 'General Sir John Kotelawala Defence University',
+      date: 'Oct 2025',
+      category: 'AI & Machine Learning',
+      description: 'Awarded 1st Runner Up in the TENSORFORGE Machine Learning competition for building competitive machine learning models and Python-based predictive algorithms.',
+      badge: '1st Runner Up',
+      imageUrl: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://drive.google.com/file/d/1fOlLjqrCOuoaEQWFtE2wwqHEHwen0ysV/view?usp=sharing'
+    },
+    {
+      id: 'cert-ideax-hackx',
+      title: 'Certificate of Appreciation — ideaX (Semi-Finals of hackX 10.0)',
+      issuer: 'Dept. of Industrial Management, University of Kelaniya',
+      date: 'Oct 2025',
+      category: 'IoT & Innovation',
+      description: 'Certificate of Appreciation for qualifying and competing in the semi-finals of hackX 10.0 (ideaX), developing innovative Arduino and IoT hardware solutions.',
+      badge: 'Semi-Finalist',
+      imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://drive.google.com/file/d/1o-V48vdkLYrw7bbPo76KuFBb9i-ONaYs/view?usp=drive_link'
+    },
+    {
+      id: 'cert-cisco-cybersecurity',
+      title: 'Introduction to Cybersecurity Certification',
+      issuer: 'Cisco Networking Academy',
+      date: 'Dec 2025',
+      category: 'Cybersecurity',
+      description: 'Certified by Cisco Networking Academy in core cybersecurity principles, threat defense, network security best practices, and data protection.',
+      badge: 'Cisco Certified',
+      imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://www.credly.com/badges/ae2bf5f5-d932-46b6-841b-bd600738a4e0'
+    },
+    {
+      id: 'cert-cisco-python-essentials',
+      title: 'Python Essentials 1 — Statement of Achievement',
+      issuer: 'Cisco Networking Academy & OpenEDG Python Institute',
+      date: 'Nov 2025',
+      category: 'Software Engineering',
+      description: 'Certified in designing, developing, debugging, and refactoring Python 3 programs, mastering algorithmic thinking, Python syntax, Standard Library, and PCEP preparation.',
+      badge: 'OpenEDG / Cisco',
+      imageUrl: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://drive.google.com/file/d/1N5SaIqmS0owwqEx0WK_oxthBDbZp3-jb/view?usp=drive_link'
+    },
+    {
+      id: 'cert-hemas-aithon',
+      title: 'Hemas AITHON Participation Certificate',
+      issuer: 'Hemas Holdings PLC',
+      date: '2025',
+      category: 'AI & Vibe Coding',
+      description: 'Participated in the Hemas AITHON AI hackathon, focusing on modern generative AI integrations, vibe coding methodologies, and agile prototype delivery.',
+      badge: 'Participant',
+      imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Certifications/2090323482/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ'
+    },
+    {
+      id: 'cert-hackelite',
+      title: 'Hackelite 2.0 Participation Certificate',
+      issuer: 'IEEE WIE Student Branch, University of Moratuwa',
+      date: 'Sep 2025',
+      category: 'Mobile Development',
+      description: 'Participated in Hackelite 2.0 hackathon, building mobile application prototypes utilizing Flutter and Android architecture.',
+      badge: 'IEEE Moratuwa',
+      imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Certifications/2089949848/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ'
+    },
+    {
+      id: 'cert-jpura-xtream',
+      title: 'J\'PURA XTREAM Competitive Programming Certificate',
+      issuer: 'University of Sri Jayewardenepura',
+      date: 'Oct 2025',
+      category: 'Algorithms',
+      description: 'Participated in J\'PURA XTREAM algorithmic hackathon, solving complex computational problem sets in Python and C.',
+      badge: 'Competitive Coding',
+      imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://drive.google.com/file/d/1xg6neadGWaOeLX-BwN-H6jNFJ2PyV_hy/view?usp=sharing'
+    },
+    {
+      id: 'cert-moraxtreme',
+      title: 'MoraXtreme 9.0 Hackathon Certificate of Participation',
+      issuer: 'IEEE Student Branch, University of Moratuwa',
+      date: 'Nov 2024',
+      category: 'Hackathon',
+      description: 'Achieved 94th place in MoraXtreme 9.0, solving algorithmic and data structure challenges under strict time bounds with team members.',
+      badge: 'Top 100 Finish',
+      imageUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://drive.google.com/file/d/1W0Obwxnnu_W5SwXjGTOeWqd3IdjvdiQ5/view?usp=drivesdk'
+    },
+    {
+      id: 'cert-wso2-ballerina',
+      title: 'Innovate with Ballerina Coding Challenge Certificate',
+      issuer: 'WSO2',
+      date: 'Nov 2024',
+      category: 'Cloud Architecture',
+      description: 'Completed the WSO2 Ballerina coding challenge, designing cloud-native integration microservices and RESTful API endpoints.',
+      badge: 'WSO2 Certified',
+      imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://drive.google.com/file/d/1VVqbKMp9MAu49si1-FycHKFKFczYeFW7/view?usp=sharing'
+    },
+    {
+      id: 'cert-hackerrank-python',
+      title: 'HackerRank Python (Basic) Skill Certificate',
+      issuer: 'HackerRank',
+      date: 'Nov 2024',
+      category: 'Problem Solving',
+      description: 'Validated foundational Python proficiencies covering scalar types, control flow, strings, collections, modularity, OOP classes, and iteration.',
+      badge: 'HackerRank Verified',
+      imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+      credentialUrl: 'https://www.hackerrank.com/certificates/iframe/945bb823f36d'
+    }
+  ],
+
   siteSettings: {
-    siteTitle: 'Ashiy Ishan | Developer • Creator • Builder',
+    siteTitle: 'Ashinshana Ishan | Developer • Creator • Builder',
     tagline: 'I BUILD. I CREATE. I SHARE.',
-    metaDescription: 'Ashiy Ishan is a software developer and content creator building software, exploring technology and sharing knowledge through YouTube.',
+    metaDescription: 'Ashinshana Ishan is a software developer and content creator building software, exploring technology and sharing knowledge through YouTube.',
     accentColor: '#00d2ff',
     developerAccent: '#38bdf8',
     creatorAccent: '#ff3366',

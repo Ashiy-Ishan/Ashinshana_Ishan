@@ -62,41 +62,20 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
     }
   };
 
-  const getRoleBadge = () => {
-    switch (activeRole) {
-      case 'developer':
-        return { label: 'DEV MODE', icon: <Code2 size={13} />, color: 'badge-dev' };
-      case 'creator':
-        return { label: 'CREATOR MODE', icon: <Video size={13} />, color: 'badge-creator' };
-      default:
-        return { label: 'PERSONAL MODE', icon: <Sparkles size={13} />, color: 'badge-split' };
-    }
-  };
-
-  const currentBadge = getRoleBadge();
   const activeThemeObj = themes.find(t => t.id === theme) || themes[0];
 
   return (
     <header className={`site-header ${isScrolled ? 'header-scrolled' : ''}`}>
       <div className="header-container">
-        {/* Brand Identity with Enlarged Logo Mark */}
+        {/* Brand Identity: Single letter 'A' Logo */}
         <div className="brand-header-left">
           <a 
             href="#home" 
-            className="brand-logo" 
+            className="brand-logo-a" 
             onClick={(e) => handleNavClick(e, '#home')}
-            aria-label="Ashiy Ishan Home"
+            aria-label="Ashinshana Ishan Home"
           >
-            <div className="brand-logo-mark">
-              <span className="brand-mark-text">AI</span>
-            </div>
-            <div className="brand-title-wrap">
-              <span className="brand-primary">{profile?.name || 'ASHIY ISHAN'}</span>
-              <span className={`brand-role-pill ${currentBadge.color}`}>
-                {currentBadge.icon}
-                <span>{currentBadge.label}</span>
-              </span>
-            </div>
+            <span className="brand-letter-a">A</span>
           </a>
         </div>
 
@@ -113,7 +92,8 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                       className={`nav-link ${isActive ? 'active' : ''}`}
                       onClick={(e) => handleNavClick(e, item.href)}
                     >
-                      {item.label}
+                      <span className="nav-text">{item.label}</span>
+                      {isActive && <span className="active-indicator" />}
                     </a>
                   </li>
                 );
@@ -128,6 +108,8 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
               className="theme-toggle-btn"
               onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
               title="Select Theme Mode"
+              aria-label="Select Theme Mode"
+              aria-expanded={themeDropdownOpen}
             >
               <Palette size={15} className="palette-icon" />
               <span className="theme-btn-label">{activeThemeObj.name}</span>
@@ -147,6 +129,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                       setThemeDropdownOpen(false);
                     }}
                   >
+                    <span className="theme-opt-dot" style={{ background: t.accent }} />
                     <span className="theme-opt-name">{t.name}</span>
                   </button>
                 ))}
@@ -155,13 +138,13 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </div>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
+        {/* Mobile Hamburger Toggle Button */}
         <button
           type="button"
           className="mobile-toggle-btn"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? 'Close Navigation' : 'Open Navigation'}
           aria-expanded={mobileMenuOpen}
-          aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -170,11 +153,19 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
       {/* Mobile Menu Drawer */}
       <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-drawer-header">
-          <div className="brand-logo-mark small">
-            <span className="brand-mark-text">AI</span>
-          </div>
+          <a 
+            href="#home" 
+            className="brand-logo-a" 
+            onClick={(e) => {
+              handleNavClick(e, '#home');
+              setMobileMenuOpen(false);
+            }}
+            aria-label="Ashinshana Ishan Home"
+          >
+            <span className="brand-letter-a">A</span>
+          </a>
           <div>
-            <span className="brand-primary">{profile?.name || 'ASHIY ISHAN'}</span>
+            <span className="brand-primary">{profile?.name || 'ASHINSHANA'}</span>
             <span className="drawer-subtitle">{profile?.title || 'Developer • Creator • Builder'}</span>
           </div>
         </div>

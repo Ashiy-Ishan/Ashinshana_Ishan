@@ -39,11 +39,11 @@ export const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="section-container about-section" aria-label="About Ashiy Ishan">
+    <section id="about" className="section-container about-section" aria-label="About Ashinshana Ishan">
       <div className="section-heading-wrap">
         <span className="section-tag">PERSONAL & JOURNEY</span>
         <h2 className="section-title">
-          ABOUT <span className="title-gradient">ASHIY ISHAN</span>
+          ABOUT <span className="title-gradient">ASHINSHANA ISHAN</span>
         </h2>
         <p className="section-subtext">
           Undergraduate software engineer, tech creator, and digital builder bridging technical systems with visual media.
@@ -57,7 +57,7 @@ export const AboutSection = () => {
             <div className="bio-avatar-ring">
               <img 
                 src={profile?.profileImage} 
-                alt={profile?.name || 'Ashiy Ishan'} 
+                alt={profile?.fullName || profile?.name || 'Ashinshana Ishan'} 
                 className="bio-avatar-img"
               />
             </div>
@@ -83,6 +83,9 @@ export const AboutSection = () => {
                   <span className="fact-label">Education</span>
                   <p className="fact-val">{profile?.university || 'Sabaragamuwa University of Sri Lanka'}</p>
                   <p className="fact-sub">{profile?.degree || 'BSc (Hons) in Computing'}</p>
+                  <p className="fact-sub" style={{ marginTop: '0.25rem', opacity: 0.85 }}>
+                    {profile?.school || 'Bandaranayake College, Gampaha'} (2014 - 2022)
+                  </p>
                 </div>
               </div>
 

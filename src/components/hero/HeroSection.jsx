@@ -26,7 +26,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
       tag: 'PERSONAL & UNDERGRADUATE IDENTITY',
       badgeClass: 'badge-split',
       headlinePrefix: "I'M",
-      highlight: 'ASHIY ISHAN',
+      highlight: 'ASHINSHANA',
       subtitle: 'Developer • Creator • Builder',
       statement: profile?.statement || 'I build software, create content, and turn ideas into things people can use.',
       primaryBtnText: 'Explore My Journey',
@@ -246,7 +246,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
             <div className={`clean-role-image-wrapper layer-personal ${activeRole === 'personal' ? 'dominant' : 'background'}`}>
               <img
                 src={personalImg}
-                alt="Ashiy Ishan Personal Identity"
+                alt="Ashinshana Ishan Personal Identity"
                 className="clean-role-portrait portrait-personal"
               />
             </div>
@@ -255,7 +255,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
             <div className={`clean-role-image-wrapper layer-developer ${activeRole === 'developer' ? 'dominant' : 'background'}`}>
               <img
                 src={developerImg}
-                alt="Ashiy Ishan Software Developer"
+                alt="Ashinshana Ishan Software Developer"
                 className="clean-role-portrait portrait-developer"
               />
             </div>
@@ -264,7 +264,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
             <div className={`clean-role-image-wrapper layer-creator ${activeRole === 'creator' ? 'dominant' : 'background'}`}>
               <img
                 src={creatorImg}
-                alt="Ashiy Ishan Tech Creator"
+                alt="Ashinshana Ishan Tech Creator"
                 className="clean-role-portrait portrait-creator"
               />
             </div>

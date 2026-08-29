@@ -62,7 +62,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="section-container contact-section" aria-label="Contact Ashiy Ishan">
+    <section id="contact" className="section-container contact-section" aria-label="Contact Ashinshana Ishan">
       <div className="section-heading-wrap">
         <span className="section-tag">GET IN TOUCH</span>
         <h2 className="section-title">

@@ -95,7 +95,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
           <div className="admin-brand">
             <ShieldCheck size={24} className="shield-icon" />
             <div>
-              <h1 className="admin-brand-title">ASHIY CMS</h1>
+              <h1 className="admin-brand-title">ASHINSHANA CMS</h1>
               <p className="admin-brand-sub">Portfolio Management</p>
             </div>
           </div>
@@ -130,7 +130,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
 
         <div className="admin-sidebar-footer">
           <div className="admin-user-info">
-            <span className="user-email">{currentUser?.email || 'admin@ashiyishan.dev'}</span>
+            <span className="user-email">{currentUser?.email || 'admin@ashinshana.dev'}</span>
             {currentUser?.isDemo && (
               <span className="demo-tag">Demo Mode</span>
             )}

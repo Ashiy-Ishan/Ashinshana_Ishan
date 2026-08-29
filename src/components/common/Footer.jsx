@@ -13,7 +13,7 @@ export const Footer = () => {
       <div className="footer-container">
         <div className="footer-top">
           <div className="footer-brand">
-            <h3 className="footer-name">{profile?.name || 'ASHIY ISHAN'}</h3>
+            <h3 className="footer-name">{profile?.fullName || profile?.name || 'ASHINSHANA ISHAN'}</h3>
             <p className="footer-tagline">{profile?.title || 'Developer • Creator • Builder'}</p>
             <p className="footer-statement">
               "{profile?.statement || 'I build software, create content, and turn ideas into things people can use.'}"
@@ -59,7 +59,7 @@ export const Footer = () => {
               {profile?.email && (
                 <a
                   href={`mailto:${profile.email}`}
-                  aria-label="Email Ashiy"
+                  aria-label="Email Ashinshana"
                   className="footer-social-icon"
                 >
                   <Mail size={20} />
@@ -93,7 +93,7 @@ export const Footer = () => {
 
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {currentYear} <strong>{profile?.name || 'Ashiy Ishan'}</strong>. All rights reserved.
+            © {currentYear} <strong>{profile?.fullName || profile?.name || 'Ashinshana Ishan'}</strong>. All rights reserved.
           </p>
           <p className="footer-motto">
             Built with curiosity <Heart size={14} className="heart-icon" /> & precision.

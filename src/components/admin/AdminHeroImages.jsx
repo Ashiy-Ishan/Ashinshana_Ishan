@@ -1,6 +1,6 @@
 // src/components/admin/AdminHeroImages.jsx
 import React, { useState, useEffect } from 'react';
-import { Save, Check, User, Code2, Video, Upload, Image as ImageIcon, AlertCircle, Loader2 } from 'lucide-react';
+import { Save, Check, User, Code2, Video, Upload, Image as ImageIcon, AlertCircle, Loader2, RefreshCw } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { uploadImageToImageKit } from '../../services/imagekitService';
 
@@ -32,6 +32,7 @@ export const AdminHeroImages = () => {
     setImages(prev => ({ ...prev, [roleKey]: value }));
   };
 
+  // Upload file to ImageKit and automatically override current image in Firestore
   const handleFileUpload = async (roleKey, file) => {
     if (!file) return;
     setErrorMessage(null);
@@ -39,7 +40,19 @@ export const AdminHeroImages = () => {
     try {
       const folderName = `hero-${roleKey.replace('heroImage', '').toLowerCase()}`;
       const uploadedUrl = await uploadImageToImageKit(file, folderName);
-      setImages(prev => ({ ...prev, [roleKey]: uploadedUrl }));
+      
+      const newImages = { ...images, [roleKey]: uploadedUrl };
+      setImages(newImages);
+
+      // Auto-save and immediately override in Firestore database
+      await updateProfile({
+        heroImagePersonal: newImages.heroImagePersonal,
+        heroImageDeveloper: newImages.heroImageDeveloper,
+        heroImageCreator: newImages.heroImageCreator
+      });
+
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3500);
     } catch (err) {
       setErrorMessage(`Upload error: ${err.message}`);
     } finally {
@@ -96,7 +109,7 @@ export const AdminHeroImages = () => {
         <div>
           <h2 className="admin-pane-title">Role Portrait Images</h2>
           <p className="admin-pane-desc">
-            Upload and manage individual portrait images for Personal, Developer, and Creator hero modes.
+            Upload and manage individual portrait images for Personal, Developer, and Creator hero modes. Uploading a new image will automatically replace and override the current image in real-time.
           </p>
         </div>
       </div>
@@ -105,7 +118,7 @@ export const AdminHeroImages = () => {
         {saveSuccess && (
           <div className="form-alert success">
             <Check size={18} />
-            <span>Role images successfully updated and synced across all pages!</span>
+            <span>Role image successfully uploaded, overridden, and synced across all pages!</span>
           </div>
         )}
 
@@ -164,7 +177,12 @@ export const AdminHeroImages = () => {
                       {isUploading ? (
                         <>
                           <Loader2 size={14} className="animate-spin" />
-                          <span>Uploading to ImageKit...</span>
+                          <span>Uploading & Overriding Image...</span>
+                        </>
+                      ) : currentUrl ? (
+                        <>
+                          <RefreshCw size={14} />
+                          <span>Replace / Override Image</span>
                         </>
                       ) : (
                         <>

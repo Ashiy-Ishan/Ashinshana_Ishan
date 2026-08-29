@@ -1,6 +1,7 @@
 // src/components/admin/AdminSkills.jsx
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Star, Check, X, } from 'lucide-react';
+import { Plus, Edit2, Trash2, Star, Check, X, Sparkles } from 'lucide-react';
+import { Ballerina, PremierePro, Photoshop } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 export const AdminSkills = () => {
@@ -9,6 +10,25 @@ export const AdminSkills = () => {
   const [editingSkill, setEditingSkill] = useState(null);
   const [isNew, setIsNew] = useState(false);
   const [filterCategory, setFilterCategory] = useState('All');
+
+  const renderAdminSkillIcon = (skill) => {
+    const icon = (skill.icon || '').toLowerCase();
+    const name = (skill.name || '').toLowerCase();
+
+    if (icon.includes('ballerina') || name.includes('ballerina')) {
+      return <Ballerina size={20} />;
+    }
+    if (icon.includes('premiere') || name.includes('premiere')) {
+      return <PremierePro size={20} />;
+    }
+    if (icon.includes('photoshop') || name.includes('photoshop')) {
+      return <Photoshop size={20} />;
+    }
+    if (skill.icon && skill.icon.startsWith('devicon-')) {
+      return <i className={`${skill.icon} colored`} />;
+    }
+    return <Sparkles size={16} />;
+  };
 
   const categories = [
     'Programming Languages',
@@ -243,7 +263,7 @@ export const AdminSkills = () => {
                 <tr key={skill.id || skill.name}>
                   <td>
                     <div className="table-skill-icon">
-                      {skill.icon && <i className={`${skill.icon} colored`} />}
+                      {renderAdminSkillIcon(skill)}
                     </div>
                   </td>
                   <td>

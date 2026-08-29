@@ -4,7 +4,7 @@ import App from './App';
 
 test('renders brand name and core roles', () => {
   render(<App />);
-  const brandElements = screen.getAllByText(/ASHIY ISHAN/i);
+  const brandElements = screen.getAllByText(/ASHINSHANA/i);
   expect(brandElements.length).toBeGreaterThan(0);
 });
 

@@ -1,7 +1,6 @@
 // src/components/creator/CreatorSection.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  Play, 
   Users, 
   Eye, 
   Video, 
@@ -9,27 +8,72 @@ import {
   Clock, 
   Calendar, 
   Sparkles, 
-  Flame, 
-  Film, 
-  X 
+  Film 
 } from 'lucide-react';
 import { Youtube } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
+// Animated Count-Up Hook / Component for Channel Insights
+const AnimatedCounter = ({ value = '0', label = '', icon: Icon, colorClass = 'subscribers' }) => {
+  const [count, setCount] = useState(0);
+
+  // Extract raw number and suffix (e.g., '800+' -> 800 and '+')
+  const strVal = String(value);
+  const numericVal = parseInt(strVal.replace(/[^0-9]/g, ''), 10) || 0;
+  const suffix = strVal.replace(/[0-9]/g, '').trim();
+
+  useEffect(() => {
+    let startTimestamp = null;
+    let animationFrameId;
+    const duration = 1600;
+
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      // Smooth ease-out cubic
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(easeOut * numericVal));
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(step);
+      } else {
+        setCount(numericVal);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [numericVal]);
+
+  return (
+    <div className="creator-stat-card">
+      <div className={`stat-icon-wrapper ${colorClass}`}>
+        <Icon size={22} />
+      </div>
+      <div className="stat-info">
+        <div className="stat-number-row">
+          <span className="stat-count-number">{count}</span>
+          {suffix && <span className="stat-count-suffix">{suffix}</span>}
+        </div>
+        <span className="stat-label-text">{label}</span>
+      </div>
+    </div>
+  );
+};
+
 export const CreatorSection = () => {
   const { youtubeChannel, youtubeVideos } = usePortfolio();
   const [activeTab, setActiveTab] = useState('ALL');
-  const [activeVideoModal, setActiveVideoModal] = useState(null);
 
   const channel = youtubeChannel || {};
   const videos = youtubeVideos || [];
 
-  const filterTabs = ['ALL', 'FEATURED', 'POPULAR', 'LATEST'];
+  const filterTabs = ['ALL', 'COMPETITIONS', 'FEATURED', 'LATEST'];
 
   const filteredVideos = videos.filter((video) => {
     if (activeTab === 'ALL') return true;
+    if (activeTab === 'COMPETITIONS') return video.category === 'Competition' || video.featured;
     if (activeTab === 'FEATURED') return video.featured;
-    if (activeTab === 'POPULAR') return video.category === 'Popular' || video.featured;
     if (activeTab === 'LATEST') return video.category === 'Latest' || !video.featured;
     return true;
   });
@@ -40,78 +84,45 @@ export const CreatorSection = () => {
       <div className="section-heading-wrap">
         <div className="section-pill-tag tag-creator">
           <Youtube size={14} />
-          <span>CONTENT CREATION & MEDIA</span>
+          <span>TECHNICAL FLOWS & DEMOS</span>
         </div>
         <h2 className="section-title">
-          YOUTUBE <span className="title-gradient creator-gradient">& TECH CREATOR</span>
+          COMPETITIONS & <span className="title-gradient creator-gradient">PROJECT DEMOS</span>
         </h2>
         <p className="section-subtext">
-          Demystifying technology, sharing developer workflows, and producing high-definition tutorials for builders worldwide.
+          Showcasing competition submissions, hackathon presentations, and focused technical flow explanations of IoT and software architectures.
         </p>
       </div>
 
-      {/* YouTube Channel Banner / Hub Card */}
-      <div className="channel-hub-card">
-        <div className="channel-hub-left">
-          <div className="channel-avatar-wrapper">
+      {/* Enhanced Channel Profile Header (Clean, Unboxed, Spacious) */}
+      <div className="creator-profile-header">
+        <div className="creator-profile-left">
+          <div className="creator-avatar-wrapper">
             <img
               src={channel.channelImage || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'}
-              alt={channel.channelName || 'Curly Max YouTube Channel'}
-              className="channel-avatar"
+              alt={channel.channelName || 'CURLYmax YouTube Channel'}
+              className="creator-avatar-img"
             />
-            <div className="channel-verified-badge" title="Official Tech Channel">
-              <Youtube size={16} />
+            <div className="creator-verified-badge" title="Official YouTube Channel">
+              <Youtube size={15} />
             </div>
           </div>
 
-          <div className="channel-meta-info">
-            <div className="channel-title-row">
-              <h3 className="channel-name">{channel.channelName || 'Curly Max'}</h3>
-              <span className="channel-handle">{channel.handle || '@CurlyMax'}</span>
+          <div className="creator-profile-text">
+            <div className="creator-title-row">
+              <h3 className="creator-channel-name">{channel.channelName || 'CURLYmax'}</h3>
+              <span className="creator-handle-badge">{channel.handle || '@ashiy_ish'}</span>
             </div>
-            <p className="channel-bio">
-              {channel.description || 'Coding tutorials, full-stack architecture, and tech exploration.'}
+            <p className="creator-bio-text">
+              {channel.description || 'Official YouTube channel of CURLYmax featuring competition demos, hackathon project presentations, IoT architectures, and full-stack software walkthroughs.'}
             </p>
           </div>
         </div>
 
-        {/* Channel Metrics Dashboard */}
-        <div className="channel-metrics-grid">
-          <div className="metric-box">
-            <div className="metric-icon-wrap subscribers">
-              <Users size={18} />
-            </div>
-            <div className="metric-data">
-              <span className="metric-num">{channel.subscribers || '1.5K+'}</span>
-              <span className="metric-lbl">Subscribers</span>
-            </div>
-          </div>
-
-          <div className="metric-box">
-            <div className="metric-icon-wrap views">
-              <Eye size={18} />
-            </div>
-            <div className="metric-data">
-              <span className="metric-num">{channel.views || '48K+'}</span>
-              <span className="metric-lbl">Total Views</span>
-            </div>
-          </div>
-
-          <div className="metric-box">
-            <div className="metric-icon-wrap videos">
-              <Film size={18} />
-            </div>
-            <div className="metric-data">
-              <span className="metric-num">{channel.videos || '25+'}</span>
-              <span className="metric-lbl">Uploaded Videos</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Redesigned High-Impact YouTube CTA Button */}
-        <div className="channel-action-box">
+        {/* High-Impact YouTube Action Button */}
+        <div className="creator-cta-wrap">
           <a
-            href={channel.channelUrl || 'https://www.youtube.com/@AshiyIshan'}
+            href={channel.channelUrl || 'https://www.youtube.com/@ashiy_ish/videos'}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-youtube btn-youtube-glow"
@@ -121,11 +132,33 @@ export const CreatorSection = () => {
             </div>
             <div className="yt-btn-text">
               <span className="yt-btn-primary">VISIT YOUTUBE CHANNEL</span>
-              <span className="yt-btn-sub">{channel.subscribers || '1.5K+'} SUBSCRIBERS</span>
+              <span className="yt-btn-sub">{channel.subscribers || '60'} SUBSCRIBERS</span>
             </div>
             <ExternalLink size={16} className="yt-btn-arrow" />
           </a>
         </div>
+      </div>
+
+      {/* Channel Insights & Performance Row (with Animated Counters) */}
+      <div className="creator-insights-grid">
+        <AnimatedCounter
+          value={channel.subscribers || '60'}
+          label="Subscribers"
+          icon={Users}
+          colorClass="subscribers"
+        />
+        <AnimatedCounter
+          value={channel.views || '800+'}
+          label="Total Views"
+          icon={Eye}
+          colorClass="views"
+        />
+        <AnimatedCounter
+          value={channel.videos || '3'}
+          label="Uploaded Videos"
+          icon={Film}
+          colorClass="videos"
+        />
       </div>
 
       {/* Videos Section */}
@@ -133,7 +166,7 @@ export const CreatorSection = () => {
         <div className="videos-filter-bar">
           <div className="filter-title-wrap">
             <Video size={20} className="filter-icon creator-icon" />
-            <h3 className="filter-title">CURATED VIDEO PLAYLISTS</h3>
+            <h3 className="filter-title">COMPETITION & PROJECT PLAYLISTS</h3>
           </div>
 
           <div className="video-tab-buttons" role="tablist">
@@ -147,7 +180,6 @@ export const CreatorSection = () => {
                 onClick={() => setActiveTab(tab)}
               >
                 {tab === 'FEATURED' && <Sparkles size={13} />}
-                {tab === 'POPULAR' && <Flame size={13} />}
                 <span>{tab}</span>
               </button>
             ))}
@@ -156,134 +188,89 @@ export const CreatorSection = () => {
 
         {/* Video Cards Grid */}
         <div className="videos-cards-grid">
-          {filteredVideos.map((video) => (
-            <article key={video.id || video.title} className="video-card">
-              {/* Thumbnail Container */}
-              <div 
-                className="video-thumbnail-container"
-                onClick={() => setActiveVideoModal(video)}
-              >
-                <img
-                  src={video.thumbnailUrl}
-                  alt={video.title}
-                  className="video-thumb-img"
-                  loading="lazy"
-                />
-                <div className="video-play-overlay">
-                  <div className="play-button-circle">
-                    <Play size={22} className="play-triangle" fill="white" />
-                  </div>
-                </div>
-
-                {/* Duration Badge */}
-                {video.duration && (
-                  <span className="video-duration-pill">
-                    <Clock size={11} /> {video.duration}
-                  </span>
-                )}
-
-                {/* Featured Badge */}
-                {video.featured && (
-                  <span className="video-featured-pill">
-                    <Sparkles size={11} /> Featured
-                  </span>
-                )}
-              </div>
-
-              {/* Video Info */}
-              <div className="video-info-box">
-                <h4 
-                  className="video-headline" 
-                  onClick={() => setActiveVideoModal(video)}
-                  title={video.title}
-                >
-                  {video.title}
-                </h4>
-
-                <p className="video-description">{video.description}</p>
-
-                <div className="video-meta-footer">
-                  <span className="meta-stat views">
-                    <Eye size={12} /> {video.views} views
-                  </span>
-                  <span className="meta-stat date">
-                    <Calendar size={12} /> {video.publishedAt}
-                  </span>
-                </div>
-
-                <div className="video-action-row">
-                  <button
-                    type="button"
-                    className="btn-watch-modal"
-                    onClick={() => setActiveVideoModal(video)}
-                  >
-                    <Play size={14} fill="currentColor" />
-                    <span>Watch Preview</span>
-                  </button>
-                  <a
-                    href={video.url || `https://www.youtube.com/watch?v=${video.youtubeId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-yt-direct"
-                    title="Open on YouTube"
-                  >
-                    <Youtube size={14} />
-                    <span>YouTube</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      {/* Embedded Video Modal */}
-      {activeVideoModal && (
-        <div className="video-modal-backdrop" onClick={() => setActiveVideoModal(null)}>
-          <div className="video-modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-top-bar">
-              <div className="modal-title-wrap">
-                <Youtube size={18} className="modal-yt-icon" />
-                <h4 className="modal-video-title">{activeVideoModal.title}</h4>
-              </div>
-              <button
-                type="button"
-                className="modal-close-button"
-                onClick={() => setActiveVideoModal(null)}
-                aria-label="Close video player"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="modal-player-wrapper">
-              <iframe
-                src={`https://www.youtube.com/embed/${activeVideoModal.youtubeId}?autoplay=1`}
-                title={activeVideoModal.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="modal-iframe"
-              />
-            </div>
-
-            <div className="modal-details-footer">
-              <p className="modal-description">{activeVideoModal.description}</p>
-              <div className="modal-footer-cta">
-                <a
-                  href={`https://www.youtube.com/watch?v=${activeVideoModal.youtubeId}`}
+          {filteredVideos.map((video) => {
+            const videoUrl = video.url || `https://www.youtube.com/watch?v=${video.youtubeId}`;
+            return (
+              <article key={video.id || video.title} className="video-card">
+                {/* Thumbnail Container */}
+                <a 
+                  href={videoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-youtube btn-sm"
+                  className="video-thumbnail-container"
+                  title={`Watch ${video.title} on YouTube`}
                 >
-                  <Youtube size={16} />
-                  <span>Open on YouTube App</span>
-                  <ExternalLink size={14} />
+                  <img
+                    src={video.thumbnailUrl}
+                    alt={video.title}
+                    className="video-thumb-img"
+                    loading="lazy"
+                  />
+                  <div className="video-play-overlay">
+                    <div className="play-button-circle">
+                      <Youtube size={26} className="play-yt-icon" fill="white" />
+                    </div>
+                  </div>
+
+                  {/* Duration Badge */}
+                  {video.duration && (
+                    <span className="video-duration-pill">
+                      <Clock size={11} /> {video.duration}
+                    </span>
+                  )}
+
+                  {/* Featured Badge */}
+                  {video.featured && (
+                    <span className="video-featured-pill">
+                      <Sparkles size={11} /> Featured
+                    </span>
+                  )}
                 </a>
-              </div>
-            </div>
-          </div>
+
+                {/* Video Info */}
+                <div className="video-info-box">
+                  <h4 className="video-headline">
+                    <a
+                      href={videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="video-title-link"
+                    >
+                      {video.title}
+                    </a>
+                  </h4>
+
+                  <p className="video-description">{video.description}</p>
+
+                  {/* Video Meta Stats & Clean Watch on YouTube Action */}
+                  <div className="video-meta-footer">
+                    <div className="meta-stats-group">
+                      <span className="meta-stat views">
+                        <Eye size={13} /> {video.views} views
+                      </span>
+                      <span className="meta-stat date">
+                        <Calendar size={13} /> {video.publishedAt}
+                      </span>
+                    </div>
+
+                    <a
+                      href={videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-watch-youtube"
+                      title="Watch on YouTube"
+                    >
+                      <Youtube size={15} className="btn-yt-icon" />
+                      <span>Watch on YouTube</span>
+                      <ExternalLink size={13} />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
-      )}
+      </div>
     </section>
   );
 };
