@@ -1791,14 +1791,55 @@ body {
 }
 
 .node-content {
-  padding-bottom: 2rem;
+  padding-bottom: 1.75rem;
+  flex: 1;
+}
+
+.milestone-clickable-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.milestone-interactive-node:hover .milestone-clickable-card {
+  background: rgba(0, 210, 255, 0.04);
+  border-color: rgba(0, 210, 255, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.milestone-interactive-node.expanded .milestone-clickable-card {
+  background: rgba(0, 210, 255, 0.06);
+  border-color: rgba(0, 210, 255, 0.45);
+  box-shadow: 0 6px 25px rgba(0, 210, 255, 0.12);
+}
+
+.milestone-toggle-hint {
+  margin-left: auto;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.milestone-interactive-node:hover .milestone-toggle-hint {
+  color: var(--accent-cyan);
+  background: rgba(0, 210, 255, 0.15);
 }
 
 .node-top {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.45rem;
 }
 
 .node-year {
@@ -1807,7 +1848,8 @@ body {
   gap: 0.3rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: var(--accent-cyan);
+  font-weight: 600;
 }
 
 .node-badge {
@@ -1827,11 +1869,14 @@ body {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.2rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .node-subtitle {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--accent-cyan);
   margin-bottom: 0.4rem;
 }

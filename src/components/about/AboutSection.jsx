@@ -9,8 +9,9 @@ import {
   ArrowUpRight, 
   Compass, 
   Award, 
-  Terminal,
-  Video
+  Video,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { CurrentlyBuilding } from './CurrentlyBuilding';
@@ -18,23 +19,29 @@ import { CurrentlyBuilding } from './CurrentlyBuilding';
 export const AboutSection = () => {
   const { profile, timeline } = usePortfolio();
   const [filter, setFilter] = useState('all');
+  const [expandedMilestones, setExpandedMilestones] = useState({});
 
-  const sortedTimeline = [...(timeline || [])].sort((a, b) => {
-    if (typeof a.order === 'number' && typeof b.order === 'number') {
-      return a.order - b.order;
+  const toggleMilestone = (id) => {
+    setExpandedMilestones((prev) => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  // 1. Filter out projects from milestones
+  // 2. Sort milestones strictly according to time (chronologically from earliest to latest)
+  const parseStartYear = (it) => {
+    const str = String(it.year || it.date || '');
+    const years = str.match(/\b(19\d\d|20\d\d)\b/g);
+    if (years && years.length > 0) {
+      return parseInt(years[0], 10);
     }
-    const parseKey = (it) => {
-      const str = String(it.year || it.date || '');
-      const years = str.match(/\b(19\d\d|20\d\d)\b/g);
-      if (years && years.length > 0) {
-        const start = parseInt(years[0], 10);
-        const end = years.length > 1 ? parseInt(years[1], 10) : (str.toLowerCase().includes('present') ? 2099 : start);
-        return start * 1000 + end;
-      }
-      return 999999;
-    };
-    return parseKey(a) - parseKey(b);
-  });
+    return 9999;
+  };
+
+  const sortedTimeline = [...(timeline || [])]
+    .filter((item) => item.type !== 'project')
+    .sort((a, b) => parseStartYear(a) - parseStartYear(b));
 
   const filteredTimeline = sortedTimeline.filter((item) => {
     if (filter === 'all') return true;
@@ -45,8 +52,6 @@ export const AboutSection = () => {
     switch (type) {
       case 'education':
         return <GraduationCap size={18} />;
-      case 'project':
-        return <Terminal size={18} />;
       case 'creator':
         return <Video size={18} />;
       case 'milestone':
@@ -67,17 +72,17 @@ export const AboutSection = () => {
           ABOUT <span className="title-gradient personal-gradient">ASHINSHANA ISHAN</span>
         </h2>
         <p className="section-subtext">
-          Undergraduate software engineer, tech creator, and digital builder bridging technical systems with visual media.
+          Undergraduate software engineer and tech creator bridging technical software architecture with visual media.
         </p>
       </div>
 
-      {/* Personal Profile Header Card (Positioned & Symmetrical to Channel Card) */}
+      {/* Personal Profile Header Card */}
       <div className="personal-profile-header">
         <div className="personal-profile-left">
           <div className="personal-avatar-wrapper">
             <img 
               src={profile?.personalImage || profile?.heroImagePersonal || profile?.profileImage} 
-              alt={profile?.fullName || profile?.name || 'Ashinshana Ishan'} 
+              alt={profile?.fullName || 'Ashinshana Ishan'} 
               className="personal-avatar-img"
             />
             <div className="personal-verified-badge" title="Undergraduate & Tech Creator">
@@ -87,7 +92,7 @@ export const AboutSection = () => {
 
           <div className="personal-profile-text">
             <div className="personal-title-row">
-              <h3 className="personal-channel-name">{profile?.fullName || profile?.name || 'Ashinshana Ishan'}</h3>
+              <h3 className="personal-channel-name">{profile?.fullName || 'Ashinshana Ishan'}</h3>
               <span className="personal-handle-badge">Undergraduate '26</span>
             </div>
             <p className="personal-bio-text">
@@ -129,8 +134,8 @@ export const AboutSection = () => {
         </div>
       </div>
 
-      {/* Personal Insights & Highlights Grid (Positioned matching Channel stats) */}
-      <div className="personal-insights-grid">
+      {/* Personal Insights & Highlights Grid (Without SUSL card & Without Builder) */}
+      <div className="personal-insights-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
         <div className="personal-stat-card">
           <div className="stat-icon-wrapper degree">
             <GraduationCap size={22} />
@@ -145,26 +150,26 @@ export const AboutSection = () => {
         </div>
 
         <div className="personal-stat-card">
+          <div className="stat-icon-wrapper motto">
+            <Sparkles size={22} />
+          </div>
+          <div className="stat-info">
+            <div className="stat-number-row">
+              <span className="stat-count-number">Creator</span>
+            </div>
+            <span className="stat-label-text">Tech & Tutorials</span>
+          </div>
+        </div>
+
+        <div className="personal-stat-card">
           <div className="stat-icon-wrapper location">
             <MapPin size={22} />
           </div>
           <div className="stat-info">
             <div className="stat-number-row">
-              <span className="stat-count-number">SUSL</span>
+              <span className="stat-count-number">Sri Lanka</span>
             </div>
-            <span className="stat-label-text">Sabaragamuwa Univ</span>
-          </div>
-        </div>
-
-        <div className="personal-stat-card">
-          <div className="stat-icon-wrapper motto">
-            <Compass size={22} />
-          </div>
-          <div className="stat-info">
-            <div className="stat-number-row">
-              <span className="stat-count-number">Builder</span>
-            </div>
-            <span className="stat-label-text">"I BUILD. CREATE. SHARE."</span>
+            <span className="stat-label-text">South Asia</span>
           </div>
         </div>
       </div>
@@ -208,7 +213,7 @@ export const AboutSection = () => {
                 <Compass size={18} className="fact-icon" />
                 <div>
                   <span className="fact-label">Core Philosophy</span>
-                  <p className="fact-val">"{profile?.motto || 'I BUILD. I CREATE. I SHARE.'}"</p>
+                  <p className="fact-val">"{profile?.motto || 'I DEVELOP. I CREATE. I SHARE.'}"</p>
                 </div>
               </div>
             </div>
@@ -221,7 +226,7 @@ export const AboutSection = () => {
           </div>
         </div>
 
-        {/* Right Column: Visual Milestone Timeline */}
+        {/* Right Column: Visual Milestone Timeline with Click-to-Expand Details */}
         <div className="timeline-wrapper">
           <div className="timeline-header-bar">
             <h3 className="timeline-title">
@@ -229,7 +234,7 @@ export const AboutSection = () => {
               <span>Milestone & Journey Timeline</span>
             </h3>
 
-            {/* Filter Pills */}
+            {/* Filter Pills without projects */}
             <div className="timeline-filters">
               <button
                 type="button"
@@ -247,10 +252,10 @@ export const AboutSection = () => {
               </button>
               <button
                 type="button"
-                className={`filter-btn ${filter === 'project' ? 'active' : ''}`}
-                onClick={() => setFilter('project')}
+                className={`filter-btn ${filter === 'milestone' ? 'active' : ''}`}
+                onClick={() => setFilter('milestone')}
               >
-                Projects
+                Milestones
               </button>
               <button
                 type="button"
@@ -263,30 +268,53 @@ export const AboutSection = () => {
           </div>
 
           <div className="timeline-items">
-            {filteredTimeline.map((item, idx) => (
-              <div key={item.id || idx} className="timeline-node">
-                <div className="node-marker">
-                  <div className={`marker-icon-box ${item.type}`}>
-                    {getTimelineIcon(item.type)}
+            {filteredTimeline.map((item, idx) => {
+              const isExpanded = Boolean(expandedMilestones[item.id || idx]);
+
+              return (
+                <div 
+                  key={item.id || idx} 
+                  className={`timeline-node milestone-interactive-node ${isExpanded ? 'expanded' : ''}`}
+                  onClick={() => toggleMilestone(item.id || idx)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="node-marker">
+                    <div className={`marker-icon-box ${item.type}`}>
+                      {getTimelineIcon(item.type)}
+                    </div>
+                    <div className="node-line" />
                   </div>
-                  <div className="node-line" />
-                </div>
-                <div className="node-content">
-                  <div className="node-top">
-                    <span className="node-year">
-                      <Calendar size={13} />
-                      <span>{item.year}</span>
-                    </span>
-                    {item.badge && (
-                      <span className={`node-badge badge-${item.type}`}>{item.badge}</span>
+
+                  <div className="node-content milestone-clickable-card">
+                    <div className="node-top">
+                      <span className="node-year">
+                        <Calendar size={13} />
+                        <span>{item.year}</span>
+                      </span>
+                      {item.badge && (
+                        <span className={`node-badge badge-${item.type}`}>{item.badge}</span>
+                      )}
+                      <div className="milestone-toggle-hint">
+                        {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                      </div>
+                    </div>
+
+                    {/* Main Event Name */}
+                    <div className="milestone-title-row">
+                      <h4 className="node-title">{item.title}</h4>
+                    </div>
+
+                    {/* Expandable Details Area (Shown When Clicked) */}
+                    {isExpanded && (
+                      <div className="milestone-expanded-details animate-fade-in" style={{ marginTop: '0.65rem', paddingTop: '0.65rem', borderTop: '1px dashed var(--border-subtle)' }}>
+                        {item.subtitle && <p className="node-subtitle" style={{ fontWeight: 600, color: 'var(--accent-cyan)', marginBottom: '0.35rem' }}>{item.subtitle}</p>}
+                        {item.description && <p className="node-desc" style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{item.description}</p>}
+                      </div>
                     )}
                   </div>
-                  <h4 className="node-title">{item.title}</h4>
-                  {item.subtitle && <p className="node-subtitle">{item.subtitle}</p>}
-                  <p className="node-desc">{item.description}</p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

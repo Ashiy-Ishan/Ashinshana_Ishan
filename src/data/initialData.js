@@ -16,9 +16,9 @@ export const initialData = {
     id: 'main',
     name: 'Ashinshana',
     fullName: 'Ashinshana Ishan',
-    title: 'Developer • Creator • Builder',
-    motto: 'I BUILD. I CREATE. I SHARE.',
-    statement: 'I build software, create content, and turn ideas into things people can use.',
+    title: 'Developer • Tech Creator',
+    motto: 'I DEVELOP. I CREATE. I SHARE.',
+    statement: 'I develop software, create content, and turn ideas into elegant digital solutions.',
     bio: "I’m an undergraduate at Sabaragamuwa University of Sri Lanka, passionate about modern web development, backend engineering, UI/UX design, and tech content creation. I enjoy turning complex ideas into elegant, user-focused digital experiences.",
     location: 'Sri Lanka',
     university: 'Sabaragamuwa University of Sri Lanka',
@@ -45,7 +45,7 @@ export const initialData = {
     dynamicRoles: [
       'Software Developer',
       'YouTube Creator',
-      'Full-Stack Builder',
+      'Full-Stack Developer',
       'UI/UX Designer',
       'Tech Enthusiast',
       'Internet of Things'
