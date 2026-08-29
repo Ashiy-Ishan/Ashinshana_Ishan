@@ -1178,6 +1178,24 @@ body {
   background: radial-gradient(circle at center, rgba(255, 51, 102, 0.36) 0%, rgba(255, 51, 102, 0.1) 50%, transparent 75%);
 }
 
+/* Background Glow Boost when cursor hovers over the role image */
+.portrait-stage:hover .portrait-halo {
+  transform: translate(-50%, -50%) scale(1.22);
+  opacity: 0.95;
+  filter: blur(75px);
+}
+
+.portrait-stage:hover .portrait-body-aura {
+  transform: translate(-50%, -50%) scale(1.15);
+  opacity: 0.95;
+  filter: blur(65px);
+}
+
+.portrait-stage:hover .portrait-floor-mist {
+  transform: translateX(-50%) scale(1.12);
+  opacity: 0.75;
+}
+
 /* Dynamic Role Body Light Aura (Ambient Glow Behind Torso & Silhouette) */
 .portrait-body-aura {
   position: absolute;
@@ -1191,7 +1209,7 @@ body {
   z-index: 2;
   filter: blur(55px);
   opacity: 0.7;
-  transition: all 0.8s var(--ease-cinematic);
+  transition: all 0.5s var(--ease-cinematic);
 }
 
 .portrait-body-aura.aura-personal {
@@ -1223,29 +1241,29 @@ body {
 /* Realistic Ambient Floor Mist (Seamless 360° Radial Feathering Behind Floor Base) */
 .portrait-floor-mist {
   position: absolute;
-  bottom: -40px;
+  bottom: -35px;
   left: 50%;
   transform: translateX(-50%);
-  width: 800px;
-  height: 260px;
+  width: 780px;
+  height: 220px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  filter: blur(50px);
-  opacity: 0.55;
-  transition: all 0.8s var(--ease-cinematic);
+  filter: blur(45px);
+  opacity: 0.5;
+  transition: all 0.5s var(--ease-cinematic);
 }
 
 .portrait-floor-mist.mist-personal {
-  background: radial-gradient(ellipse 60% 50% at 50% 75%, rgba(0, 210, 255, 0.25) 0%, rgba(168, 85, 247, 0.1) 35%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 75%, rgba(0, 210, 255, 0.22) 0%, rgba(168, 85, 247, 0.08) 35%, transparent 70%);
 }
 
 .portrait-floor-mist.mist-developer {
-  background: radial-gradient(ellipse 60% 50% at 50% 75%, rgba(56, 189, 248, 0.28) 0%, rgba(0, 210, 255, 0.12) 35%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 75%, rgba(56, 189, 248, 0.24) 0%, rgba(0, 210, 255, 0.1) 35%, transparent 70%);
 }
 
 .portrait-floor-mist.mist-creator {
-  background: radial-gradient(ellipse 60% 50% at 50% 75%, rgba(255, 51, 102, 0.28) 0%, rgba(255, 107, 107, 0.1) 35%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 75%, rgba(255, 51, 102, 0.24) 0%, rgba(255, 107, 107, 0.08) 35%, transparent 70%);
 }
 
 .clean-role-image-wrapper {
@@ -1289,42 +1307,23 @@ body {
   box-shadow: none !important;
   outline: none !important;
   background: transparent !important;
-  transition: transform 0.4s var(--ease-cinematic), filter 0.4s ease;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0, 0, 0, 0.85) 86%, rgba(0, 0, 0, 0.3) 95%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0, 0, 0, 0.85) 86%, rgba(0, 0, 0, 0.3) 95%, transparent 100%);
+  filter: none !important;
+  transition: opacity 0.4s ease;
 }
 
-/* Personal role image - aligned & natural with dynamic rim lighting */
-.clean-role-portrait.portrait-personal {
-  transform: translateY(0) scale(1.02);
-  transform-origin: bottom center;
-  filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
-}
-.clean-role-portrait.portrait-personal:hover {
-  transform: translateY(-8px) scale(1.04);
-  filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.5)) drop-shadow(0 20px 45px rgba(0, 0, 0, 0.95));
-}
-
-/* Developer role image with dynamic sky-blue rim lighting */
-.clean-role-portrait.portrait-developer {
-  transform: translateY(0) scale(1.02);
-  transform-origin: bottom center;
-  filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
-}
-.clean-role-portrait.portrait-developer:hover {
-  transform: translateY(-8px) scale(1.04);
-  filter: drop-shadow(0 0 30px rgba(56, 189, 248, 0.5)) drop-shadow(0 20px 45px rgba(0, 0, 0, 0.95));
-}
-
-/* Creator role image with dynamic red-pink rim lighting */
+/* Role images - natural positioning without zoom or box shadow on hover */
+.clean-role-portrait.portrait-personal,
+.clean-role-portrait.portrait-developer,
 .clean-role-portrait.portrait-creator {
-  transform: translateY(0) scale(1.02);
-  transform-origin: bottom center;
-  filter: drop-shadow(0 0 20px rgba(255, 51, 102, 0.35)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
+  transform: translateY(0);
+  filter: none !important;
 }
+
+.clean-role-portrait.portrait-personal:hover,
+.clean-role-portrait.portrait-developer:hover,
 .clean-role-portrait.portrait-creator:hover {
-  transform: translateY(-8px) scale(1.04);
-  filter: drop-shadow(0 0 30px rgba(255, 51, 102, 0.5)) drop-shadow(0 20px 45px rgba(0, 0, 0, 0.95));
+  transform: translateY(0) !important;
+  filter: none !important;
 }
 
 .scroll-down-cue {

@@ -31,6 +31,7 @@ import { AdminCreator } from './AdminCreator';
 import { AdminBuilding } from './AdminBuilding';
 import { AdminGallery } from './AdminGallery';
 import { AdminSettings } from './AdminSettings';
+import { AdminHeroImages } from './AdminHeroImages';
 
 export const AdminDashboard = ({ onExitAdmin }) => {
   const { isAuthenticated, currentUser, loading, logout } = useAuth();
@@ -63,6 +64,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={18} /> },
     { id: 'profile', label: 'Profile & Identity', icon: <User size={18} /> },
+    { id: 'hero-images', label: 'Role & Avatar Portals', icon: <ImageIcon size={18} /> },
     { id: 'timeline', label: 'Journey Timeline', icon: <Milestone size={18} /> },
     { id: 'skills', label: 'Developer Skills', icon: <Layers size={18} /> },
     { id: 'projects', label: 'Projects Showcase', icon: <Workflow size={18} /> },
@@ -80,6 +82,8 @@ export const AdminDashboard = ({ onExitAdmin }) => {
         return <AdminOverview onNavigateTab={(tab) => setActiveTab(tab)} />;
       case 'profile':
         return <AdminProfile />;
+      case 'hero-images':
+        return <AdminHeroImages />;
       case 'timeline':
         return <AdminTimeline />;
       case 'skills':

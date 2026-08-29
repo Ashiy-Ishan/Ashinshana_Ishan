@@ -197,54 +197,95 @@ export const AdminProfile = () => {
           </div>
         </div>
 
-        {/* Section 3: Hero Portraits Image Configuration */}
+        {/* Section 3: Profile Avatars & Hero Portraits */}
         <div className="admin-form-card">
           <h3 className="card-section-title">
-            <Image size={18} /> Hero & Role Identity Image Manager
+            <Image size={18} /> Role Avatars & Hero Portraits Manager
           </h3>
           <p className="card-sub-info">
-            Manage and update portrait images for Personal, Developer, and Creator roles. Upload directly to ImageKit CDN or paste existing URLs.
+            Manage circular avatars (shown in About, Personal, Developer, and Channel cards) and large hero portraits. Upload directly to ImageKit CDN.
           </p>
 
-          <div className="form-grid-3">
-            {/* Personal Role Image */}
+          <h4 style={{ fontSize: '0.9rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', margin: '1.25rem 0 0.75rem 0' }}>
+            Circular Profile & Role Avatars:
+          </h4>
+          <div className="form-grid-3" style={{ marginBottom: '1.75rem' }}>
+            {/* Personal Avatar */}
             <ImageUploadField
-              label="Personal Role Image"
-              value={formData.heroImagePersonal || formData.personalImage || formData.profileImage || ''}
+              label="Personal Card Avatar"
+              value={formData.personalImage || formData.profileImage || ''}
               onChange={(url) => setFormData((prev) => ({ 
                 ...prev, 
-                heroImagePersonal: url,
                 personalImage: url,
                 profileImage: url 
               }))}
-              folder="profile"
-              hint="Hero Personal portrait"
+              folder="avatars"
+              hint="About / Personal card circular avatar"
             />
 
-            {/* Developer Role Image */}
+            {/* Developer Avatar */}
             <ImageUploadField
-              label="Developer Role Image"
-              value={formData.heroImageDeveloper || formData.developerImage || ''}
+              label="Developer Card Avatar"
+              value={formData.developerImage || ''}
               onChange={(url) => setFormData((prev) => ({ 
                 ...prev, 
-                heroImageDeveloper: url,
                 developerImage: url 
               }))}
-              folder="profile"
-              hint="Hero Developer portrait"
+              folder="avatars"
+              hint="Developer card circular avatar"
             />
 
-            {/* Creator Role Image */}
+            {/* Creator Avatar */}
             <ImageUploadField
-              label="Creator Role Image"
-              value={formData.heroImageCreator || formData.creatorImage || ''}
+              label="Creator Card Avatar"
+              value={formData.creatorImage || ''}
               onChange={(url) => setFormData((prev) => ({ 
                 ...prev, 
-                heroImageCreator: url,
                 creatorImage: url 
               }))}
-              folder="profile"
-              hint="Hero Creator portrait"
+              folder="avatars"
+              hint="YouTube channel circular avatar"
+            />
+          </div>
+
+          <h4 style={{ fontSize: '0.9rem', color: 'var(--accent-dev)', fontFamily: 'var(--font-mono)', margin: '1.25rem 0 0.75rem 0' }}>
+            Hero Large Standing Portraits:
+          </h4>
+          <div className="form-grid-3">
+            {/* Personal Hero Image */}
+            <ImageUploadField
+              label="Personal Hero Portrait"
+              value={formData.heroImagePersonal || ''}
+              onChange={(url) => setFormData((prev) => ({ 
+                ...prev, 
+                heroImagePersonal: url
+              }))}
+              folder="hero"
+              hint="Hero Personal standing portrait"
+            />
+
+            {/* Developer Hero Image */}
+            <ImageUploadField
+              label="Developer Hero Portrait"
+              value={formData.heroImageDeveloper || ''}
+              onChange={(url) => setFormData((prev) => ({ 
+                ...prev, 
+                heroImageDeveloper: url 
+              }))}
+              folder="hero"
+              hint="Hero Developer standing portrait"
+            />
+
+            {/* Creator Hero Image */}
+            <ImageUploadField
+              label="Creator Hero Portrait"
+              value={formData.heroImageCreator || ''}
+              onChange={(url) => setFormData((prev) => ({ 
+                ...prev, 
+                heroImageCreator: url 
+              }))}
+              folder="hero"
+              hint="Hero Creator standing portrait"
             />
           </div>
         </div>
