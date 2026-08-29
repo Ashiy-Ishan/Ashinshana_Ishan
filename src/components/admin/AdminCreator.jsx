@@ -1,8 +1,8 @@
-// src/components/admin/AdminCreator.jsx
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Check, X, Video, Star, Save } from 'lucide-react';
 import { Youtube } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { ImageUploadField } from './ImageUploadField';
 
 export const AdminCreator = () => {
   const { 
@@ -161,16 +161,16 @@ export const AdminCreator = () => {
           />
         </div>
 
-        <div className="form-field">
-          <label>Channel Description</label>
-          <textarea
-            value={channelForm.description || ''}
-            onChange={(e) =>
-              setChannelForm({ ...channelForm, description: e.target.value })
-            }
-            rows={2}
-          />
-        </div>
+        <ImageUploadField
+          label="Channel Avatar / Logo Image"
+          value={channelForm.avatarUrl || channelForm.logoUrl || ''}
+          onChange={(url) =>
+            setChannelForm({ ...channelForm, avatarUrl: url, logoUrl: url })
+          }
+          folder="creator"
+          placeholder="https://ik.imagekit.io/... or upload channel logo"
+          hint="Upload YouTube channel avatar or branded badge"
+        />
 
         <button type="submit" className="btn btn-primary mt-2">
           <Save size={16} />
@@ -259,20 +259,19 @@ export const AdminCreator = () => {
                   </div>
                 </div>
 
-                <div className="form-field">
-                  <label>Thumbnail Image URL</label>
-                  <input
-                    type="text"
-                    value={editingVideo.thumbnailUrl || ''}
-                    onChange={(e) =>
-                      setEditingVideo({
-                        ...editingVideo,
-                        thumbnailUrl: e.target.value
-                      })
-                    }
-                    placeholder="https://..."
-                  />
-                </div>
+                <ImageUploadField
+                  label="Thumbnail Image (ImageKit CDN or URL)"
+                  value={editingVideo.thumbnailUrl || ''}
+                  onChange={(url) =>
+                    setEditingVideo({
+                      ...editingVideo,
+                      thumbnailUrl: url
+                    })
+                  }
+                  folder="creator"
+                  placeholder="https://ik.imagekit.io/... or upload custom thumbnail"
+                  hint="Upload custom 16:9 thumbnail or auto-generated YouTube thumb"
+                />
 
                 <div className="form-grid-3">
                   <div className="form-field">

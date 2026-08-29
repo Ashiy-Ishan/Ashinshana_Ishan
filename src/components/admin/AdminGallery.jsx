@@ -1,4 +1,3 @@
-// src/components/admin/AdminGallery.jsx
 import React, { useState } from 'react';
 import { 
   Plus, 
@@ -12,6 +11,7 @@ import {
   Eye
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { ImageUploadField } from './ImageUploadField';
 
 export const AdminGallery = () => {
   const { gallery, profile, saveGalleryItem, deleteGalleryItem, updateProfile } = usePortfolio();
@@ -155,23 +155,15 @@ export const AdminGallery = () => {
                 </div>
               </div>
 
-              <div className="form-field">
-                <label>Direct Image URL or Asset Path *</label>
-                <input
-                  type="text"
-                  value={newItem.url}
-                  onChange={(e) => setNewItem({ ...newItem, url: e.target.value })}
-                  placeholder="https://... or relative path"
-                  required
-                />
-              </div>
-
-              {newItem.url && (
-                <div className="preview-container-mini">
-                  <p className="preview-label">Live Preview:</p>
-                  <img src={newItem.url} alt="Preview" className="media-mini-preview" />
-                </div>
-              )}
+              <ImageUploadField
+                label="Direct Image URL or Upload Asset *"
+                value={newItem.url}
+                onChange={(url) => setNewItem({ ...newItem, url })}
+                folder="gallery"
+                placeholder="https://ik.imagekit.io/... or upload photo"
+                hint="Upload high-res photo or artwork to ImageKit CDN"
+                required
+              />
 
               <div className="admin-modal-actions">
                 <button

@@ -1,7 +1,7 @@
-// src/components/admin/AdminPublished.jsx
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Check, X, } from 'lucide-react';
+import { Plus, Edit2, Trash2, Check, X } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { ImageUploadField } from './ImageUploadField';
 
 export const AdminPublished = () => {
   const { publishedProjects, savePublishedProject, deletePublishedProject } = usePortfolio();
@@ -182,6 +182,17 @@ export const AdminPublished = () => {
                   />
                 </div>
               </div>
+
+              <ImageUploadField
+                label="Release Banner / Cover Image"
+                value={editingPub.imageUrl || editingPub.banner || ''}
+                onChange={(url) =>
+                  setEditingPub({ ...editingPub, imageUrl: url, banner: url })
+                }
+                folder="published"
+                placeholder="https://ik.imagekit.io/... or upload release banner"
+                hint="Upload software artwork or release screenshot"
+              />
 
               <div className="admin-modal-actions">
                 <button

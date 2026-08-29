@@ -1,9 +1,9 @@
-// src/components/admin/AdminSkills.jsx
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Star, Check, X, Sparkles } from 'lucide-react';
 import { PremierePro, Photoshop } from '../common/Icons';
 import ballerinaImg from '../../Iamage/ballerina.jpeg';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { ImageUploadField } from './ImageUploadField';
 
 export const AdminSkills = () => {
   const { skills, saveSkill, deleteSkill } = usePortfolio();
@@ -179,6 +179,17 @@ export const AdminSkills = () => {
                   />
                 </div>
               </div>
+
+              <ImageUploadField
+                label="Custom Skill Icon / Logo (Optional)"
+                value={editingSkill.imageUrl || ''}
+                onChange={(url) =>
+                  setEditingSkill({ ...editingSkill, imageUrl: url })
+                }
+                folder="skills"
+                placeholder="https://ik.imagekit.io/... or upload logo image"
+                hint="Upload PNG/SVG/JPEG logo (e.g. Ballerina, Flutter, etc.)"
+              />
 
               <div className="form-field">
                 <label>Description</label>

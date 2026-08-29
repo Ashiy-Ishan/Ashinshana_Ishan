@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/Ashinshana_Ishan/static/css/main.7c3c299c.css",
-    "main.js": "/Ashinshana_Ishan/static/js/main.db5c7bac.js",
-    "static/js/206.e251589c.chunk.js": "/Ashinshana_Ishan/static/js/206.e251589c.chunk.js",
-    "static/media/developer.png": "/Ashinshana_Ishan/static/media/developer.93b65a5484157ccc53da.png",
-    "static/media/youtuber.png": "/Ashinshana_Ishan/static/media/youtuber.4359c086f891d8c24680.png",
-    "static/media/person.png": "/Ashinshana_Ishan/static/media/person.c28d6e19f72071ab30c4.png",
-    "static/media/r.jpg": "/Ashinshana_Ishan/static/media/r.7b613c38868be934556b.jpg",
-    "static/media/profile.png": "/Ashinshana_Ishan/static/media/profile.78ae023241354df14ad2.png",
-    "static/media/portfolio.png": "/Ashinshana_Ishan/static/media/portfolio.4efe3892eaebc8939576.png",
-    "static/media/fun_web.png": "/Ashinshana_Ishan/static/media/fun_web.518b64323f62743efbeb.png",
-    "static/media/curlymax.png": "/Ashinshana_Ishan/static/media/curlymax.89a64f474cf3798aff35.png",
-    "static/media/java.png": "/Ashinshana_Ishan/static/media/java.71abe976f94d8d316f1d.png",
-    "static/media/bank.png": "/Ashinshana_Ishan/static/media/bank.654fc163ff64a2d2de2a.png",
-    "index.html": "/Ashinshana_Ishan/index.html"
+    "main.css": "/static/css/main.4c23f7b2.css",
+    "main.js": "/static/js/main.1a51bbcc.js",
+    "static/js/206.e251589c.chunk.js": "/static/js/206.e251589c.chunk.js",
+    "static/media/developer.png": "/static/media/developer.93b65a5484157ccc53da.png",
+    "static/media/youtuber.png": "/static/media/youtuber.4359c086f891d8c24680.png",
+    "static/media/person.png": "/static/media/person.c28d6e19f72071ab30c4.png",
+    "static/media/r.jpg": "/static/media/r.7b613c38868be934556b.jpg",
+    "static/media/profile.png": "/static/media/profile.78ae023241354df14ad2.png",
+    "static/media/portfolio.png": "/static/media/portfolio.4efe3892eaebc8939576.png",
+    "static/media/fun_web.png": "/static/media/fun_web.518b64323f62743efbeb.png",
+    "static/media/curlymax.png": "/static/media/curlymax.89a64f474cf3798aff35.png",
+    "static/media/java.png": "/static/media/java.71abe976f94d8d316f1d.png",
+    "static/media/bank.png": "/static/media/bank.654fc163ff64a2d2de2a.png",
+    "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.7c3c299c.css",
-    "static/js/main.db5c7bac.js"
+    "static/css/main.4c23f7b2.css",
+    "static/js/main.1a51bbcc.js"
   ]
 }

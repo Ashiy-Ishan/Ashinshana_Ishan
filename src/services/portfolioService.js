@@ -9,6 +9,7 @@ import {
   deleteDoc, 
   query, 
   orderBy, 
+  onSnapshot,
   serverTimestamp 
 } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../config/firebase';
@@ -38,10 +39,26 @@ const setCachedData = (key, value) => {
 export const portfolioService = {
   // --- Sync All Baseline Data to Cloud Firestore ---
   async syncAllToFirestore() {
+    // 1. Always update local storage cache first so local state is synchronized
+    setCachedData('profile', initialData.profile);
+    setCachedData('skills', initialData.skills);
+    setCachedData('projects', initialData.projects);
+    setCachedData('publishedProjects', initialData.publishedProjects);
+    setCachedData('youtubeChannel', initialData.youtubeChannel);
+    setCachedData('youtubeVideos', initialData.youtubeVideos);
+    setCachedData('currentlyBuilding', initialData.currentlyBuilding);
+    setCachedData('timeline', initialData.timeline);
+    setCachedData('gallery', initialData.gallery);
+    setCachedData('siteSettings', initialData.siteSettings);
+
     if (!isFirebaseConfigured || !db) {
-      throw new Error('Firestore is not configured. Please check your credentials.');
+      return { 
+        localOnly: true, 
+        message: 'Saved all baseline data to your local browser cache. To upload directly to Cloud Firestore, configure your Firebase API keys in your .env.local file.' 
+      };
     }
 
+    // 2. Upload to Cloud Firestore when credentials are present
     // 1. Profile
     await setDoc(doc(db, 'profiles', 'main'), initialData.profile, { merge: true });
 
@@ -82,7 +99,10 @@ export const portfolioService = {
     // 9. Site Settings
     await setDoc(doc(db, 'siteSettings', 'main'), initialData.siteSettings, { merge: true });
 
-    return true;
+    return { 
+      localOnly: false, 
+      message: 'All baseline portfolio collections successfully synced to Cloud Firestore!' 
+    };
   },
 
   // --- Profile ---
@@ -597,5 +617,295 @@ export const portfolioService = {
     const updated = current.filter(m => m.id !== msgId);
     setCachedData('contactMessages', updated);
     return true;
+  },
+
+  // =========================================================================
+  // REAL-TIME FIRESTORE SUBSCRIPTIONS (onSnapshot)
+  // =========================================================================
+
+  // 1. Profile Real-time Listener
+  subscribeToProfile(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('profile', initialData.profile));
+      return () => {};
+    }
+    const docRef = doc(db, 'profiles', 'main');
+    return onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = { ...initialData.profile, ...docSnap.data() };
+          setCachedData('profile', data);
+          onUpdate && onUpdate(data);
+        } else {
+          onUpdate && onUpdate(initialData.profile);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time profile listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('profile', initialData.profile));
+      }
+    );
+  },
+
+  // 2. Skills Real-time Listener
+  subscribeToSkills(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('skills', initialData.skills));
+      return () => {};
+    }
+    const q = query(collection(db, 'skills'), orderBy('order', 'asc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const skills = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('skills', skills);
+          onUpdate && onUpdate(skills);
+        } else {
+          onUpdate && onUpdate(initialData.skills);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time skills listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('skills', initialData.skills));
+      }
+    );
+  },
+
+  // 3. Projects Real-time Listener
+  subscribeToProjects(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('projects', initialData.projects));
+      return () => {};
+    }
+    const q = query(collection(db, 'projects'), orderBy('order', 'asc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const projs = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('projects', projs);
+          onUpdate && onUpdate(projs);
+        } else {
+          onUpdate && onUpdate(initialData.projects);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time projects listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('projects', initialData.projects));
+      }
+    );
+  },
+
+  // 4. Published Projects Real-time Listener
+  subscribeToPublishedProjects(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('publishedProjects', initialData.publishedProjects));
+      return () => {};
+    }
+    const q = query(collection(db, 'publishedProjects'), orderBy('releaseDate', 'desc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const pubs = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('publishedProjects', pubs);
+          onUpdate && onUpdate(pubs);
+        } else {
+          onUpdate && onUpdate(initialData.publishedProjects);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time published projects listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('publishedProjects', initialData.publishedProjects));
+      }
+    );
+  },
+
+  // 5. YouTube Channel Real-time Listener
+  subscribeToYouTubeChannel(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('youtubeChannel', initialData.youtubeChannel));
+      return () => {};
+    }
+    const docRef = doc(db, 'youtubeChannel', 'main');
+    return onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = { ...initialData.youtubeChannel, ...docSnap.data() };
+          setCachedData('youtubeChannel', data);
+          onUpdate && onUpdate(data);
+        } else {
+          onUpdate && onUpdate(initialData.youtubeChannel);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time youtubeChannel listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('youtubeChannel', initialData.youtubeChannel));
+      }
+    );
+  },
+
+  // 6. YouTube Videos Real-time Listener
+  subscribeToYouTubeVideos(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('youtubeVideos', initialData.youtubeVideos));
+      return () => {};
+    }
+    const q = query(collection(db, 'youtubeVideos'), orderBy('order', 'asc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const vids = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('youtubeVideos', vids);
+          onUpdate && onUpdate(vids);
+        } else {
+          onUpdate && onUpdate(initialData.youtubeVideos);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time youtubeVideos listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('youtubeVideos', initialData.youtubeVideos));
+      }
+    );
+  },
+
+  // 7. Currently Building Radar Real-time Listener
+  subscribeToCurrentlyBuilding(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('currentlyBuilding', initialData.currentlyBuilding));
+      return () => {};
+    }
+    const docRef = doc(db, 'currentlyBuilding', 'main');
+    return onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = { ...initialData.currentlyBuilding, ...docSnap.data() };
+          setCachedData('currentlyBuilding', data);
+          onUpdate && onUpdate(data);
+        } else {
+          onUpdate && onUpdate(initialData.currentlyBuilding);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time currentlyBuilding listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('currentlyBuilding', initialData.currentlyBuilding));
+      }
+    );
+  },
+
+  // 8. Timeline Real-time Listener
+  subscribeToTimeline(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('timeline', initialData.timeline));
+      return () => {};
+    }
+    const q = query(collection(db, 'timeline'), orderBy('year', 'desc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const items = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('timeline', items);
+          onUpdate && onUpdate(items);
+        } else {
+          onUpdate && onUpdate(initialData.timeline);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time timeline listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('timeline', initialData.timeline));
+      }
+    );
+  },
+
+  // 9. Gallery Real-time Listener
+  subscribeToGallery(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('gallery', initialData.gallery));
+      return () => {};
+    }
+    const q = query(collection(db, 'gallery'), orderBy('date', 'desc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const items = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('gallery', items);
+          onUpdate && onUpdate(items);
+        } else {
+          onUpdate && onUpdate(initialData.gallery);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time gallery listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('gallery', initialData.gallery));
+      }
+    );
+  },
+
+  // 10. Site Settings Real-time Listener
+  subscribeToSiteSettings(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('siteSettings', initialData.siteSettings));
+      return () => {};
+    }
+    const docRef = doc(db, 'siteSettings', 'main');
+    return onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = { ...initialData.siteSettings, ...docSnap.data() };
+          setCachedData('siteSettings', data);
+          onUpdate && onUpdate(data);
+        } else {
+          onUpdate && onUpdate(initialData.siteSettings);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time siteSettings listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('siteSettings', initialData.siteSettings));
+      }
+    );
+  },
+
+  // 11. Contact Messages Real-time Listener (for CMS Admin)
+  subscribeToContactMessages(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('contactMessages', []));
+      return () => {};
+    }
+    const q = query(collection(db, 'contactMessages'), orderBy('createdAt', 'desc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const msgs = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('contactMessages', msgs);
+          onUpdate && onUpdate(msgs);
+        } else {
+          onUpdate && onUpdate([]);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time contact messages listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('contactMessages', []));
+      }
+    );
   }
 };

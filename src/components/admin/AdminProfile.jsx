@@ -1,7 +1,7 @@
-// src/components/admin/AdminProfile.jsx
 import React, { useState } from 'react';
 import { Save, Check, User, Image, Sparkles, Link2 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { ImageUploadField } from './ImageUploadField';
 
 export const AdminProfile = () => {
   const { profile, updateProfile } = usePortfolio();
@@ -190,63 +190,49 @@ export const AdminProfile = () => {
             <Image size={18} /> Hero & Role Identity Image Manager
           </h3>
           <p className="card-sub-info">
-            Manage and update website portrait images for Personal, Developer, and Creator roles. Supports ImageKit.io CDN URLs and custom web links.
+            Manage and update portrait images for Personal, Developer, and Creator roles. Upload directly to ImageKit CDN or paste existing URLs.
           </p>
 
           <div className="form-grid-3">
             {/* Personal Role Image */}
-            <div className="form-field role-image-box">
-              <label>Personal Role Image</label>
-              <div className="role-thumb-preview">
-                <img
-                  src={formData.heroImagePersonal || formData.personalImage || formData.profileImage}
-                  alt="Personal Role Preview"
-                />
-              </div>
-              <input
-                type="text"
-                name="heroImagePersonal"
-                value={formData.heroImagePersonal || ''}
-                onChange={handleChange}
-                placeholder="https://ik.imagekit.io/x2eerczu0/... or image URL"
-              />
-            </div>
+            <ImageUploadField
+              label="Personal Role Image"
+              value={formData.heroImagePersonal || formData.personalImage || formData.profileImage || ''}
+              onChange={(url) => setFormData((prev) => ({ 
+                ...prev, 
+                heroImagePersonal: url,
+                personalImage: url,
+                profileImage: url 
+              }))}
+              folder="profile"
+              hint="Hero Personal portrait"
+            />
 
             {/* Developer Role Image */}
-            <div className="form-field role-image-box">
-              <label>Developer Role Image</label>
-              <div className="role-thumb-preview">
-                <img
-                  src={formData.heroImageDeveloper || formData.developerImage || formData.profileImage}
-                  alt="Developer Role Preview"
-                />
-              </div>
-              <input
-                type="text"
-                name="heroImageDeveloper"
-                value={formData.heroImageDeveloper || ''}
-                onChange={handleChange}
-                placeholder="https://ik.imagekit.io/x2eerczu0/... or image URL"
-              />
-            </div>
+            <ImageUploadField
+              label="Developer Role Image"
+              value={formData.heroImageDeveloper || formData.developerImage || ''}
+              onChange={(url) => setFormData((prev) => ({ 
+                ...prev, 
+                heroImageDeveloper: url,
+                developerImage: url 
+              }))}
+              folder="profile"
+              hint="Hero Developer portrait"
+            />
 
             {/* Creator Role Image */}
-            <div className="form-field role-image-box">
-              <label>Creator / YouTuber Role Image</label>
-              <div className="role-thumb-preview">
-                <img
-                  src={formData.heroImageCreator || formData.creatorImage || formData.profileImage}
-                  alt="Creator Role Preview"
-                />
-              </div>
-              <input
-                type="text"
-                name="heroImageCreator"
-                value={formData.heroImageCreator || ''}
-                onChange={handleChange}
-                placeholder="https://ik.imagekit.io/x2eerczu0/... or image URL"
-              />
-            </div>
+            <ImageUploadField
+              label="Creator Role Image"
+              value={formData.heroImageCreator || formData.creatorImage || ''}
+              onChange={(url) => setFormData((prev) => ({ 
+                ...prev, 
+                heroImageCreator: url,
+                creatorImage: url 
+              }))}
+              folder="profile"
+              hint="Hero Creator portrait"
+            />
           </div>
         </div>
 

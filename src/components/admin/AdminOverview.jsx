@@ -31,16 +31,18 @@ export const AdminOverview = ({ onNavigateTab }) => {
 
   const [syncing, setSyncing] = useState(false);
   const [syncSuccess, setSyncSuccess] = useState(false);
+  const [syncMessage, setSyncMessage] = useState('');
 
   const handleSyncFirestore = async () => {
     try {
       setSyncing(true);
       setSyncSuccess(false);
-      await syncAllToFirestore();
+      const res = await syncAllToFirestore();
+      setSyncMessage(res?.message || 'Data successfully synchronized!');
       setSyncSuccess(true);
-      setTimeout(() => setSyncSuccess(false), 4000);
+      setTimeout(() => setSyncSuccess(false), 5000);
     } catch (err) {
-      alert(`Firestore sync error: ${err.message}`);
+      alert(`Firestore sync notice: ${err.message}`);
     } finally {
       setSyncing(false);
     }

@@ -70,9 +70,84 @@ export const PortfolioProvider = ({ children }) => {
     }
   }, []);
 
+  // Real-time Firestore Subscriptions (Active Listener Lifecycle)
   useEffect(() => {
-    loadAllData();
-  }, [loadAllData]);
+    let isMounted = true;
+    setLoading(true);
+
+    const unsubProfile = portfolioService.subscribeToProfile(
+      (data) => isMounted && setProfile(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubSkills = portfolioService.subscribeToSkills(
+      (data) => isMounted && setSkills(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubProjects = portfolioService.subscribeToProjects(
+      (data) => isMounted && setProjects(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubPublished = portfolioService.subscribeToPublishedProjects(
+      (data) => isMounted && setPublishedProjects(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubChannel = portfolioService.subscribeToYouTubeChannel(
+      (data) => isMounted && setYouTubeChannel(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubVideos = portfolioService.subscribeToYouTubeVideos(
+      (data) => isMounted && setYouTubeVideos(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubBuilding = portfolioService.subscribeToCurrentlyBuilding(
+      (data) => isMounted && setCurrentlyBuilding(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubTimeline = portfolioService.subscribeToTimeline(
+      (data) => isMounted && setTimeline(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubGallery = portfolioService.subscribeToGallery(
+      (data) => isMounted && setGallery(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubSettings = portfolioService.subscribeToSiteSettings(
+      (data) => isMounted && setSiteSettings(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    const unsubMessages = portfolioService.subscribeToContactMessages(
+      (data) => isMounted && setContactMessages(data),
+      (err) => isMounted && setError(err.message)
+    );
+
+    setLoading(false);
+
+    // Clean up all active listeners on component unmount
+    return () => {
+      isMounted = false;
+      if (typeof unsubProfile === 'function') unsubProfile();
+      if (typeof unsubSkills === 'function') unsubSkills();
+      if (typeof unsubProjects === 'function') unsubProjects();
+      if (typeof unsubPublished === 'function') unsubPublished();
+      if (typeof unsubChannel === 'function') unsubChannel();
+      if (typeof unsubVideos === 'function') unsubVideos();
+      if (typeof unsubBuilding === 'function') unsubBuilding();
+      if (typeof unsubTimeline === 'function') unsubTimeline();
+      if (typeof unsubGallery === 'function') unsubGallery();
+      if (typeof unsubSettings === 'function') unsubSettings();
+      if (typeof unsubMessages === 'function') unsubMessages();
+    };
+  }, []);
 
   // Mutations
   const updateProfile = async (data) => {

@@ -1,7 +1,7 @@
-// src/components/admin/AdminProjects.jsx
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Star, Check, X, Eye, EyeOff } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
+import { ImageUploadField } from './ImageUploadField';
 
 export const AdminProjects = () => {
   const { projects, saveProject, deleteProject } = usePortfolio();
@@ -159,17 +159,16 @@ export const AdminProjects = () => {
                 </div>
               </div>
 
-              <div className="form-field">
-                <label>Cover Image URL or Path</label>
-                <input
-                  type="text"
-                  value={editingProject.imageUrl || ''}
-                  onChange={(e) =>
-                    setEditingProject({ ...editingProject, imageUrl: e.target.value })
-                  }
-                  placeholder="https://... or relative path"
-                />
-              </div>
+              <ImageUploadField
+                label="Cover Image (ImageKit CDN or URL)"
+                value={editingProject.imageUrl || ''}
+                onChange={(url) =>
+                  setEditingProject({ ...editingProject, imageUrl: url })
+                }
+                folder="projects"
+                placeholder="https://ik.imagekit.io/... or upload cover image"
+                hint="Upload project screenshot or card banner to ImageKit CDN"
+              />
 
               <div className="form-field">
                 <label>Short Description (for cards)</label>

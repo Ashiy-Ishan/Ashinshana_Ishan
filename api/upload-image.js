@@ -58,19 +58,19 @@ function getImageKit() {
 }
 
 // Disable default Vercel body parser to allow Busboy multipart stream parsing
-export const config = {
+const config = {
   api: {
     bodyParser: false
   }
 };
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   // 1. Handle CORS
   const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.some(o => o.toLowerCase() === origin.toLowerCase())) {
+  if (origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
-    res.setHeader('Access-Control-Allow-Origin', 'https://Ashiy-Ishan.github.io');
+    res.setHeader('Access-Control-Allow-Origin', '*');
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -193,3 +193,5 @@ export default async function handler(req, res) {
   }
 }
 
+module.exports = handler;
+module.exports.config = config;
