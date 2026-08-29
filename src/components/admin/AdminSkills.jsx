@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Star, Check, X, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, Star, Check, X, Sparkles, CloudUpload, CheckCircle2 } from 'lucide-react';
 import { PremierePro, Photoshop } from '../common/Icons';
 import ballerinaImg from '../../Iamage/ballerina.jpeg';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { ImageUploadField } from './ImageUploadField';
 
 export const AdminSkills = () => {
-  const { skills, saveSkill, deleteSkill } = usePortfolio();
+  const { skills, saveSkill, deleteSkill, syncAllSkills } = usePortfolio();
 
   const [editingSkill, setEditingSkill] = useState(null);
   const [isNew, setIsNew] = useState(false);
   const [filterCategory, setFilterCategory] = useState('All');
+  const [syncing, setSyncing] = useState(false);
+  const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
 
   const renderAdminSkillIcon = (skill) => {
     const icon = (skill.icon || '').toLowerCase();
@@ -51,23 +53,32 @@ export const AdminSkills = () => {
     'Tools'
   ];
 
+  const proficiencies = [
+    'Mastery',
+    'Expert',
+    'Advanced',
+    'Proficient',
+    'Intermediate',
+    'Familiar'
+  ];
+
   const emptySkill = {
     name: '',
     category: 'Programming Languages',
     icon: 'devicon-react-original',
     description: '',
     level: 'Proficient',
-    featured: false,
+    featured: false, // Default featured is NO
     order: skills.length + 1
   };
 
   const handleStartNew = () => {
-    setEditingSkill({ ...emptySkill });
+    setEditingSkill({ ...emptySkill, featured: false });
     setIsNew(true);
   };
 
   const handleStartEdit = (skill) => {
-    setEditingSkill({ ...skill });
+    setEditingSkill({ ...skill, featured: skill.featured || false });
     setIsNew(false);
   };
 
@@ -81,6 +92,20 @@ export const AdminSkills = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this skill?')) {
       await deleteSkill(id);
+    }
+  };
+
+  const handleSyncAllBaseline = async () => {
+    setSyncing(true);
+    setSyncSuccessMessage(null);
+    try {
+      await syncAllSkills();
+      setSyncSuccessMessage('All baseline skills successfully uploaded and synchronized to Firestore database!');
+      setTimeout(() => setSyncSuccessMessage(null), 4000);
+    } catch (err) {
+      alert(`Sync failed: ${err.message}`);
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -98,11 +123,30 @@ export const AdminSkills = () => {
             Manage your database-driven competency matrix, categories, devicons, and featured highlights.
           </p>
         </div>
-        <button type="button" className="btn btn-primary" onClick={handleStartNew}>
-          <Plus size={16} />
-          <span>Add New Skill</span>
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleSyncAllBaseline}
+            disabled={syncing}
+            title="Upload all default skills into the Firestore database once"
+          >
+            <CloudUpload size={16} />
+            <span>{syncing ? 'Uploading All Skills...' : 'Upload All Default Skills Once'}</span>
+          </button>
+          <button type="button" className="btn btn-primary" onClick={handleStartNew}>
+            <Plus size={16} />
+            <span>Add New Skill</span>
+          </button>
+        </div>
       </div>
+
+      {syncSuccessMessage && (
+        <div className="form-alert success" style={{ marginBottom: '1.5rem' }}>
+          <CheckCircle2 size={18} />
+          <span>{syncSuccessMessage}</span>
+        </div>
+      )}
 
       {/* Modal / Form when editing */}
       {editingSkill && (
@@ -153,6 +197,33 @@ export const AdminSkills = () => {
                 </div>
               </div>
 
+              {/* Predefined Category Quick-Select Buttons */}
+              <div className="form-field">
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Quick-Select Category:</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.35rem' }}>
+                  {categories.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      style={{
+                        padding: '0.3rem 0.65rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        background: editingSkill.category === c ? 'var(--accent-dev)' : 'var(--bg-surface-elevated)',
+                        color: editingSkill.category === c ? '#000' : 'var(--text-secondary)',
+                        border: editingSkill.category === c ? '1px solid var(--accent-dev)' : '1px solid var(--border-medium)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setEditingSkill({ ...editingSkill, category: c })}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="form-grid-2">
                 <div className="form-field">
                   <label>Devicon Class Name</label>
@@ -177,6 +248,33 @@ export const AdminSkills = () => {
                     }
                     placeholder="e.g. Advanced, Proficient, Familiar"
                   />
+                </div>
+              </div>
+
+              {/* Predefined Proficiency Quick-Select Buttons */}
+              <div className="form-field">
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Quick-Select Proficiency:</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.35rem' }}>
+                  {proficiencies.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      style={{
+                        padding: '0.3rem 0.65rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        background: editingSkill.level === p ? '#10b981' : 'var(--bg-surface-elevated)',
+                        color: editingSkill.level === p ? '#fff' : 'var(--text-secondary)',
+                        border: editingSkill.level === p ? '1px solid #10b981' : '1px solid var(--border-medium)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setEditingSkill({ ...editingSkill, level: p })}
+                    >
+                      {p}
+                    </button>
+                  ))}
                 </div>
               </div>
 

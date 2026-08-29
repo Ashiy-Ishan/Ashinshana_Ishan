@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Star, Check, X, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit2, Trash2, Star, Check, X, Eye, EyeOff, CloudUpload, CheckCircle2 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { ImageUploadField } from './ImageUploadField';
 
 export const AdminProjects = () => {
-  const { projects, saveProject, deleteProject } = usePortfolio();
+  const { projects, saveProject, deleteProject, syncAllProjects } = usePortfolio();
 
   const [editingProject, setEditingProject] = useState(null);
   const [isNew, setIsNew] = useState(false);
   const [techInput, setTechInput] = useState('');
+  const [syncing, setSyncing] = useState(false);
+  const [syncSuccessMessage, setSyncSuccessMessage] = useState(null);
 
   const categories = ['Web', 'Backend', 'Mobile', 'AI', 'IoT', 'Desktop', 'Other'];
   const statusOptions = ['Live', 'Open Source', 'Released', 'In Development', 'Archived'];
@@ -25,19 +27,19 @@ export const AdminProjects = () => {
     demoUrl: '',
     date: new Date().getFullYear().toString(),
     status: 'Live',
-    featured: false,
+    featured: false, // Default featured is NO
     published: true,
     order: projects.length + 1
   };
 
   const handleStartNew = () => {
-    setEditingProject({ ...emptyProject });
+    setEditingProject({ ...emptyProject, featured: false });
     setTechInput('');
     setIsNew(true);
   };
 
   const handleStartEdit = (proj) => {
-    setEditingProject({ ...proj });
+    setEditingProject({ ...proj, featured: proj.featured || false });
     setTechInput(Array.isArray(proj.technologies) ? proj.technologies.join(', ') : '');
     setIsNew(false);
   };
@@ -65,6 +67,20 @@ export const AdminProjects = () => {
     }
   };
 
+  const handleSyncAllBaseline = async () => {
+    setSyncing(true);
+    setSyncSuccessMessage(null);
+    try {
+      await syncAllProjects();
+      setSyncSuccessMessage('All baseline projects successfully uploaded and synchronized to Firestore database!');
+      setTimeout(() => setSyncSuccessMessage(null), 4000);
+    } catch (err) {
+      alert(`Sync failed: ${err.message}`);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   return (
     <div className="admin-tab-pane">
       <div className="admin-pane-header">
@@ -74,11 +90,30 @@ export const AdminProjects = () => {
             Add, update, feature, or publish software applications, live links, and repositories.
           </p>
         </div>
-        <button type="button" className="btn btn-primary" onClick={handleStartNew}>
-          <Plus size={16} />
-          <span>Add New Project</span>
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleSyncAllBaseline}
+            disabled={syncing}
+            title="Upload all default projects into the Firestore database once"
+          >
+            <CloudUpload size={16} />
+            <span>{syncing ? 'Uploading All Projects...' : 'Upload All Default Projects Once'}</span>
+          </button>
+          <button type="button" className="btn btn-primary" onClick={handleStartNew}>
+            <Plus size={16} />
+            <span>Add New Project</span>
+          </button>
+        </div>
       </div>
+
+      {syncSuccessMessage && (
+        <div className="form-alert success" style={{ marginBottom: '1.5rem' }}>
+          <CheckCircle2 size={18} />
+          <span>{syncSuccessMessage}</span>
+        </div>
+      )}
 
       {/* Modal / Form */}
       {editingProject && (
@@ -129,6 +164,33 @@ export const AdminProjects = () => {
                 </div>
               </div>
 
+              {/* Predefined Category Quick-Select Buttons */}
+              <div className="form-field">
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Quick-Select Category:</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.35rem' }}>
+                  {categories.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      style={{
+                        padding: '0.3rem 0.65rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        background: editingProject.category === c ? 'var(--accent-dev)' : 'var(--bg-surface-elevated)',
+                        color: editingProject.category === c ? '#000' : 'var(--text-secondary)',
+                        border: editingProject.category === c ? '1px solid var(--accent-dev)' : '1px solid var(--border-medium)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setEditingProject({ ...editingProject, category: c })}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="form-grid-2">
                 <div className="form-field">
                   <label>Status</label>
@@ -156,6 +218,33 @@ export const AdminProjects = () => {
                     }
                     placeholder="e.g. 2025"
                   />
+                </div>
+              </div>
+
+              {/* Predefined Status Quick-Select Buttons */}
+              <div className="form-field">
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Quick-Select Status:</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.35rem' }}>
+                  {statusOptions.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      style={{
+                        padding: '0.3rem 0.65rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        background: editingProject.status === s ? '#38bdf8' : 'var(--bg-surface-elevated)',
+                        color: editingProject.status === s ? '#000' : 'var(--text-secondary)',
+                        border: editingProject.status === s ? '1px solid #38bdf8' : '1px solid var(--border-medium)',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setEditingProject({ ...editingProject, status: s })}
+                    >
+                      {s}
+                    </button>
+                  ))}
                 </div>
               </div>
 

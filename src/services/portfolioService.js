@@ -154,9 +154,35 @@ export const portfolioService = {
     return getCachedData('skills', initialData.skills);
   },
 
+  async syncAllSkillsToFirestore() {
+    if (isFirebaseConfigured && db) {
+      for (let i = 0; i < initialData.skills.length; i++) {
+        const item = initialData.skills[i];
+        const skillId = item.id || `skill-${i + 1}`;
+        await setDoc(doc(db, 'skills', skillId), { ...item, id: skillId, order: i + 1 }, { merge: true });
+      }
+    }
+    setCachedData('skills', initialData.skills);
+    return initialData.skills;
+  },
+
   async saveSkill(skill) {
     let savedSkill = { ...skill };
     if (isFirebaseConfigured && db) {
+      // If saving a skill and Firestore skills collection is currently empty, seed all default skills first so no other skills disappear
+      try {
+        const currentSnap = await getDocs(collection(db, 'skills'));
+        if (currentSnap.empty) {
+          for (let i = 0; i < initialData.skills.length; i++) {
+            const item = initialData.skills[i];
+            const sId = item.id || `skill-${i + 1}`;
+            await setDoc(doc(db, 'skills', sId), { ...item, id: sId, order: i + 1 }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default skills check warning:', checkErr);
+      }
+
       if (skill.id && !skill.id.startsWith('temp-')) {
         const docRef = doc(db, 'skills', skill.id);
         await setDoc(docRef, savedSkill, { merge: true });
@@ -211,9 +237,35 @@ export const portfolioService = {
     return getCachedData('projects', initialData.projects);
   },
 
+  async syncAllProjectsToFirestore() {
+    if (isFirebaseConfigured && db) {
+      for (let i = 0; i < initialData.projects.length; i++) {
+        const item = initialData.projects[i];
+        const projId = item.id || `proj-${i + 1}`;
+        await setDoc(doc(db, 'projects', projId), { ...item, id: projId, order: i + 1 }, { merge: true });
+      }
+    }
+    setCachedData('projects', initialData.projects);
+    return initialData.projects;
+  },
+
   async saveProject(project) {
     let saved = { ...project };
     if (isFirebaseConfigured && db) {
+      // If saving a project and Firestore projects collection is currently empty, seed all default projects first so no other projects disappear
+      try {
+        const currentSnap = await getDocs(collection(db, 'projects'));
+        if (currentSnap.empty) {
+          for (let i = 0; i < initialData.projects.length; i++) {
+            const item = initialData.projects[i];
+            const pId = item.id || `proj-${i + 1}`;
+            await setDoc(doc(db, 'projects', pId), { ...item, id: pId, order: i + 1 }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default projects check warning:', checkErr);
+      }
+
       if (project.id && !project.id.startsWith('temp-')) {
         const docRef = doc(db, 'projects', project.id);
         await setDoc(docRef, saved, { merge: true });
@@ -271,6 +323,19 @@ export const portfolioService = {
   async savePublishedProject(pubProject) {
     let saved = { ...pubProject };
     if (isFirebaseConfigured && db) {
+      try {
+        const currentSnap = await getDocs(collection(db, 'publishedProjects'));
+        if (currentSnap.empty && initialData.publishedProjects) {
+          for (let i = 0; i < initialData.publishedProjects.length; i++) {
+            const item = initialData.publishedProjects[i];
+            const pId = item.id || `pub-${i + 1}`;
+            await setDoc(doc(db, 'publishedProjects', pId), { ...item, id: pId }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default publishedProjects check warning:', checkErr);
+      }
+
       if (pubProject.id && !pubProject.id.startsWith('temp-')) {
         const docRef = doc(db, 'publishedProjects', pubProject.id);
         await setDoc(docRef, saved, { merge: true });

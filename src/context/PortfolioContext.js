@@ -156,6 +156,12 @@ export const PortfolioProvider = ({ children }) => {
     return updated;
   };
 
+  const syncAllSkills = async () => {
+    const synced = await portfolioService.syncAllSkillsToFirestore();
+    setSkills(synced);
+    return synced;
+  };
+
   const saveSkill = async (skill) => {
     const saved = await portfolioService.saveSkill(skill);
     const updatedSkills = await portfolioService.getSkills();
@@ -166,6 +172,12 @@ export const PortfolioProvider = ({ children }) => {
   const deleteSkill = async (skillId) => {
     await portfolioService.deleteSkill(skillId);
     setSkills((prev) => prev.filter((s) => s.id !== skillId));
+  };
+
+  const syncAllProjects = async () => {
+    const synced = await portfolioService.syncAllProjectsToFirestore();
+    setProjects(synced);
+    return synced;
   };
 
   const saveProject = async (project) => {
@@ -275,8 +287,10 @@ export const PortfolioProvider = ({ children }) => {
     error,
     refreshData: loadAllData,
     updateProfile,
+    syncAllSkills,
     saveSkill,
     deleteSkill,
+    syncAllProjects,
     saveProject,
     deleteProject,
     savePublishedProject,
