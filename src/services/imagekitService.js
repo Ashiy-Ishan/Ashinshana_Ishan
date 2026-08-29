@@ -19,59 +19,102 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
     throw new Error(`File size (${(file.size / (1024 * 1024)).toFixed(2)}MB) exceeds maximum limit of ${MAX_SIZE_MB}MB.`);
   }
 
-  // Generate clean filename
-  const cleanFileName = `${folderName}_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase()}`;
-  const base = IMAGEKIT_URL_ENDPOINT.endsWith('/') ? IMAGEKIT_URL_ENDPOINT : `${IMAGEKIT_URL_ENDPOINT}/`;
+  const cleanFileName = `ashiy_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase()}`;
+  const targetFolder = folderName.startsWith('/') ? folderName : `/${folderName}`;
 
-  // 2. Retrieve Firebase User ID Token for backend authentication if available
-  let idToken = null;
-  if (auth && auth.currentUser) {
-    try {
-      idToken = await auth.currentUser.getIdToken();
-    } catch (tokenErr) {
-      console.warn('Could not fetch idToken:', tokenErr);
-    }
-  }
+  // 2. Official Method: Client-side direct upload to ImageKit via signed auth params
+  try {
+    const authResponse = await fetch('/api/imagekit-auth');
+    if (authResponse.ok) {
+      const authData = await authResponse.json();
+      const { signature, expire, token, publicKey } = authData;
 
-  // 3. Try Vercel Serverless Function / Backend API Upload
-  if (idToken) {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('folder', folderName);
+      if (signature && token && expire && publicKey) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('fileName', cleanFileName);
+        formData.append('publicKey', publicKey);
+        formData.append('signature', signature);
+        formData.append('expire', String(expire));
+        formData.append('token', token);
+        formData.append('folder', targetFolder);
+        formData.append('useUniqueFileName', 'true');
 
-      const response = await fetch(UPLOAD_API_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${idToken}`
-        },
-        body: formData
-      });
+        const uploadRes = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+          method: 'POST',
+          body: formData
+        });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data && data.success && data.url) {
-          return data.url;
+        if (uploadRes.ok) {
+          const result = await uploadRes.json();
+          if (result && result.url) {
+            return result.url;
+          }
+        } else {
+          const errRes = await uploadRes.json().catch(() => ({}));
+          throw new Error(errRes.message || `ImageKit upload failed with status ${uploadRes.status}`);
         }
       }
-    } catch (apiErr) {
-      console.warn('Backend upload endpoint unavailable, using direct CDN resolution fallback:', apiErr.message);
     }
+  } catch (directUploadErr) {
+    if (directUploadErr.message && directUploadErr.message.includes('ImageKit upload failed')) {
+      throw directUploadErr;
+    }
+    console.warn('Direct ImageKit upload via auth params skipped/failed:', directUploadErr.message);
   }
 
-  // 4. Fallback: Read file as Data URL or generate formatted ImageKit CDN reference
+  // 3. Fallback: Serverless upload endpoint (/api/upload-image)
+  try {
+    let idToken = null;
+    if (auth && auth.currentUser) {
+      try {
+        idToken = await auth.currentUser.getIdToken();
+      } catch (tErr) {
+        console.warn('Could not fetch idToken:', tErr);
+      }
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', folderName);
+
+    const headers = {};
+    if (idToken) {
+      headers['Authorization'] = `Bearer ${idToken}`;
+    }
+
+    const response = await fetch(UPLOAD_API_URL, {
+      method: 'POST',
+      headers,
+      body: formData
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.url) {
+        return data.url;
+      }
+    } else if (response.status !== 404) {
+      const errorJson = await response.json().catch(() => ({}));
+      if (errorJson.error) {
+        if (errorJson.error.includes("reading 'length'") || errorJson.error.includes("Cannot read properties")) {
+          throw new Error("Serverless API requires redeployment: please push the latest commit to Vercel and ensure IMAGEKIT_PRIVATE_KEY is set in Vercel Settings.");
+        }
+        throw new Error(errorJson.error);
+      }
+    }
+  } catch (serverErr) {
+    if (serverErr.message && !serverErr.message.includes('Failed to fetch')) {
+      throw serverErr;
+    }
+    console.warn('Backend serverless upload skipped:', serverErr.message);
+  }
+
+  // 4. Local Development Fallback: Read file as Data URL (only for offline local preview)
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onloadend = () => {
-      // Return Data URL for instant local display or formatted CDN URL
-      if (reader.result && reader.result.length < 500000) {
-        resolve(reader.result);
-      } else {
-        resolve(`${base}${cleanFileName}`);
-      }
-    };
-    reader.onerror = () => {
-      resolve(`${base}${cleanFileName}`);
+      resolve(reader.result);
     };
     reader.readAsDataURL(file);
   });

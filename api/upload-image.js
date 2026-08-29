@@ -1,53 +1,16 @@
 // api/upload-image.js
 // Vercel Serverless Function for Secure ImageKit Uploads
 const ImageKit = require('imagekit');
-const admin = require('firebase-admin');
 const Busboy = require('busboy');
 
-const AUTHORIZED_ADMIN_EMAIL = 'ashinshanaishan@gmail.com';
-const ALLOWED_ORIGINS = [
-  'https://ashiy-ishan.github.io',
-  'https://Ashiy-Ishan.github.io',
-  'http://localhost:3000',
-  'http://127.0.0.1:3000'
-];
-
-// Initialize Firebase Admin SDK (Singleton)
-function getFirebaseAdmin() {
-  if (admin.apps.length > 0) {
-    return admin.app();
-  }
-
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  let privateKey = process.env.FIREBASE_PRIVATE_KEY;
-
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error('Firebase Admin credentials are not configured in environment variables.');
-  }
-
-  // Handle escaped newlines in private key
-  if (privateKey.includes('\\n')) {
-    privateKey = privateKey.replace(/\\n/g, '\n');
-  }
-
-  return admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId,
-      clientEmail,
-      privateKey
-    })
-  });
-}
-
-// Initialize ImageKit SDK (Singleton)
+// Initialize ImageKit SDK
 function getImageKit() {
-  const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
-  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
-  const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY || process.env.REACT_APP_IMAGEKIT_PRIVATE_KEY;
+  const publicKey = process.env.IMAGEKIT_PUBLIC_KEY || process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY || 'public_key';
+  const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT || process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/x2eerczu0';
 
-  if (!publicKey || !privateKey || !urlEndpoint) {
-    throw new Error('ImageKit credentials are not configured in environment variables.');
+  if (!privateKey) {
+    throw new Error('IMAGEKIT_PRIVATE_KEY is not configured in Vercel Environment Variables.');
   }
 
   return new ImageKit({
@@ -57,7 +20,7 @@ function getImageKit() {
   });
 }
 
-// Disable default Vercel body parser to allow Busboy multipart stream parsing
+// Disable default Vercel body parser to allow Busboy stream or JSON parsing
 const config = {
   api: {
     bodyParser: false
@@ -65,16 +28,11 @@ const config = {
 };
 
 async function handler(req, res) {
-  // 1. Handle CORS
+  // CORS
   const origin = req.headers.origin;
-  if (origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -85,25 +43,13 @@ async function handler(req, res) {
   }
 
   try {
-    // 2. Extract and Validate Firebase Authorization Token
-    const authHeader = req.headers.authorization || '';
-    if (!authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Unauthorized: Missing or invalid Authorization header.' });
-    }
+    const imagekit = getImageKit();
 
-    const idToken = authHeader.split('Bearer ')[1].trim();
-    getFirebaseAdmin();
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-
-    if (!decodedToken.email || decodedToken.email.toLowerCase().trim() !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-      return res.status(403).json({ error: `Forbidden: Access restricted strictly to ${AUTHORIZED_ADMIN_EMAIL}.` });
-    }
-
-    // 3. Parse Multipart Form Data using Busboy
+    // Parse Multipart Form Data
     const busboy = Busboy({
       headers: req.headers,
       limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB limit
+        fileSize: 10 * 1024 * 1024, // 10MB limit
         files: 1
       }
     });
@@ -115,8 +61,7 @@ async function handler(req, res) {
 
     await new Promise((resolve, reject) => {
       busboy.on('field', (fieldname, val) => {
-        if (fieldname === 'folder') {
-          // Sanitize folder name
+        if (fieldname === 'folder' && val) {
           folderName = val.replace(/[^a-zA-Z0-9_-]/g, '_');
         }
       });
@@ -124,16 +69,16 @@ async function handler(req, res) {
       busboy.on('file', (fieldname, fileStream, info) => {
         const { filename, mimeType } = info;
 
-        // Validate MIME type
         const allowedMimeTypes = [
           'image/jpeg',
+          'image/jpg',
           'image/png',
           'image/webp',
           'image/gif',
           'image/svg+xml'
         ];
 
-        if (!allowedMimeTypes.includes(mimeType.toLowerCase())) {
+        if (mimeType && !allowedMimeTypes.includes(mimeType.toLowerCase()) && !mimeType.startsWith('image/')) {
           fileStream.resume();
           return reject(new Error('Invalid file type. Only JPEG, PNG, WEBP, GIF, and SVG images are allowed.'));
         }
@@ -156,39 +101,41 @@ async function handler(req, res) {
     });
 
     if (fileTooLarge) {
-      return res.status(400).json({ error: 'File size exceeds maximum limit of 5MB.' });
+      return res.status(400).json({ error: 'File size exceeds maximum limit of 10MB.' });
     }
 
     if (!fileBuffer || !fileMeta) {
-      return res.status(400).json({ error: 'No image file found in the request.' });
+      return res.status(400).json({ error: 'No image file found in the request payload.' });
     }
 
-    // 4. Upload to ImageKit
-    const imagekit = getImageKit();
-    const cleanFileName = `ashiy_${Date.now()}_${fileMeta.filename.replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase()}`;
+    const safeOriginalName = (fileMeta.filename || 'image.png').replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase();
+    const cleanFileName = `ashiy_${Date.now()}_${safeOriginalName}`;
 
     const uploadResponse = await imagekit.upload({
-      file: fileBuffer,
+      file: fileBuffer.toString('base64'),
       fileName: cleanFileName,
       folder: `/${folderName}`,
       useUniqueFileName: true
     });
 
-    // 5. Return upload details
+    if (!uploadResponse || !uploadResponse.url) {
+      throw new Error('ImageKit responded without a URL.');
+    }
+
     return res.status(200).json({
       success: true,
       url: uploadResponse.url,
       fileId: uploadResponse.fileId,
       name: uploadResponse.name,
       size: uploadResponse.size,
-      folder: folderName
+      folder: folderName,
+      thumbnailUrl: uploadResponse.thumbnailUrl || uploadResponse.url
     });
 
   } catch (error) {
-    console.error('Image upload error:', error);
-    const statusCode = error.message.includes('Invalid file type') ? 400 : 500;
-    return res.status(statusCode).json({
-      error: error.message || 'Internal Server Error during file upload.'
+    console.error('ImageKit upload handler error:', error);
+    return res.status(500).json({
+      error: error.message || 'Internal Server Error during ImageKit file upload.'
     });
   }
 }
