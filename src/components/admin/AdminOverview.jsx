@@ -9,6 +9,7 @@ import {
   Trash2, 
   CheckCircle,
   Layers,
+  Award,
   Database,
   Cloud,
   Loader2
@@ -23,6 +24,7 @@ export const AdminOverview = ({ onNavigateTab }) => {
     projects, 
     publishedProjects, 
     youtubeVideos, 
+    achievements,
     contactMessages, 
     gallery,
     deleteContactMessage,
@@ -60,6 +62,12 @@ export const AdminOverview = ({ onNavigateTab }) => {
       val: projects.length,
       icon: <Workflow size={22} className="stat-icon-proj" />,
       tab: 'projects'
+    },
+    {
+      label: 'Certificates & Awards',
+      val: (achievements || []).length,
+      icon: <Award size={22} style={{ color: '#ffb800' }} />,
+      tab: 'achievements'
     },
     {
       label: 'Published Releases',

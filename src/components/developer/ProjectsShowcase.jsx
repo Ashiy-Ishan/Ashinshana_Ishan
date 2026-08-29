@@ -17,10 +17,23 @@ export const ProjectsShowcase = () => {
 
   const publishedProjects = projects.filter((p) => p.published !== false);
 
-  const filteredProjects = publishedProjects.filter((p) => {
-    if (selectedCategory === 'All') return true;
-    return p.category === selectedCategory;
-  });
+  const getProjectCategories = (p) => {
+    if (Array.isArray(p.categories) && p.categories.length > 0) {
+      return p.categories;
+    }
+    if (p.category) {
+      return p.category.split(',').map((c) => c.trim()).filter(Boolean);
+    }
+    return ['Web'];
+  };
+
+  const projectMatchesCategory = (project, cat) => {
+    if (cat === 'All') return true;
+    const cats = getProjectCategories(project);
+    return cats.includes(cat);
+  };
+
+  const filteredProjects = publishedProjects.filter((p) => projectMatchesCategory(p, selectedCategory));
 
   const getStatusBadgeClass = (status) => {
     switch (status?.toLowerCase()) {
@@ -45,7 +58,7 @@ export const ProjectsShowcase = () => {
           const count =
             cat === 'All'
               ? publishedProjects.length
-              : publishedProjects.filter((p) => p.category === cat).length;
+              : publishedProjects.filter((p) => projectMatchesCategory(p, cat)).length;
           
           if (cat !== 'All' && count === 0) return null;
 
@@ -129,7 +142,11 @@ export const ProjectsShowcase = () => {
               {/* Card Meta & Info */}
               <div className="project-info-wrapper">
                 <div className="project-header-row">
-                  <span className="project-category-tag">{project.category || 'Software'}</span>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                    {getProjectCategories(project).map((c) => (
+                      <span key={c} className="project-category-tag">{c}</span>
+                    ))}
+                  </div>
                   {project.date && (
                     <span className="project-date-tag">
                       <Calendar size={12} /> {project.date}

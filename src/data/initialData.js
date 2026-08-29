@@ -566,110 +566,130 @@ export const initialData = {
       title: '1st Runner Up in TENSORFORGE',
       issuer: 'General Sir John Kotelawala Defence University',
       date: 'Oct 2025',
+      type: 'Achievement',
       category: 'AI & Machine Learning',
       description: 'Awarded 1st Runner Up in the TENSORFORGE Machine Learning competition for building competitive machine learning models and Python-based predictive algorithms.',
       badge: '1st Runner Up',
       imageUrl: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://drive.google.com/file/d/1fOlLjqrCOuoaEQWFtE2wwqHEHwen0ysV/view?usp=sharing'
+      credentialUrl: 'https://drive.google.com/file/d/1fOlLjqrCOuoaEQWFtE2wwqHEHwen0ysV/view?usp=sharing',
+      order: 1
     },
     {
       id: 'cert-ideax-hackx',
       title: 'Certificate of Appreciation — ideaX (Semi-Finals of hackX 10.0)',
       issuer: 'Dept. of Industrial Management, University of Kelaniya',
       date: 'Oct 2025',
+      type: 'Achievement',
       category: 'IoT & Innovation',
       description: 'Certificate of Appreciation for qualifying and competing in the semi-finals of hackX 10.0 (ideaX), developing innovative Arduino and IoT hardware solutions.',
       badge: 'Semi-Finalist',
       imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://drive.google.com/file/d/1o-V48vdkLYrw7bbPo76KuFBb9i-ONaYs/view?usp=drive_link'
+      credentialUrl: 'https://drive.google.com/file/d/1o-V48vdkLYrw7bbPo76KuFBb9i-ONaYs/view?usp=drive_link',
+      order: 2
     },
     {
       id: 'cert-cisco-cybersecurity',
       title: 'Introduction to Cybersecurity Certification',
       issuer: 'Cisco Networking Academy',
       date: 'Dec 2025',
+      type: 'Learning Certificate',
       category: 'Cybersecurity',
       description: 'Certified by Cisco Networking Academy in core cybersecurity principles, threat defense, network security best practices, and data protection.',
       badge: 'Cisco Certified',
       imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://www.credly.com/badges/ae2bf5f5-d932-46b6-841b-bd600738a4e0'
+      credentialUrl: 'https://www.credly.com/badges/ae2bf5f5-d932-46b6-841b-bd600738a4e0',
+      order: 3
     },
     {
       id: 'cert-cisco-python-essentials',
       title: 'Python Essentials 1 — Statement of Achievement',
       issuer: 'Cisco Networking Academy & OpenEDG Python Institute',
       date: 'Nov 2025',
+      type: 'Learning Certificate',
       category: 'Software Engineering',
       description: 'Certified in designing, developing, debugging, and refactoring Python 3 programs, mastering algorithmic thinking, Python syntax, Standard Library, and PCEP preparation.',
       badge: 'OpenEDG / Cisco',
       imageUrl: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://drive.google.com/file/d/1N5SaIqmS0owwqEx0WK_oxthBDbZp3-jb/view?usp=drive_link'
+      credentialUrl: 'https://drive.google.com/file/d/1N5SaIqmS0owwqEx0WK_oxthBDbZp3-jb/view?usp=drive_link',
+      order: 4
     },
     {
       id: 'cert-hemas-aithon',
       title: 'Hemas AITHON Participation Certificate',
       issuer: 'Hemas Holdings PLC',
       date: '2025',
+      type: 'Participation Certificate',
       category: 'AI & Vibe Coding',
       description: 'Participated in the Hemas AITHON AI hackathon, focusing on modern generative AI integrations, vibe coding methodologies, and agile prototype delivery.',
       badge: 'Participant',
       imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Certifications/2090323482/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ'
+      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Certifications/2090323482/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ',
+      order: 5
     },
     {
       id: 'cert-hackelite',
       title: 'Hackelite 2.0 Participation Certificate',
       issuer: 'IEEE WIE Student Branch, University of Moratuwa',
       date: 'Sep 2025',
+      type: 'Participation Certificate',
       category: 'Mobile Development',
       description: 'Participated in Hackelite 2.0 hackathon, building mobile application prototypes utilizing Flutter and Android architecture.',
       badge: 'IEEE Moratuwa',
       imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Certifications/2089949848/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ'
+      credentialUrl: 'https://www.linkedin.com/in/ashinshana-ishan/overlay/Certifications/2089949848/treasury/?profileId=ACoAAFB6tB8BQXhbQN5e63o9pYu2jNxLykzy_oQ',
+      order: 6
     },
     {
       id: 'cert-jpura-xtream',
       title: 'J\'PURA XTREAM Competitive Programming Certificate',
       issuer: 'University of Sri Jayewardenepura',
       date: 'Oct 2025',
+      type: 'Participation Certificate',
       category: 'Algorithms',
       description: 'Participated in J\'PURA XTREAM algorithmic hackathon, solving complex computational problem sets in Python and C.',
       badge: 'Competitive Coding',
       imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://drive.google.com/file/d/1xg6neadGWaOeLX-BwN-H6jNFJ2PyV_hy/view?usp=sharing'
+      credentialUrl: 'https://drive.google.com/file/d/1xg6neadGWaOeLX-BwN-H6jNFJ2PyV_hy/view?usp=sharing',
+      order: 7
     },
     {
       id: 'cert-moraxtreme',
       title: 'MoraXtreme 9.0 Hackathon Certificate of Participation',
       issuer: 'IEEE Student Branch, University of Moratuwa',
       date: 'Nov 2024',
+      type: 'Participation Certificate',
       category: 'Hackathon',
       description: 'Achieved 94th place in MoraXtreme 9.0, solving algorithmic and data structure challenges under strict time bounds with team members.',
       badge: 'Top 100 Finish',
       imageUrl: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://drive.google.com/file/d/1W0Obwxnnu_W5SwXjGTOeWqd3IdjvdiQ5/view?usp=drivesdk'
+      credentialUrl: 'https://drive.google.com/file/d/1W0Obwxnnu_W5SwXjGTOeWqd3IdjvdiQ5/view?usp=drivesdk',
+      order: 8
     },
     {
       id: 'cert-wso2-ballerina',
       title: 'Innovate with Ballerina Coding Challenge Certificate',
       issuer: 'WSO2',
       date: 'Nov 2024',
+      type: 'Learning Certificate',
       category: 'Cloud Architecture',
       description: 'Completed the WSO2 Ballerina coding challenge, designing cloud-native integration microservices and RESTful API endpoints.',
       badge: 'WSO2 Certified',
       imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://drive.google.com/file/d/1VVqbKMp9MAu49si1-FycHKFKFczYeFW7/view?usp=sharing'
+      credentialUrl: 'https://drive.google.com/file/d/1VVqbKMp9MAu49si1-FycHKFKFczYeFW7/view?usp=sharing',
+      order: 9
     },
     {
       id: 'cert-hackerrank-python',
       title: 'HackerRank Python (Basic) Skill Certificate',
       issuer: 'HackerRank',
       date: 'Nov 2024',
+      type: 'Learning Certificate',
       category: 'Problem Solving',
       description: 'Validated foundational Python proficiencies covering scalar types, control flow, strings, collections, modularity, OOP classes, and iteration.',
       badge: 'HackerRank Verified',
       imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
-      credentialUrl: 'https://www.hackerrank.com/certificates/iframe/945bb823f36d'
+      credentialUrl: 'https://www.hackerrank.com/certificates/iframe/945bb823f36d',
+      order: 10
     }
   ],
 

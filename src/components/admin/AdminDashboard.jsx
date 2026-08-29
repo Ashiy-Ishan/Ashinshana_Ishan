@@ -9,6 +9,7 @@ import {
   Video, 
   Hammer, 
   Image as ImageIcon, 
+  Award,
   Settings, 
   LogOut, 
   ExternalLink, 
@@ -26,6 +27,7 @@ import { AdminPublished } from './AdminPublished';
 import { AdminCreator } from './AdminCreator';
 import { AdminBuilding } from './AdminBuilding';
 import { AdminGallery } from './AdminGallery';
+import { AdminAchievements } from './AdminAchievements';
 import { AdminSettings } from './AdminSettings';
 
 export const AdminDashboard = ({ onExitAdmin }) => {
@@ -62,6 +64,7 @@ export const AdminDashboard = ({ onExitAdmin }) => {
     { id: 'skills', label: 'Developer Skills', icon: <Layers size={18} /> },
     { id: 'projects', label: 'Projects Showcase', icon: <Workflow size={18} /> },
     { id: 'published', label: 'Published Releases', icon: <Package size={18} /> },
+    { id: 'achievements', label: 'Achievements & Certificates', icon: <Award size={18} /> },
     { id: 'creator', label: 'YouTube Studio', icon: <Video size={18} /> },
     { id: 'building', label: 'Currently Building', icon: <Hammer size={18} /> },
     { id: 'gallery', label: 'Media Gallery', icon: <ImageIcon size={18} /> },
@@ -80,6 +83,8 @@ export const AdminDashboard = ({ onExitAdmin }) => {
         return <AdminProjects />;
       case 'published':
         return <AdminPublished />;
+      case 'achievements':
+        return <AdminAchievements />;
       case 'creator':
         return <AdminCreator />;
       case 'building':

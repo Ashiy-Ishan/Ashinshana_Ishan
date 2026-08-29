@@ -53,12 +53,43 @@ export const AdminProjects = () => {
       .map((t) => t.trim())
       .filter(Boolean);
 
+    const cats = getProjectCategories(editingProject);
+
     await saveProject({
       ...editingProject,
+      categories: cats,
+      category: cats.join(', '),
       technologies: techs
     });
 
     setEditingProject(null);
+  };
+
+  const getProjectCategories = (p) => {
+    if (!p) return ['Web'];
+    if (Array.isArray(p.categories) && p.categories.length > 0) {
+      return p.categories;
+    }
+    if (p.category) {
+      return p.category.split(',').map((c) => c.trim()).filter(Boolean);
+    }
+    return ['Web'];
+  };
+
+  const toggleCategory = (cat) => {
+    const currentCats = getProjectCategories(editingProject);
+    let newCats;
+    if (currentCats.includes(cat)) {
+      newCats = currentCats.filter((c) => c !== cat);
+      if (newCats.length === 0) newCats = ['Web']; // keep at least 1
+    } else {
+      newCats = [...currentCats, cat];
+    }
+    setEditingProject({
+      ...editingProject,
+      categories: newCats,
+      category: newCats.join(', ')
+    });
   };
 
   const handleDelete = async (id) => {
@@ -133,61 +164,55 @@ export const AdminProjects = () => {
             </div>
 
             <form onSubmit={handleSave} className="admin-modal-form">
-              <div className="form-grid-2">
-                <div className="form-field">
-                  <label>Project Title *</label>
-                  <input
-                    type="text"
-                    value={editingProject.title}
-                    onChange={(e) =>
-                      setEditingProject({ ...editingProject, title: e.target.value })
-                    }
-                    placeholder="e.g. Slithering E-Commerce Engine"
-                    required
-                  />
-                </div>
-
-                <div className="form-field">
-                  <label>Category *</label>
-                  <select
-                    value={editingProject.category}
-                    onChange={(e) =>
-                      setEditingProject({ ...editingProject, category: e.target.value })
-                    }
-                  >
-                    {categories.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <div className="form-field">
+                <label>Project Title *</label>
+                <input
+                  type="text"
+                  value={editingProject.title}
+                  onChange={(e) =>
+                    setEditingProject({ ...editingProject, title: e.target.value })
+                  }
+                  placeholder="e.g. Slithering E-Commerce Engine"
+                  required
+                />
               </div>
 
-              {/* Predefined Category Quick-Select Buttons */}
+              {/* Multi-Select Categories */}
               <div className="form-field">
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Quick-Select Category:</label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.35rem' }}>
-                  {categories.map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      style={{
-                        padding: '0.3rem 0.65rem',
-                        borderRadius: '6px',
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        background: editingProject.category === c ? 'var(--accent-dev)' : 'var(--bg-surface-elevated)',
-                        color: editingProject.category === c ? '#000' : 'var(--text-secondary)',
-                        border: editingProject.category === c ? '1px solid var(--accent-dev)' : '1px solid var(--border-medium)',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onClick={() => setEditingProject({ ...editingProject, category: c })}
-                    >
-                      {c}
-                    </button>
-                  ))}
+                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>Categories (Click to select multiple) *</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    Selected: <strong>{getProjectCategories(editingProject).join(', ')}</strong>
+                  </span>
+                </label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.4rem' }}>
+                  {categories.map((c) => {
+                    const active = getProjectCategories(editingProject).includes(c);
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        style={{
+                          padding: '0.35rem 0.75rem',
+                          borderRadius: '6px',
+                          fontSize: '0.8rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          background: active ? 'var(--accent-dev)' : 'var(--bg-surface-elevated)',
+                          color: active ? '#000' : 'var(--text-secondary)',
+                          border: active ? '1px solid var(--accent-dev)' : '1px solid var(--border-medium)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onClick={() => toggleCategory(c)}
+                      >
+                        {active && <Check size={13} strokeWidth={3} />}
+                        <span>{c}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -416,7 +441,11 @@ export const AdminProjects = () => {
                     <p className="table-subtext">{proj.shortDescription}</p>
                   </td>
                   <td>
-                    <span className="table-cat-pill">{proj.category}</span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                      {getProjectCategories(proj).map((c) => (
+                        <span key={c} className="table-cat-pill">{c}</span>
+                      ))}
+                    </div>
                   </td>
                   <td>
                     <span className="table-status-pill">{proj.status}</span>

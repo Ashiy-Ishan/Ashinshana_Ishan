@@ -16,6 +16,7 @@ export const PortfolioProvider = ({ children }) => {
   const [currentlyBuilding, setCurrentlyBuilding] = useState(initialData.currentlyBuilding);
   const [timeline, setTimeline] = useState(initialData.timeline);
   const [gallery, setGallery] = useState(initialData.gallery);
+  const [achievements, setAchievements] = useState(initialData.achievements);
   const [siteSettings, setSiteSettings] = useState(initialData.siteSettings);
   const [contactMessages, setContactMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ export const PortfolioProvider = ({ children }) => {
         currBuild,
         tl,
         gal,
+        certs,
         settings,
         msgs
       ] = await Promise.all([
@@ -46,6 +48,7 @@ export const PortfolioProvider = ({ children }) => {
         portfolioService.getCurrentlyBuilding(),
         portfolioService.getTimeline(),
         portfolioService.getGallery(),
+        portfolioService.getAchievements(),
         portfolioService.getSiteSettings(),
         portfolioService.getContactMessages()
       ]);
@@ -59,6 +62,7 @@ export const PortfolioProvider = ({ children }) => {
       setCurrentlyBuilding(currBuild);
       setTimeline(tl);
       setGallery(gal);
+      setAchievements(certs);
       setSiteSettings(settings);
       setContactMessages(msgs);
       setError(null);
@@ -120,6 +124,11 @@ export const PortfolioProvider = ({ children }) => {
       (err) => isMounted && setError(err.message)
     );
 
+    const unsubAchievements = portfolioService.subscribeToAchievements(
+      (data) => isMounted && setAchievements(data),
+      (err) => isMounted && setError(err.message)
+    );
+
     const unsubSettings = portfolioService.subscribeToSiteSettings(
       (data) => isMounted && setSiteSettings(data),
       (err) => isMounted && setError(err.message)
@@ -144,6 +153,7 @@ export const PortfolioProvider = ({ children }) => {
       if (typeof unsubBuilding === 'function') unsubBuilding();
       if (typeof unsubTimeline === 'function') unsubTimeline();
       if (typeof unsubGallery === 'function') unsubGallery();
+      if (typeof unsubAchievements === 'function') unsubAchievements();
       if (typeof unsubSettings === 'function') unsubSettings();
       if (typeof unsubMessages === 'function') unsubMessages();
     };
@@ -252,6 +262,24 @@ export const PortfolioProvider = ({ children }) => {
     setGallery((prev) => prev.filter((g) => g.id !== itemId));
   };
 
+  const syncAllAchievements = async () => {
+    const synced = await portfolioService.syncAllAchievementsToFirestore();
+    setAchievements(synced);
+    return synced;
+  };
+
+  const saveAchievement = async (item) => {
+    const saved = await portfolioService.saveAchievement(item);
+    const updated = await portfolioService.getAchievements();
+    setAchievements(updated);
+    return saved;
+  };
+
+  const deleteAchievement = async (itemId) => {
+    await portfolioService.deleteAchievement(itemId);
+    setAchievements((prev) => prev.filter((c) => c.id !== itemId));
+  };
+
   const updateSiteSettings = async (settings) => {
     const updated = await portfolioService.updateSiteSettings(settings);
     setSiteSettings(updated);
@@ -281,6 +309,7 @@ export const PortfolioProvider = ({ children }) => {
     currentlyBuilding,
     timeline,
     gallery,
+    achievements,
     siteSettings,
     contactMessages,
     loading,
@@ -303,6 +332,9 @@ export const PortfolioProvider = ({ children }) => {
     deleteTimelineItem,
     saveGalleryItem,
     deleteGalleryItem,
+    syncAllAchievements,
+    saveAchievement,
+    deleteAchievement,
     updateSiteSettings,
     submitContactMessage,
     deleteContactMessage

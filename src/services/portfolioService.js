@@ -626,6 +626,89 @@ export const portfolioService = {
     return updated;
   },
 
+  // --- Achievements & Certificates ---
+  async getAchievements() {
+    if (isFirebaseConfigured && db) {
+      try {
+        const q = query(collection(db, 'achievements'), orderBy('order', 'asc'));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const certs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCachedData('achievements', certs);
+          return certs;
+        }
+      } catch (err) {
+        console.warn('Failed to fetch achievements from Firestore, using cache/seed:', err);
+      }
+    }
+    return getCachedData('achievements', initialData.achievements);
+  },
+
+  async syncAllAchievementsToFirestore() {
+    if (isFirebaseConfigured && db) {
+      for (let i = 0; i < initialData.achievements.length; i++) {
+        const item = initialData.achievements[i];
+        const certId = item.id || `cert-${i + 1}`;
+        await setDoc(doc(db, 'achievements', certId), { ...item, id: certId, order: item.order || i + 1 }, { merge: true });
+      }
+    }
+    setCachedData('achievements', initialData.achievements);
+    return initialData.achievements;
+  },
+
+  async saveAchievement(achievement) {
+    let saved = { ...achievement };
+    if (isFirebaseConfigured && db) {
+      // Auto-seed if empty
+      try {
+        const currentSnap = await getDocs(collection(db, 'achievements'));
+        if (currentSnap.empty && initialData.achievements) {
+          for (let i = 0; i < initialData.achievements.length; i++) {
+            const item = initialData.achievements[i];
+            const cId = item.id || `cert-${i + 1}`;
+            await setDoc(doc(db, 'achievements', cId), { ...item, id: cId, order: item.order || i + 1 }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default achievements check warning:', checkErr);
+      }
+
+      if (achievement.id && !achievement.id.startsWith('temp-')) {
+        const docRef = doc(db, 'achievements', achievement.id);
+        await setDoc(docRef, saved, { merge: true });
+      } else {
+        const docRef = await addDoc(collection(db, 'achievements'), saved);
+        saved.id = docRef.id;
+      }
+    } else {
+      if (!saved.id) {
+        saved.id = `cert-${Date.now()}`;
+      }
+    }
+
+    const current = getCachedData('achievements', initialData.achievements);
+    const index = current.findIndex(c => c.id === saved.id);
+    let updatedList;
+    if (index >= 0) {
+      updatedList = [...current];
+      updatedList[index] = saved;
+    } else {
+      updatedList = [...current, saved];
+    }
+    setCachedData('achievements', updatedList);
+    return saved;
+  },
+
+  async deleteAchievement(achievementId) {
+    if (isFirebaseConfigured && db) {
+      await deleteDoc(doc(db, 'achievements', achievementId));
+    }
+    const current = getCachedData('achievements', initialData.achievements);
+    const updated = current.filter(c => c.id !== achievementId);
+    setCachedData('achievements', updated);
+    return true;
+  },
+
   // --- Contact Messages ---
   async submitContactMessage(message) {
     const record = {
@@ -948,7 +1031,33 @@ export const portfolioService = {
     );
   },
 
-  // 11. Contact Messages Real-time Listener (for CMS Admin)
+  // 11. Achievements & Certificates Real-time Listener
+  subscribeToAchievements(onUpdate, onError) {
+    if (!isFirebaseConfigured || !db) {
+      onUpdate && onUpdate(getCachedData('achievements', initialData.achievements));
+      return () => {};
+    }
+    const q = query(collection(db, 'achievements'), orderBy('order', 'asc'));
+    return onSnapshot(
+      q,
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const items = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+          setCachedData('achievements', items);
+          onUpdate && onUpdate(items);
+        } else {
+          onUpdate && onUpdate(initialData.achievements);
+        }
+      },
+      (err) => {
+        console.warn('Firestore real-time achievements listener error:', err);
+        if (onError) onError(err);
+        onUpdate && onUpdate(getCachedData('achievements', initialData.achievements));
+      }
+    );
+  },
+
+  // 12. Contact Messages Real-time Listener (for CMS Admin)
   subscribeToContactMessages(onUpdate, onError) {
     if (!isFirebaseConfigured || !db) {
       onUpdate && onUpdate(getCachedData('contactMessages', []));
