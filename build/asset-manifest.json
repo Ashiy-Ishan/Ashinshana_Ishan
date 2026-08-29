@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Ashinshana_Ishan/static/css/main.f28eab86.css",
-    "main.js": "/Ashinshana_Ishan/static/js/main.216d2d6d.js",
+    "main.css": "/Ashinshana_Ishan/static/css/main.a3b1a55a.css",
+    "main.js": "/Ashinshana_Ishan/static/js/main.15b638b2.js",
     "static/js/206.e251589c.chunk.js": "/Ashinshana_Ishan/static/js/206.e251589c.chunk.js",
-    "static/media/person.png": "/Ashinshana_Ishan/static/media/person.e8c9106d789e3fa5b374.png",
+    "static/media/developer.png": "/Ashinshana_Ishan/static/media/developer.93b65a5484157ccc53da.png",
+    "static/media/youtuber.png": "/Ashinshana_Ishan/static/media/youtuber.4359c086f891d8c24680.png",
+    "static/media/person.png": "/Ashinshana_Ishan/static/media/person.c28d6e19f72071ab30c4.png",
     "static/media/r.jpg": "/Ashinshana_Ishan/static/media/r.7b613c38868be934556b.jpg",
-    "static/media/developer.png": "/Ashinshana_Ishan/static/media/developer.419e9d96b2aba5c66523.png",
     "static/media/profile.png": "/Ashinshana_Ishan/static/media/profile.78ae023241354df14ad2.png",
-    "static/media/youtuber.png": "/Ashinshana_Ishan/static/media/youtuber.2d9b5395dd9c4e8bed97.png",
     "static/media/fun_web.png": "/Ashinshana_Ishan/static/media/fun_web.518b64323f62743efbeb.png",
     "static/media/portfolio.png": "/Ashinshana_Ishan/static/media/portfolio.9394a0862d6877dab9e0.png",
     "static/media/curlymax.png": "/Ashinshana_Ishan/static/media/curlymax.89a64f474cf3798aff35.png",
@@ -16,7 +16,7 @@
     "index.html": "/Ashinshana_Ishan/index.html"
   },
   "entrypoints": [
-    "static/css/main.f28eab86.css",
-    "static/js/main.216d2d6d.js"
+    "static/css/main.a3b1a55a.css",
+    "static/js/main.15b638b2.js"
   ]
 }

@@ -247,7 +247,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
               <img
                 src={personalImg}
                 alt="Ashiy Ishan Personal Identity"
-                className="clean-role-portrait"
+                className="clean-role-portrait portrait-personal"
               />
             </div>
 
@@ -256,7 +256,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
               <img
                 src={developerImg}
                 alt="Ashiy Ishan Software Developer"
-                className="clean-role-portrait"
+                className="clean-role-portrait portrait-developer"
               />
             </div>
 
@@ -265,7 +265,7 @@ export const HeroSection = ({ activeRole, setActiveRole }) => {
               <img
                 src={creatorImg}
                 alt="Ashiy Ishan Tech Creator"
-                className="clean-role-portrait"
+                className="clean-role-portrait portrait-creator"
               />
             </div>
           </div>

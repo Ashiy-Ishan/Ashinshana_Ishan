@@ -10,8 +10,8 @@ import {
   Calendar, 
   Sparkles, 
   Flame, 
-  Film,
-  X
+  Film, 
+  X 
 } from 'lucide-react';
 import { Youtube } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
@@ -56,18 +56,18 @@ export const CreatorSection = () => {
           <div className="channel-avatar-wrapper">
             <img
               src={channel.channelImage || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'}
-              alt={channel.channelName || 'Ashiy Ishan YouTube Channel'}
+              alt={channel.channelName || 'Curly Max YouTube Channel'}
               className="channel-avatar"
             />
             <div className="channel-verified-badge" title="Official Tech Channel">
-              <Youtube size={14} />
+              <Youtube size={16} />
             </div>
           </div>
 
           <div className="channel-meta-info">
             <div className="channel-title-row">
-              <h3 className="channel-name">{channel.channelName || 'Ashiy Ishan'}</h3>
-              <span className="channel-handle">{channel.handle || '@AshiyIshan'}</span>
+              <h3 className="channel-name">{channel.channelName || 'Curly Max'}</h3>
+              <span className="channel-handle">{channel.handle || '@CurlyMax'}</span>
             </div>
             <p className="channel-bio">
               {channel.description || 'Coding tutorials, full-stack architecture, and tech exploration.'}
@@ -108,17 +108,22 @@ export const CreatorSection = () => {
           </div>
         </div>
 
-        {/* Subscribe CTA Button */}
+        {/* Redesigned High-Impact YouTube CTA Button */}
         <div className="channel-action-box">
           <a
             href={channel.channelUrl || 'https://www.youtube.com/@AshiyIshan'}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-youtube"
+            className="btn btn-youtube btn-youtube-glow"
           >
-            <Youtube size={20} />
-            <span>Visit YouTube Channel</span>
-            <ExternalLink size={16} />
+            <div className="yt-icon-box">
+              <Youtube size={22} className="yt-icon-svg" />
+            </div>
+            <div className="yt-btn-text">
+              <span className="yt-btn-primary">VISIT YOUTUBE CHANNEL</span>
+              <span className="yt-btn-sub">{channel.subscribers || '1.5K+'} SUBSCRIBERS</span>
+            </div>
+            <ExternalLink size={16} className="yt-btn-arrow" />
           </a>
         </div>
       </div>
@@ -198,84 +203,82 @@ export const CreatorSection = () => {
                 <p className="video-description">{video.description}</p>
 
                 <div className="video-meta-footer">
-                  <div className="meta-left">
-                    {video.views && (
-                      <span className="meta-stat">
-                        <Eye size={13} /> {video.views} views
-                      </span>
-                    )}
-                    {video.publishedAt && (
-                      <span className="meta-stat">
-                        <Calendar size={13} /> {video.publishedAt}
-                      </span>
-                    )}
-                  </div>
+                  <span className="meta-stat views">
+                    <Eye size={12} /> {video.views} views
+                  </span>
+                  <span className="meta-stat date">
+                    <Calendar size={12} /> {video.publishedAt}
+                  </span>
+                </div>
 
+                <div className="video-action-row">
+                  <button
+                    type="button"
+                    className="btn-watch-modal"
+                    onClick={() => setActiveVideoModal(video)}
+                  >
+                    <Play size={14} fill="currentColor" />
+                    <span>Watch Preview</span>
+                  </button>
                   <a
-                    href={video.url || channel.channelUrl}
+                    href={video.url || `https://www.youtube.com/watch?v=${video.youtubeId}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="video-yt-link"
-                    title="Open directly on YouTube"
+                    className="btn-yt-direct"
+                    title="Open on YouTube"
                   >
-                    <Youtube size={16} />
+                    <Youtube size={14} />
+                    <span>YouTube</span>
                   </a>
                 </div>
               </div>
             </article>
           ))}
         </div>
-
-        {filteredVideos.length === 0 && (
-          <div className="empty-videos-notice">
-            <p>No videos found under this filter.</p>
-          </div>
-        )}
       </div>
 
-      {/* Video Modal Player / Detail */}
+      {/* Embedded Video Modal */}
       {activeVideoModal && (
         <div className="video-modal-backdrop" onClick={() => setActiveVideoModal(null)}>
-          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="modal-close-btn"
-              onClick={() => setActiveVideoModal(null)}
-              aria-label="Close Video Player"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="modal-video-frame">
-              {activeVideoModal.youtubeId ? (
-                <iframe
-                  src={`https://www.youtube.com/embed/${activeVideoModal.youtubeId}?autoplay=1`}
-                  title={activeVideoModal.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <div className="modal-fallback-preview">
-                  <img src={activeVideoModal.thumbnailUrl} alt={activeVideoModal.title} />
-                  <a
-                    href={activeVideoModal.url || channel.channelUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-youtube"
-                  >
-                    <Youtube size={20} /> Watch on YouTube
-                  </a>
-                </div>
-              )}
+          <div className="video-modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-top-bar">
+              <div className="modal-title-wrap">
+                <Youtube size={18} className="modal-yt-icon" />
+                <h4 className="modal-video-title">{activeVideoModal.title}</h4>
+              </div>
+              <button
+                type="button"
+                className="modal-close-button"
+                onClick={() => setActiveVideoModal(null)}
+                aria-label="Close video player"
+              >
+                <X size={20} />
+              </button>
             </div>
 
-            <div className="modal-video-details">
-              <h3 className="modal-title">{activeVideoModal.title}</h3>
-              <p className="modal-desc">{activeVideoModal.description}</p>
-              <div className="modal-meta-row">
-                {activeVideoModal.publishedAt && <span>📅 Published: {activeVideoModal.publishedAt}</span>}
-                {activeVideoModal.views && <span>👁️ Views: {activeVideoModal.views}</span>}
-                {activeVideoModal.duration && <span>⏱️ Duration: {activeVideoModal.duration}</span>}
+            <div className="modal-player-wrapper">
+              <iframe
+                src={`https://www.youtube.com/embed/${activeVideoModal.youtubeId}?autoplay=1`}
+                title={activeVideoModal.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="modal-iframe"
+              />
+            </div>
+
+            <div className="modal-details-footer">
+              <p className="modal-description">{activeVideoModal.description}</p>
+              <div className="modal-footer-cta">
+                <a
+                  href={`https://www.youtube.com/watch?v=${activeVideoModal.youtubeId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-youtube btn-sm"
+                >
+                  <Youtube size={16} />
+                  <span>Open on YouTube App</span>
+                  <ExternalLink size={14} />
+                </a>
               </div>
             </div>
           </div>

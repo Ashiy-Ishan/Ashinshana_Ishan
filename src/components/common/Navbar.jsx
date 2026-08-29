@@ -1,6 +1,6 @@
 // src/components/common/Navbar.jsx
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code2, Video, User, Sparkles, Palette, ChevronDown } from 'lucide-react';
+import { Menu, X, Code2, Video, Sparkles, Palette, ChevronDown } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -79,7 +79,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
   return (
     <header className={`site-header ${isScrolled ? 'header-scrolled' : ''}`}>
       <div className="header-container">
-        {/* Brand identity */}
+        {/* Brand Identity with Enlarged Logo Mark */}
         <div className="brand-header-left">
           <a 
             href="#home" 
@@ -87,11 +87,16 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
             onClick={(e) => handleNavClick(e, '#home')}
             aria-label="Ashiy Ishan Home"
           >
-            <span className="brand-primary">{profile?.name || 'ASHIY ISHAN'}</span>
-            <span className={`brand-role-pill ${currentBadge.color}`}>
-              {currentBadge.icon}
-              <span>{currentBadge.label}</span>
-            </span>
+            <div className="brand-logo-mark">
+              <span className="brand-mark-text">AI</span>
+            </div>
+            <div className="brand-title-wrap">
+              <span className="brand-primary">{profile?.name || 'ASHIY ISHAN'}</span>
+              <span className={`brand-role-pill ${currentBadge.color}`}>
+                {currentBadge.icon}
+                <span>{currentBadge.label}</span>
+              </span>
+            </div>
           </a>
         </div>
 
@@ -116,7 +121,7 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
             </ul>
           </nav>
 
-          {/* Theme Dropdown without Emojis */}
+          {/* Theme Dropdown (Dark Mode / Neo Mode) */}
           <div className="theme-switcher-wrapper">
             <button
               type="button"
@@ -165,8 +170,13 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
       {/* Mobile Menu Drawer */}
       <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-drawer-header">
-          <span className="brand-primary">{profile?.name || 'ASHIY ISHAN'}</span>
-          <span className="drawer-subtitle">{profile?.title || 'Developer • Creator • Builder'}</span>
+          <div className="brand-logo-mark small">
+            <span className="brand-mark-text">AI</span>
+          </div>
+          <div>
+            <span className="brand-primary">{profile?.name || 'ASHIY ISHAN'}</span>
+            <span className="drawer-subtitle">{profile?.title || 'Developer • Creator • Builder'}</span>
+          </div>
         </div>
 
         {/* Role Quick Switcher in Mobile Nav */}
@@ -181,7 +191,8 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                 setMobileMenuOpen(false);
               }}
             >
-              <User size={16} /> Personal
+              <Sparkles size={16} />
+              <span>Personal</span>
             </button>
             <button
               type="button"
@@ -191,7 +202,8 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                 setMobileMenuOpen(false);
               }}
             >
-              <Code2 size={16} /> Dev
+              <Code2 size={16} />
+              <span>Developer</span>
             </button>
             <button
               type="button"
@@ -201,47 +213,48 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
                 setMobileMenuOpen(false);
               }}
             >
-              <Video size={16} /> Creator
+              <Video size={16} />
+              <span>Creator</span>
             </button>
           </div>
         </div>
 
-        {/* Mobile Theme Selector without Emojis */}
+        <nav className="mobile-nav-links">
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href={item.href}
+              className={`mobile-link ${activeSection === item.id ? 'active' : ''}`}
+              onClick={(e) => handleNavClick(e, item.href)}
+            >
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Mobile Theme Toggle */}
         <div className="mobile-theme-selector">
           <p className="mobile-role-title">Theme Mode:</p>
-          <div className="mobile-theme-buttons">
+          <div className="mobile-theme-row">
             {themes.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 className={`mobile-theme-btn ${theme === t.id ? 'active' : ''}`}
-                onClick={() => {
-                  changeTheme(t.id);
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => changeTheme(t.id)}
               >
-                {t.name}
+                <span>{t.name}</span>
               </button>
             ))}
           </div>
         </div>
-
-        <ul className="mobile-nav-list">
-          {navItems.map((item) => (
-            <li key={item.id} className="mobile-nav-item">
-              <a
-                href={item.href}
-                className={`mobile-nav-link ${activeSection === item.id ? 'active' : ''}`}
-                onClick={(e) => handleNavClick(e, item.href)}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
+
       {mobileMenuOpen && (
-        <div className="mobile-nav-backdrop" onClick={() => setMobileMenuOpen(false)} />
+        <div 
+          className="mobile-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+        />
       )}
     </header>
   );
