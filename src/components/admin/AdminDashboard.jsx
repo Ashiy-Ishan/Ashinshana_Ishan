@@ -31,7 +31,7 @@ import { AdminGallery } from './AdminGallery';
 import { AdminSettings } from './AdminSettings';
 
 export const AdminDashboard = ({ onExitAdmin }) => {
-  const { isAuthenticated, currentUser, logout } = useAuth();
+  const { isAuthenticated, currentUser, loading, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -41,6 +41,17 @@ export const AdminDashboard = ({ onExitAdmin }) => {
       onExitAdmin();
     }
   };
+
+  if (loading) {
+    return (
+      <div className="admin-login-screen">
+        <div style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>
+          <div className="spinner-spin" style={{ width: '36px', height: '36px', border: '3px solid rgba(0,210,255,0.2)', borderTopColor: '#00f0ff', borderRadius: '50%', margin: '0 auto 1rem auto' }} />
+          <p>Verifying admin permissions...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Strictly guard the entire dashboard view against unauthorized URL access
   if (!isAuthenticated || !currentUser) {
