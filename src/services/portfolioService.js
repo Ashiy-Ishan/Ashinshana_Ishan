@@ -486,20 +486,40 @@ export const portfolioService = {
 
   // --- Timeline ---
   async getTimeline() {
+    const sortTimeline = (list) => {
+      if (!list || !Array.isArray(list)) return [];
+      return [...list].sort((a, b) => {
+        if (typeof a.order === 'number' && typeof b.order === 'number') {
+          return a.order - b.order;
+        }
+        const parseKey = (it) => {
+          const str = String(it.year || it.date || '');
+          const years = str.match(/\b(19\d\d|20\d\d)\b/g);
+          if (years && years.length > 0) {
+            const start = parseInt(years[0], 10);
+            const end = years.length > 1 ? parseInt(years[1], 10) : (str.toLowerCase().includes('present') ? 2099 : start);
+            return start * 1000 + end;
+          }
+          return 999999;
+        };
+        return parseKey(a) - parseKey(b);
+      });
+    };
+
     if (isFirebaseConfigured && db) {
       try {
-        const q = query(collection(db, 'timeline'), orderBy('year', 'desc'));
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(collection(db, 'timeline'));
         if (!querySnapshot.empty) {
           const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setCachedData('timeline', items);
-          return items;
+          const sorted = sortTimeline(items);
+          setCachedData('timeline', sorted);
+          return sorted;
         }
       } catch (err) {
         console.warn('Failed to fetch timeline from Firestore:', err);
       }
     }
-    return getCachedData('timeline', initialData.timeline);
+    return sortTimeline(getCachedData('timeline', initialData.timeline));
   },
 
   async syncAllTimelineToFirestore() {

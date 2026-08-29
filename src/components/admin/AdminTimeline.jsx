@@ -92,10 +92,30 @@ export const AdminTimeline = () => {
     }
   };
 
-  const filtered = (timeline || []).filter((item) => {
+  const sortTimeline = (list) => {
+    if (!list || !Array.isArray(list)) return [];
+    return [...list].sort((a, b) => {
+      if (typeof a.order === 'number' && typeof b.order === 'number') {
+        return a.order - b.order;
+      }
+      const parseKey = (it) => {
+        const str = String(it.year || it.date || '');
+        const years = str.match(/\b(19\d\d|20\d\d)\b/g);
+        if (years && years.length > 0) {
+          const start = parseInt(years[0], 10);
+          const end = years.length > 1 ? parseInt(years[1], 10) : (str.toLowerCase().includes('present') ? 2099 : start);
+          return start * 1000 + end;
+        }
+        return 999999;
+      };
+      return parseKey(a) - parseKey(b);
+    });
+  };
+
+  const filtered = sortTimeline((timeline || []).filter((item) => {
     if (filterType === 'all') return true;
     return (item.type || 'milestone') === filterType;
-  });
+  }));
 
   return (
     <div className="admin-tab-pane">
@@ -283,6 +303,22 @@ export const AdminTimeline = () => {
                 </div>
               </div>
 
+              <div className="form-grid-2">
+                <div className="form-field">
+                  <label>Sort Order Index (Chronological)</label>
+                  <input
+                    type="number"
+                    value={editingItem.order || 1}
+                    onChange={(e) =>
+                      setEditingItem({ ...editingItem, order: parseInt(e.target.value, 10) || 1 })
+                    }
+                    placeholder="1, 2, 3, 4..."
+                    min="1"
+                  />
+                  <small className="field-hint">Lower numbers appear first chronologically (1: School, 2: University, etc.)</small>
+                </div>
+              </div>
+
               <div className="form-field">
                 <label>Description & Learnings</label>
                 <textarea
@@ -319,6 +355,7 @@ export const AdminTimeline = () => {
           <table className="admin-data-table">
             <thead>
               <tr>
+                <th>Order</th>
                 <th>Timeline Title & Subtitle</th>
                 <th>Year</th>
                 <th>Type</th>
@@ -328,10 +365,15 @@ export const AdminTimeline = () => {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((item) => {
+              {filtered.map((item, idx) => {
                 const itemType = item.type || 'milestone';
                 return (
                   <tr key={item.id || item.title}>
+                    <td>
+                      <span className="table-cat-pill" style={{ fontWeight: 700 }}>
+                        #{item.order || idx + 1}
+                      </span>
+                    </td>
                     <td>
                       <strong>{item.title}</strong>
                       {item.subtitle && <p className="table-subtext" style={{ color: 'var(--accent-cyan)' }}>{item.subtitle}</p>}

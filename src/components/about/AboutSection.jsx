@@ -19,7 +19,24 @@ export const AboutSection = () => {
   const { profile, timeline } = usePortfolio();
   const [filter, setFilter] = useState('all');
 
-  const filteredTimeline = timeline.filter((item) => {
+  const sortedTimeline = [...(timeline || [])].sort((a, b) => {
+    if (typeof a.order === 'number' && typeof b.order === 'number') {
+      return a.order - b.order;
+    }
+    const parseKey = (it) => {
+      const str = String(it.year || it.date || '');
+      const years = str.match(/\b(19\d\d|20\d\d)\b/g);
+      if (years && years.length > 0) {
+        const start = parseInt(years[0], 10);
+        const end = years.length > 1 ? parseInt(years[1], 10) : (str.toLowerCase().includes('present') ? 2099 : start);
+        return start * 1000 + end;
+      }
+      return 999999;
+    };
+    return parseKey(a) - parseKey(b);
+  });
+
+  const filteredTimeline = sortedTimeline.filter((item) => {
     if (filter === 'all') return true;
     return item.type === filter;
   });

@@ -476,7 +476,8 @@ export const initialData = {
       subtitle: 'G.C.E. (A/L) Examination in Physical Science Stream',
       description: 'Completed secondary education in the Physical Science stream (2014 - 2022), developing core analytical problem solving, higher mathematics, and physics fundamentals.',
       type: 'education',
-      badge: 'School'
+      badge: 'School',
+      order: 1
     },
     {
       id: 'time-1',
@@ -485,7 +486,8 @@ export const initialData = {
       subtitle: 'Undergraduate Studies in Computing / Software Development',
       description: 'Studying core computer science fundamentals, software engineering methodologies, database management systems, and algorithms.',
       type: 'education',
-      badge: 'University'
+      badge: 'University',
+      order: 2
     },
     {
       id: 'time-3',
@@ -494,7 +496,8 @@ export const initialData = {
       subtitle: 'Ashinshana Ishan Tech & Tutorials',
       description: 'Expanded into tech education, producing video breakdowns, UI design tutorials in Figma, and frontend coding sessions.',
       type: 'creator',
-      badge: 'Content'
+      badge: 'Content',
+      order: 3
     },
     {
       id: 'time-4',
@@ -503,7 +506,8 @@ export const initialData = {
       subtitle: 'Cinematic Personal Brand Platform',
       description: 'Re-engineered portfolio into a unified 3-role identity platform with dedicated CMS capabilities and Firestore integration.',
       type: 'milestone',
-      badge: 'Current'
+      badge: 'Current',
+      order: 4
     }
   ],
 
