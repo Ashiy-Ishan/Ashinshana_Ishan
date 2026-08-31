@@ -417,9 +417,35 @@ export const portfolioService = {
     return getCachedData('youtubeVideos', initialData.youtubeVideos);
   },
 
+  async syncAllYouTubeVideosToFirestore() {
+    if (isFirebaseConfigured && db) {
+      for (let i = 0; i < initialData.youtubeVideos.length; i++) {
+        const item = initialData.youtubeVideos[i];
+        const vId = item.id || `video-${i + 1}`;
+        await setDoc(doc(db, 'youtubeVideos', vId), { ...item, id: vId, order: item.order || i + 1 }, { merge: true });
+      }
+    }
+    setCachedData('youtubeVideos', initialData.youtubeVideos);
+    return initialData.youtubeVideos;
+  },
+
   async saveYouTubeVideo(video) {
     let saved = { ...video };
     if (isFirebaseConfigured && db) {
+      // If saving a YouTube video and Firestore collection is empty, auto-seed default videos so existing videos are not lost
+      try {
+        const currentSnap = await getDocs(collection(db, 'youtubeVideos'));
+        if (currentSnap.empty && initialData.youtubeVideos) {
+          for (let i = 0; i < initialData.youtubeVideos.length; i++) {
+            const item = initialData.youtubeVideos[i];
+            const vId = item.id || `video-${i + 1}`;
+            await setDoc(doc(db, 'youtubeVideos', vId), { ...item, id: vId, order: item.order || i + 1 }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default youtubeVideos check warning:', checkErr);
+      }
+
       if (video.id && !video.id.startsWith('temp-')) {
         const docRef = doc(db, 'youtubeVideos', video.id);
         await setDoc(docRef, saved, { merge: true });
@@ -604,9 +630,34 @@ export const portfolioService = {
     return getCachedData('gallery', initialData.gallery);
   },
 
+  async syncAllGalleryToFirestore() {
+    if (isFirebaseConfigured && db) {
+      for (let i = 0; i < initialData.gallery.length; i++) {
+        const item = initialData.gallery[i];
+        const gId = item.id || `img-${i + 1}`;
+        await setDoc(doc(db, 'gallery', gId), { ...item, id: gId }, { merge: true });
+      }
+    }
+    setCachedData('gallery', initialData.gallery);
+    return initialData.gallery;
+  },
+
   async saveGalleryItem(item) {
     let saved = { ...item };
     if (isFirebaseConfigured && db) {
+      try {
+        const currentSnap = await getDocs(collection(db, 'gallery'));
+        if (currentSnap.empty && initialData.gallery) {
+          for (let i = 0; i < initialData.gallery.length; i++) {
+            const g = initialData.gallery[i];
+            const gId = g.id || `img-${i + 1}`;
+            await setDoc(doc(db, 'gallery', gId), { ...g, id: gId }, { merge: true });
+          }
+        }
+      } catch (checkErr) {
+        console.warn('Auto-seed default gallery check warning:', checkErr);
+      }
+
       if (item.id && !item.id.startsWith('temp-')) {
         const docRef = doc(db, 'gallery', item.id);
         await setDoc(docRef, saved, { merge: true });

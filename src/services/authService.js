@@ -9,6 +9,44 @@ import {
 import { auth, googleProvider, isFirebaseConfigured, AUTHORIZED_ADMIN_EMAIL } from '../config/firebase';
 
 const SESSION_AUTH_KEY = 'ashiy_portfolio_session_auth';
+export const COOKIE_LAST_ACTIVITY = 'admin_last_activity';
+export const COOKIE_SESSION_ACTIVE = 'admin_session_active';
+export const INACTIVITY_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes (120 seconds)
+
+export const cookieUtils = {
+  getCookie(name) {
+    if (typeof document === 'undefined') return null;
+    const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+    return match ? decodeURIComponent(match[3]) : null;
+  },
+
+  setCookie(name, value, maxAgeSeconds = 86400) {
+    if (typeof document === 'undefined') return;
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax`;
+  },
+
+  deleteCookie(name) {
+    if (typeof document === 'undefined') return;
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+  },
+
+  recordActivity() {
+    this.setCookie(COOKIE_LAST_ACTIVITY, Date.now().toString(), 7200);
+    this.setCookie(COOKIE_SESSION_ACTIVE, 'true', 7200);
+  },
+
+  isInactive() {
+    const lastActive = this.getCookie(COOKIE_LAST_ACTIVITY);
+    if (!lastActive) return false;
+    const elapsed = Date.now() - parseInt(lastActive, 10);
+    return elapsed > INACTIVITY_TIMEOUT_MS;
+  },
+
+  clearSessionCookies() {
+    this.deleteCookie(COOKIE_LAST_ACTIVITY);
+    this.deleteCookie(COOKIE_SESSION_ACTIVE);
+  }
+};
 
 export const authService = {
   // Validate authorized admin email
@@ -40,8 +78,10 @@ export const authService = {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         if (userCredential.user && userCredential.user.email?.toLowerCase().trim() !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
           await signOut(auth);
+          cookieUtils.clearSessionCookies();
           throw new Error(`Access Denied: Only ${AUTHORIZED_ADMIN_EMAIL} is authorized to access the CMS.`);
         }
+        cookieUtils.recordActivity();
         return userCredential.user;
       } catch (err) {
         throw new Error(this.formatAuthError(err));
@@ -56,6 +96,7 @@ export const authService = {
           isDemo: false
         };
         sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(mockUser));
+        cookieUtils.recordActivity();
         return mockUser;
       } else {
         throw new Error(`Access Denied: Invalid credentials for ${AUTHORIZED_ADMIN_EMAIL}.`);
@@ -72,8 +113,10 @@ export const authService = {
 
         if (!user.email || user.email.toLowerCase().trim() !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
           await signOut(auth);
+          cookieUtils.clearSessionCookies();
           throw new Error(`Access Denied (${user.email}): Only ${AUTHORIZED_ADMIN_EMAIL} is authorized to access the CMS.`);
         }
+        cookieUtils.recordActivity();
         return user;
       } catch (err) {
         throw new Error(this.formatAuthError(err));
@@ -85,6 +128,7 @@ export const authService = {
         displayName: 'Ashiy Ishan (Google Admin)'
       };
       sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(mockUser));
+      cookieUtils.recordActivity();
       return mockUser;
     }
   },
@@ -96,6 +140,7 @@ export const authService = {
     }
     sessionStorage.removeItem(SESSION_AUTH_KEY);
     localStorage.removeItem('ashiy_portfolio_mock_auth');
+    cookieUtils.clearSessionCookies();
     return true;
   },
 

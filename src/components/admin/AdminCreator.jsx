@@ -9,6 +9,7 @@ export const AdminCreator = () => {
     youtubeChannel, 
     youtubeVideos, 
     updateYouTubeChannel, 
+    syncAllYouTubeVideos,
     saveYouTubeVideo, 
     deleteYouTubeVideo 
   } = usePortfolio();
@@ -17,6 +18,8 @@ export const AdminCreator = () => {
   const [channelSaved, setChannelSaved] = useState(false);
   const [editingVideo, setEditingVideo] = useState(null);
   const [isNewVideo, setIsNewVideo] = useState(false);
+  const [syncingVideos, setSyncingVideos] = useState(false);
+  const [syncNotice, setSyncNotice] = useState(false);
 
   const categories = ['Featured', 'Popular', 'Latest', 'Tutorials'];
 
@@ -64,6 +67,16 @@ export const AdminCreator = () => {
     }
   };
 
+  const handleSyncVideos = async () => {
+    if (window.confirm('Sync all baseline default videos to Cloud Firestore? This ensures all 6 default showcase videos are preserved in your database.')) {
+      setSyncingVideos(true);
+      await syncAllYouTubeVideos();
+      setSyncingVideos(false);
+      setSyncNotice(true);
+      setTimeout(() => setSyncNotice(false), 4000);
+    }
+  };
+
   return (
     <div className="admin-tab-pane">
       <div className="admin-pane-header">
@@ -74,6 +87,13 @@ export const AdminCreator = () => {
           </p>
         </div>
       </div>
+
+      {syncNotice && (
+        <div className="form-alert success mb-4">
+          <Check size={16} />
+          <span>All baseline videos successfully synchronized to Cloud Firestore!</span>
+        </div>
+      )}
 
       {/* Channel Stats Form */}
       <form onSubmit={handleChannelSave} className="admin-form-card mb-6">
@@ -184,13 +204,24 @@ export const AdminCreator = () => {
           <h3 className="section-title-text">
             <Video size={18} /> Curated Video Catalog ({youtubeVideos.length})
           </h3>
-          <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            onClick={handleStartNewVideo}
-          >
-            <Plus size={14} /> Add Video
-          </button>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={handleSyncVideos}
+              disabled={syncingVideos}
+              title="Upload all default baseline videos to Cloud Firestore"
+            >
+              <Youtube size={14} /> {syncingVideos ? 'Syncing...' : 'Sync Baseline Videos'}
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={handleStartNewVideo}
+            >
+              <Plus size={14} /> Add Video
+            </button>
+          </div>
         </div>
 
         {/* Video Edit Modal */}

@@ -4,7 +4,7 @@ import { Lock, Mail, Shield, AlertCircle, ArrowLeft, Loader2 } from 'lucide-reac
 import { useAuth } from '../../context/AuthContext';
 
 export const AdminLogin = ({ onCancel }) => {
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, inactivityNotice } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,6 +48,13 @@ export const AdminLogin = ({ onCancel }) => {
           <h2 className="login-title">Ashinshana Ishan CMS</h2>
           <p className="login-subtitle">Portfolio Management & Database Portal</p>
         </div>
+
+        {inactivityNotice && !error && (
+          <div className="form-alert warning" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
+            <AlertCircle size={18} />
+            <span>Session Timed Out: You were automatically logged out due to 2 minutes of inactivity. Please sign in again.</span>
+          </div>
+        )}
 
         {error && (
           <div className="form-alert error" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>

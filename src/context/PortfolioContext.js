@@ -220,6 +220,12 @@ export const PortfolioProvider = ({ children }) => {
     return updated;
   };
 
+  const syncAllYouTubeVideos = async () => {
+    const synced = await portfolioService.syncAllYouTubeVideosToFirestore();
+    setYouTubeVideos(synced);
+    return synced;
+  };
+
   const saveYouTubeVideo = async (video) => {
     const saved = await portfolioService.saveYouTubeVideo(video);
     const updated = await portfolioService.getYouTubeVideos();
@@ -254,6 +260,12 @@ export const PortfolioProvider = ({ children }) => {
   const deleteTimelineItem = async (itemId) => {
     await portfolioService.deleteTimelineItem(itemId);
     setTimeline((prev) => prev.filter((t) => t.id !== itemId));
+  };
+
+  const syncAllGallery = async () => {
+    const synced = await portfolioService.syncAllGalleryToFirestore();
+    setGallery(synced);
+    return synced;
   };
 
   const saveGalleryItem = async (item) => {
@@ -331,12 +343,14 @@ export const PortfolioProvider = ({ children }) => {
     savePublishedProject,
     deletePublishedProject,
     updateYouTubeChannel,
+    syncAllYouTubeVideos,
     saveYouTubeVideo,
     deleteYouTubeVideo,
     updateCurrentlyBuilding,
     syncAllTimeline,
     saveTimelineItem,
     deleteTimelineItem,
+    syncAllGallery,
     saveGalleryItem,
     deleteGalleryItem,
     syncAllAchievements,
