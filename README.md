@@ -14,7 +14,7 @@ I am a digital builder who bridges technical systems with visual media. My focus
 My philosophy is simple: **I BUILD. I CREATE. I SHARE.**
 
 ## 🚀 Live Demo
-Check out the live site: [https://Ashiy-Ishan.github.io/Ashinshana_Ishan](https://Ashiy-Ishan.github.io/Ashinshana_Ishan)
+Check out the live site: [https://ashinshanaishan.me](https://ashinshanaishan.me)
 
 ## ✨ Key Features
 
