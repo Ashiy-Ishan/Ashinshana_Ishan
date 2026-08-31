@@ -1,4 +1,3 @@
-// src/components/creator/CreatorSection.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
@@ -13,11 +12,9 @@ import {
 import { Youtube } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
-// Animated Count-Up Hook / Component for Channel Insights
 const AnimatedCounter = ({ value = '0', label = '', icon: Icon, colorClass = 'subscribers' }) => {
   const [count, setCount] = useState(0);
 
-  // Extract raw number and suffix (e.g., '800+' -> 800 and '+')
   const strVal = String(value);
   const numericVal = parseInt(strVal.replace(/[^0-9]/g, ''), 10) || 0;
   const suffix = strVal.replace(/[0-9]/g, '').trim();

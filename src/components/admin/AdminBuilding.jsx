@@ -1,4 +1,3 @@
-// src/components/admin/AdminBuilding.jsx
 import React, { useState } from 'react';
 import { Save, Check, Hammer, BookOpen, Video, Compass } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';

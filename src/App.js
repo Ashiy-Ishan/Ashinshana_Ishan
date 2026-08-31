@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 import { AuthProvider } from './context/AuthContext';
@@ -11,14 +10,12 @@ import { RoleContent } from './components/role/RoleContent';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { LoadingScreen } from './components/common/LoadingScreen';
 
-// Inner component with portfolio state & active section tracking
 function PortfolioApp() {
-  const [activeRole, setActiveRole] = useState('personal'); // Initial default role: 'personal'
+  const [activeRole, setActiveRole] = useState('personal');
   const [activeSection, setActiveSection] = useState('home');
   const [isAdminView, setIsAdminView] = useState(false);
   const [appLoading, setAppLoading] = useState(true);
 
-  // Monitor URL Hash for #/admin or section jumps
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
@@ -34,7 +31,6 @@ function PortfolioApp() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Active scroll spy observer
   useEffect(() => {
     if (isAdminView || typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
 
@@ -88,13 +84,10 @@ function PortfolioApp() {
       />
       
       <main>
-        {/* 1. Cinematic 3-Role Interactive Hero */}
         <HeroSection 
           activeRole={activeRole} 
           setActiveRole={setActiveRole} 
         />
-
-        {/* 2. Dynamic Content Swapper based on selected role */}
         <RoleContent selectedRole={activeRole} />
       </main>
 

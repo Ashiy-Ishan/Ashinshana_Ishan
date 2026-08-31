@@ -1,4 +1,3 @@
-// src/components/admin/AdminDashboard.jsx
 import React, { useState } from 'react';
 import { 
   LayoutDashboard, 

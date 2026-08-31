@@ -1,4 +1,3 @@
-// src/components/common/Footer.jsx
 import React from 'react';
 import { Mail, ShieldCheck, Heart } from 'lucide-react';
 import { Github, Linkedin, Youtube, Instagram, Facebook } from './Icons';

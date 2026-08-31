@@ -1,4 +1,3 @@
-// src/components/developer/PublishedProjects.jsx
 import React from 'react';
 import { Package, ExternalLink, Tag, Calendar } from 'lucide-react';
 import { Github } from '../common/Icons';

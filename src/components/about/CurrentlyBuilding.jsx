@@ -1,4 +1,3 @@
-// src/components/about/CurrentlyBuilding.jsx
 import React from 'react';
 import { Hammer, BookOpen, Video, Compass } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';

@@ -1,7 +1,5 @@
-// src/components/common/Icons.jsx
 import React from 'react';
 
-// Brand & Social SVG Icons
 export const Youtube = ({ size = 20, className = '', ...props }) => (
   <svg
     width={size}

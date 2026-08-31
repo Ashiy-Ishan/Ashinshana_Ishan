@@ -1,4 +1,3 @@
-// src/components/about/AboutSection.jsx
 import React, { useState } from 'react';
 import { 
   GraduationCap, 
@@ -28,8 +27,6 @@ export const AboutSection = () => {
     }));
   };
 
-  // 1. Filter out projects from milestones
-  // 2. Sort milestones strictly according to time (chronologically from earliest to latest)
   const parseStartYear = (it) => {
     const str = String(it.year || it.date || '');
     const years = str.match(/\b(19\d\d|20\d\d)\b/g);

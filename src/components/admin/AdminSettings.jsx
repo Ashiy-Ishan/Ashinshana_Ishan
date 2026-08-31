@@ -1,4 +1,3 @@
-// src/components/admin/AdminSettings.jsx
 import React, { useState } from 'react';
 import { Save, Check, Globe, Eye, Palette } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';

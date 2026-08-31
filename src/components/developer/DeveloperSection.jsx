@@ -1,4 +1,3 @@
-// src/components/developer/DeveloperSection.jsx
 import React from 'react';
 import { 
   Terminal, 

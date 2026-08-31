@@ -1,4 +1,3 @@
-// src/components/common/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Code2, Video, Sparkles, Palette, ChevronDown } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
@@ -19,7 +18,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -31,7 +29,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
     };
   }, [mobileMenuOpen]);
 
-  // Role-adapted navigation links
   const getNavItems = () => {
     switch (activeRole) {
       case 'developer':
@@ -79,7 +76,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
   return (
     <header className={`site-header ${isScrolled ? 'header-scrolled' : ''}`}>
       <div className="header-container">
-        {/* Brand Identity: Single letter 'A' Logo */}
         <div className="brand-header-left">
           <a 
             href="#home" 
@@ -91,7 +87,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </a>
         </div>
 
-        {/* Desktop Navigation & Theme Selector */}
         <div className="header-right-group">
           <nav className="desktop-nav" aria-label="Main Navigation">
             <ul className="nav-list">
@@ -113,7 +108,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
             </ul>
           </nav>
 
-          {/* Theme Dropdown (Dark Mode / Neo Mode) */}
           <div className="theme-switcher-wrapper">
             <button
               type="button"
@@ -150,7 +144,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </div>
         </div>
 
-        {/* Mobile Hamburger Toggle Button */}
         <button
           type="button"
           className="mobile-toggle-btn"
@@ -162,7 +155,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
       <div className={`mobile-nav-drawer ${mobileMenuOpen ? 'open' : ''}`} aria-hidden={!mobileMenuOpen}>
         <div className="mobile-drawer-header">
           <div className="mobile-drawer-brand">
@@ -192,7 +184,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </button>
         </div>
 
-        {/* Role Quick Switcher in Mobile Nav */}
         <div className="mobile-role-selector">
           <p className="mobile-role-title">IDENTITY MODE:</p>
           <div className="mobile-role-buttons">
@@ -232,7 +223,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </div>
         </div>
 
-        {/* Navigation Section Links */}
         <div className="mobile-nav-section-wrapper">
           <p className="mobile-role-title">NAVIGATION:</p>
           <nav className="mobile-nav-links" aria-label="Mobile Navigation Links">
@@ -250,7 +240,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
           </nav>
         </div>
 
-        {/* Mobile Theme Toggle */}
         <div className="mobile-theme-selector">
           <p className="mobile-role-title">THEME MODE:</p>
           <div className="mobile-theme-row">
@@ -269,7 +258,6 @@ export const Navbar = ({ activeSection = 'home', activeRole = 'personal', onSele
         </div>
       </div>
 
-      {/* Backdrop */}
       {mobileMenuOpen && (
         <div 
           className="mobile-backdrop"

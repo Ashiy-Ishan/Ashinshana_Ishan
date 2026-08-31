@@ -1,4 +1,3 @@
-// src/components/personal/PersonalAchievements.jsx
 import React, { useState } from 'react';
 import { ExternalLink, Calendar, GraduationCap, ShieldCheck, Award, FileCheck2, BookOpen } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';

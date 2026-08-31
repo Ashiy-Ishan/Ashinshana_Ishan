@@ -1,4 +1,3 @@
-// src/services/imagekitService.js
 import { auth } from '../config/firebase';
 import { IMAGEKIT_URL_ENDPOINT, getImageKitUrl } from '../config/imagekit';
 
@@ -9,7 +8,6 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
     throw new Error('No file selected.');
   }
 
-  // 1. Client-side validation: MIME type and file size
   if (!file.type || !file.type.startsWith('image/')) {
     throw new Error('Invalid file type. Only image files (PNG, JPG, WEBP, GIF, SVG) are allowed.');
   }
@@ -22,7 +20,6 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
   const cleanFileName = `ashiy_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase()}`;
   const targetFolder = folderName.startsWith('/') ? folderName : `/${folderName}`;
 
-  // 2. Official Method: Client-side direct upload to ImageKit via signed auth params
   try {
     const authResponse = await fetch('/api/imagekit-auth');
     if (authResponse.ok) {
@@ -63,7 +60,6 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
     console.warn('Direct ImageKit upload via auth params skipped/failed:', directUploadErr.message);
   }
 
-  // 3. Fallback: Serverless upload endpoint (/api/upload-image)
   try {
     let idToken = null;
     if (auth && auth.currentUser) {
@@ -110,7 +106,6 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
     console.warn('Backend serverless upload skipped:', serverErr.message);
   }
 
-  // 4. Local Development Fallback: Read file as Data URL (only for offline local preview)
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -121,18 +116,15 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
 };
 
 export const imagekitService = {
-  // Get ImageKit Endpoint
   getEndpoint() {
     return IMAGEKIT_URL_ENDPOINT;
   },
 
-  // Resolve ImageKit URL for any path or external image
   resolveUrl(imagePath, options = {}) {
     if (!imagePath) return '';
     return getImageKitUrl(imagePath, options);
   },
 
-  // Helper to format uploaded image filename to ImageKit URL
   formatImageKitUrl(filenameOrPath) {
     if (!filenameOrPath) return '';
     if (filenameOrPath.startsWith('http://') || filenameOrPath.startsWith('https://')) {

@@ -1,4 +1,3 @@
-// src/config/firebase.js
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -18,8 +17,9 @@ const firebaseConfig = {
 export const AUTHORIZED_ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || 'ashinshanaishan@gmail.com';
 
 // Check if Firebase credentials are valid
+const isValidKey = (key) => typeof key === 'string' && key.trim().length > 10 && !key.includes('PLACEHOLDER');
 export const isFirebaseConfigured = Boolean(
-  firebaseConfig.apiKey && 
+  isValidKey(firebaseConfig.apiKey) && 
   firebaseConfig.projectId
 );
 

@@ -1,4 +1,3 @@
-// src/components/role/RoleContent.jsx
 import React, { useState, useEffect } from 'react';
 import { AboutSection } from '../about/AboutSection';
 import { DeveloperSection } from '../developer/DeveloperSection';
@@ -10,7 +9,7 @@ import { usePortfolio } from '../../context/PortfolioContext';
 export const RoleContent = ({ selectedRole }) => {
   const { siteSettings } = usePortfolio();
   const [displayRole, setDisplayRole] = useState(selectedRole);
-  const [transitionState, setTransitionState] = useState('active'); // Start active immediately to prevent lag
+  const [transitionState, setTransitionState] = useState('active');
 
   useEffect(() => {
     if (selectedRole !== displayRole) {
@@ -22,7 +21,7 @@ export const RoleContent = ({ selectedRole }) => {
           setTransitionState('active');
         }, 50);
         return () => clearTimeout(enterTimer);
-      }, 300); // 300ms fade-out transition duration
+      }, 300);
 
       return () => clearTimeout(timer);
     }
@@ -45,7 +44,6 @@ export const RoleContent = ({ selectedRole }) => {
   );
 };
 
-// 1. Developer-Only View
 const DeveloperContent = ({ siteSettings }) => {
   return (
     <div className="role-view developer-role-view">
@@ -53,7 +51,6 @@ const DeveloperContent = ({ siteSettings }) => {
         <DeveloperSection />
       )}
 
-      {/* Developer-Specific Contact */}
       {siteSettings?.showContactForm !== false && (
         <ContactSection />
       )}
@@ -61,7 +58,6 @@ const DeveloperContent = ({ siteSettings }) => {
   );
 };
 
-// 2. Creator / YouTuber-Only View
 const CreatorContent = ({ siteSettings }) => {
   return (
     <div className="role-view creator-role-view">
@@ -69,7 +65,6 @@ const CreatorContent = ({ siteSettings }) => {
         <CreatorSection />
       )}
 
-      {/* Creator-Specific Contact */}
       {siteSettings?.showContactForm !== false && (
         <ContactSection />
       )}
@@ -77,16 +72,12 @@ const CreatorContent = ({ siteSettings }) => {
   );
 };
 
-// 3. Personal / About-Only View
 const PersonalContent = ({ siteSettings }) => {
   return (
     <div className="role-view personal-role-view">
       <AboutSection />
-
-      {/* Batch Certificates & Achievements Section */}
       <PersonalAchievements />
 
-      {/* Personal Contact & Connections */}
       {siteSettings?.showContactForm !== false && (
         <ContactSection />
       )}

@@ -5968,7 +5968,7 @@ body {
 }
 
 /* ==========================================================================
-   4-SECOND CINEMATIC APP LOADING SCREEN
+   SIMPLE CLEAN APP LOADING SCREEN
    ========================================================================== */
 .app-loading-screen {
   position: fixed;
@@ -5982,233 +5982,65 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .app-loading-screen.fade-out {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: scale(1.03);
 }
 
-.loader-ambient-halo {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(0, 210, 255, 0.25) 0%, rgba(168, 85, 247, 0.15) 45%, transparent 70%);
-  filter: blur(80px);
-  pointer-events: none;
-  animation: loaderPulse 3s ease-in-out infinite alternate;
-}
-
-@keyframes loaderPulse {
-  0% { transform: scale(0.9); opacity: 0.5; }
-  100% { transform: scale(1.15); opacity: 0.9; }
-}
-
-.loader-grid-lines {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, transparent 80%);
-  pointer-events: none;
-}
-
-.loader-core-card {
-  position: relative;
-  z-index: 2;
+.simple-loader-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  max-width: 480px;
   width: 90%;
-  padding: 2.5rem 2rem;
-  background: rgba(14, 18, 28, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 210, 255, 0.15);
+  max-width: 340px;
 }
 
-.loader-logo-wrap {
-  position: relative;
-  width: 84px;
-  height: 84px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
+.simple-loader-text {
+  margin-bottom: 1.25rem;
 }
 
-.loader-logo-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1.5px dashed;
-  pointer-events: none;
-}
-
-.loader-logo-ring.ring-outer {
-  inset: -8px;
-  border-color: rgba(0, 210, 255, 0.4);
-  animation: spinRing 8s linear infinite;
-}
-
-.loader-logo-ring.ring-middle {
-  inset: -2px;
-  border-color: rgba(255, 51, 102, 0.4);
-  animation: spinRingReverse 6s linear infinite;
-}
-
-@keyframes spinRing {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spinRingReverse {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-
-.loader-logo-box {
-  width: 68px;
-  height: 68px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #07080c, #141926);
-  border: 1.5px solid rgba(0, 210, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
-}
-
-.loader-letter-a {
+.simple-loader-name {
   font-family: var(--font-mono);
-  font-size: 2.4rem;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(135deg, #00d2ff 0%, #a855f7 50%, #ff3366 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.6));
-}
-
-.loader-brand-title {
-  font-family: var(--font-mono);
-  font-size: 1.35rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  margin: 0 0 0.4rem 0;
-}
-
-.loader-brand-subtitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-  margin: 0 0 1.75rem 0;
+  letter-spacing: 0.08em;
+  color: #f8fafc;
+  margin: 0;
 }
 
-.sub-tag {
-  color: var(--text-secondary);
-}
-
-.sub-sep {
-  color: var(--accent-cyan);
-}
-
-.loader-progress-section {
+.simple-loader-bar-wrap {
   width: 100%;
-  margin-bottom: 1.5rem;
+  max-width: 220px;
 }
 
-.loader-progress-track {
+.simple-loader-bar-track {
   width: 100%;
-  height: 6px;
+  height: 3px;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
-  position: relative;
+  margin-bottom: 0.5rem;
 }
 
-.loader-progress-fill {
+.simple-loader-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00d2ff, #a855f7, #ff3366);
-  border-radius: 10px;
-  transition: width 0.1s linear;
-  box-shadow: 0 0 14px rgba(0, 210, 255, 0.8);
+  background: var(--accent-cyan, #00d2ff);
+  border-radius: 6px;
+  transition: width 0.05s linear;
 }
 
-.loader-status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.65rem;
+.simple-loader-pct {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-}
-
-.loader-status-msg {
-  color: var(--text-muted);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 80%;
+  color: var(--text-muted, #64748b);
+  text-align: center;
 }
-
-.loader-pct-badge {
-  color: var(--accent-cyan);
-  font-weight: 800;
-}
-
-.loader-roles-pill-row {
-  display: flex;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-.loader-role-pill {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.25rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  transition: all 0.35s ease;
-}
-
-.loader-role-pill.active {
-  background: rgba(0, 210, 255, 0.1);
-  border-color: rgba(0, 210, 255, 0.35);
-  color: #ffffff;
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.2);
-}
-
-.icon-cyan { color: var(--accent-cyan); }
-.icon-blue { color: var(--accent-dev); }
-.icon-pink { color: var(--accent-creator); }
 
 

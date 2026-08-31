@@ -1,4 +1,3 @@
-// src/components/developer/SkillsGrid.jsx
 import React, { useState } from 'react';
 import { Layers, Star, Sparkles } from 'lucide-react';
 import { PremierePro, Photoshop } from '../common/Icons';
@@ -10,7 +9,6 @@ export const SkillsGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
-  // Extract unique categories from actual skill items + defaults
   const categories = [
     'All',
     ...Array.from(new Set(skills.map((s) => s.category || 'Other')))

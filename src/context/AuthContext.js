@@ -1,4 +1,3 @@
-// src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authService, cookieUtils } from '../services/authService';
 
@@ -9,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [inactivityNotice, setInactivityNotice] = useState(false);
 
-  // Inactivity cookie refresher
   const updateActivityCookie = useCallback(() => {
     cookieUtils.recordActivity();
   }, []);
@@ -17,7 +15,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = authService.subscribe((user) => {
       if (user) {
-        // If returning and cookie timestamp indicates inactivity > 2 min, log out immediately
         if (cookieUtils.isInactive()) {
           authService.logout();
           setCurrentUser(null);
@@ -40,7 +37,6 @@ export const AuthProvider = ({ children }) => {
     };
   }, [updateActivityCookie]);
 
-  // Active user interaction listener for automatic 2-minute inactivity logout
   useEffect(() => {
     if (!currentUser) return;
 
@@ -49,7 +45,6 @@ export const AuthProvider = ({ children }) => {
 
     const onUserAction = () => {
       const now = Date.now();
-      // Throttle cookie writing to once every 2 seconds
       if (now - lastThrottledTime > 2000) {
         lastThrottledTime = now;
         updateActivityCookie();
@@ -61,7 +56,6 @@ export const AuthProvider = ({ children }) => {
       window.addEventListener(evt, onUserAction, { passive: true });
     });
 
-    // Check inactivity status every 2 seconds
     const inactivityInterval = setInterval(() => {
       if (cookieUtils.isInactive()) {
         authService.logout();

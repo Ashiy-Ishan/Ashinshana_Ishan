@@ -1,7 +1,6 @@
-// src/services/authService.js
 import { 
   signInWithEmailAndPassword, 
-  signInWithPopup,
+  signInWithPopup, 
   signOut, 
   onAuthStateChanged,
   sendPasswordResetEmail
@@ -11,7 +10,7 @@ import { auth, googleProvider, isFirebaseConfigured, AUTHORIZED_ADMIN_EMAIL } fr
 const SESSION_AUTH_KEY = 'ashiy_portfolio_session_auth';
 export const COOKIE_LAST_ACTIVITY = 'admin_last_activity';
 export const COOKIE_SESSION_ACTIVE = 'admin_session_active';
-export const INACTIVITY_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes (120 seconds)
+export const INACTIVITY_TIMEOUT_MS = 2 * 60 * 1000;
 
 export const cookieUtils = {
   getCookie(name) {
@@ -49,7 +48,6 @@ export const cookieUtils = {
 };
 
 export const authService = {
-  // Validate authorized admin email
   validateAdminEmail(email) {
     if (!email || email.toLowerCase().trim() !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
       throw new Error(`Access Denied: Only ${AUTHORIZED_ADMIN_EMAIL} is authorized to access the CMS.`);
@@ -57,7 +55,6 @@ export const authService = {
     return true;
   },
 
-  // Helper to format Firebase error codes cleanly
   formatAuthError(error) {
     const code = error?.code || '';
     if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
@@ -69,7 +66,6 @@ export const authService = {
     return error.message || 'Authentication failed. Please check your credentials.';
   },
 
-  // Sign In with Email & Password
   async login(email, password) {
     this.validateAdminEmail(email);
 
@@ -87,7 +83,6 @@ export const authService = {
         throw new Error(this.formatAuthError(err));
       }
     } else {
-      // Mock Auth Mode for local offline testing
       if (email.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase() && password && password.length >= 6) {
         const mockUser = {
           uid: 'admin-ashinshana-001',
@@ -104,7 +99,6 @@ export const authService = {
     }
   },
 
-  // Sign In with Google
   async loginWithGoogle() {
     if (isFirebaseConfigured && auth && googleProvider) {
       try {
@@ -133,7 +127,6 @@ export const authService = {
     }
   },
 
-  // Sign Out
   async logout() {
     if (isFirebaseConfigured && auth) {
       await signOut(auth);
@@ -144,7 +137,6 @@ export const authService = {
     return true;
   },
 
-  // Send Password Reset
   async resetPassword(email) {
     this.validateAdminEmail(email);
     if (isFirebaseConfigured && auth) {
@@ -155,7 +147,6 @@ export const authService = {
     }
   },
 
-  // Subscribe to Auth State Changes with Admin Email Check
   subscribe(callback) {
     if (isFirebaseConfigured && auth) {
       callback(this.getCurrentUser());
@@ -194,7 +185,6 @@ export const authService = {
     }
   },
 
-  // Check current user
   getCurrentUser() {
     if (isFirebaseConfigured && auth) {
       const user = auth.currentUser;

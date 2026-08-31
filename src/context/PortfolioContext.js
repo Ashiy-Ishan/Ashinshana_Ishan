@@ -1,4 +1,3 @@
-// src/context/PortfolioContext.js
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { portfolioService } from '../services/portfolioService';
 import { initialData } from '../data/initialData';
@@ -74,7 +73,6 @@ export const PortfolioProvider = ({ children }) => {
     }
   }, []);
 
-  // Real-time Firestore Subscriptions (Active Listener Lifecycle)
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -141,7 +139,6 @@ export const PortfolioProvider = ({ children }) => {
 
     setLoading(false);
 
-    // Clean up all active listeners on component unmount
     return () => {
       isMounted = false;
       if (typeof unsubProfile === 'function') unsubProfile();
@@ -159,7 +156,6 @@ export const PortfolioProvider = ({ children }) => {
     };
   }, []);
 
-  // Mutations
   const updateProfile = async (data) => {
     const updated = await portfolioService.updateProfile(data);
     setProfile(updated);

@@ -1,4 +1,3 @@
-// src/data/initialData.js
 import personImg from '../Iamage/person.png';
 import developerImg from '../Iamage/developer.png';
 import youtuberImg from '../Iamage/youtuber.png';

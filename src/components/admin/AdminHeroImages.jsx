@@ -1,4 +1,3 @@
-// src/components/admin/AdminHeroImages.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Save, 

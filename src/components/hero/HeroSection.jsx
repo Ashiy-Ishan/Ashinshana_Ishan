@@ -1,4 +1,3 @@
-// src/components/hero/HeroSection.jsx
 import React from 'react';
 import { 
   Code2, 

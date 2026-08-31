@@ -1,4 +1,3 @@
-// src/components/admin/AdminLogin.jsx
 import React, { useState } from 'react';
 import { Lock, Mail, Shield, AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';

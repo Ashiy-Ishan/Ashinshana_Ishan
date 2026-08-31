@@ -1,4 +1,3 @@
-// src/components/developer/ProjectsShowcase.jsx
 import React, { useState } from 'react';
 import { 
   ExternalLink, 

@@ -1,4 +1,3 @@
-// src/config/imagekit.js
 export const IMAGEKIT_URL_ENDPOINT = process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/x2eerczu0';
 
 /**
