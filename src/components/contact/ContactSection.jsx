@@ -32,7 +32,7 @@ export const ContactSection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setStatus({ submitting: false, success: false, error: 'Please fill in all required fields.' });
       return;
     }
@@ -42,12 +42,11 @@ export const ContactSection = () => {
       await submitContactMessage(formData);
       setStatus({ submitting: false, success: true, error: null });
       setFormData({ name: '', email: '', subject: '', message: '' });
-    } catch (err) {
-      console.warn('Submission fallback error:', err);
+    } catch {
       setStatus({
         submitting: false,
         success: false,
-        error: 'Could not send directly. You can also connect via direct email or social channels below.'
+        error: 'Your message couldn’t be sent. Try again or open your email app.'
       });
     }
   };
@@ -65,7 +64,7 @@ export const ContactSection = () => {
       <div className="section-heading-wrap">
         <span className="section-tag">GET IN TOUCH</span>
         <h2 className="section-title">
-          LET'S <span className="title-gradient">CONNECT & COLLABORATE</span>
+          Let’s <span className="title-gradient">work together</span>
         </h2>
         <p className="section-subtext">
           Have an exciting project, software engineering opportunity, content sponsorship, or tech inquiry? Send a message.
@@ -76,9 +75,9 @@ export const ContactSection = () => {
         {/* Left Column: Social Media & Direct Channels */}
         <div className="contact-info-panel">
           <div className="contact-panel-card">
-            <h3 className="panel-title">Social & Professional Hub</h3>
+            <h3 className="panel-title">Find me online</h3>
             <p className="panel-desc">
-              Connect with me across official networks or send an encrypted message directly through the contact terminal.
+              Find me on social media or send me an email.
             </p>
 
             <div className="social-hub-wrapper">
@@ -178,31 +177,30 @@ export const ContactSection = () => {
 
         {/* Right Column: Premium Contact Form */}
         <div className="contact-form-panel">
-          <form className="contact-form-modern" onSubmit={handleSubmit}>
-            <h3 className="form-header-title">Send a Direct Message</h3>
+          <form className="contact-form-modern" onSubmit={handleSubmit} aria-busy={status.submitting}>
+            <h3 className="form-header-title">Send a message</h3>
 
             {status.success && (
-              <div className="form-alert success">
+              <div className="form-alert success" role="status">
                 <CheckCircle size={20} />
                 <div>
-                  <strong>Message Transmitted Successfully!</strong>
+                  <strong>Message sent</strong>
                   <p>Thank you for reaching out. I will get back to you shortly.</p>
                 </div>
               </div>
             )}
 
             {status.error && (
-              <div className="form-alert error">
+              <div className="form-alert error" role="alert">
                 <AlertCircle size={20} />
                 <div>
-                  <strong>Notice:</strong>
                   <p>{status.error}</p>
                   <button
                     type="button"
                     onClick={handleDirectEmail}
                     className="btn-link-fallback"
                   >
-                    Launch Email Client
+                    Open email app
                   </button>
                 </div>
               </div>
@@ -215,6 +213,8 @@ export const ContactSection = () => {
                   id="contact-name"
                   type="text"
                   name="name"
+                  maxLength={100}
+                  autoComplete="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="e.g. Alex Smith"
@@ -229,6 +229,8 @@ export const ContactSection = () => {
                   id="contact-email"
                   type="email"
                   name="email"
+                  maxLength={254}
+                  autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="e.g. alex@example.com"
@@ -244,6 +246,7 @@ export const ContactSection = () => {
                 id="contact-subject"
                 type="text"
                 name="subject"
+                maxLength={150}
                 value={formData.subject}
                 onChange={handleChange}
                 placeholder="e.g. Full-Stack Project Collaboration"
@@ -256,6 +259,7 @@ export const ContactSection = () => {
               <textarea
                 id="contact-message"
                 name="message"
+                maxLength={5000}
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Describe your inquiry, project scope, or idea..."
@@ -274,7 +278,7 @@ export const ContactSection = () => {
                 {status.submitting ? (
                   <>
                     <Loader2 size={18} className="spinner-icon animate-spin" />
-                    <span>Transmitting...</span>
+                    <span>Sending…</span>
                   </>
                 ) : (
                   <>

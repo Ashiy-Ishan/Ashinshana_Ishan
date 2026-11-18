@@ -1,237 +1,136 @@
 import React, { useState } from 'react';
-import { 
-  Code2, 
-  Workflow, 
-  Video, 
-  Mail, 
-  Image, 
-  Trash2, 
-  CheckCircle,
-  Layers,
-  Award,
-  Database,
-  Cloud,
-  Loader2
+import {
+  ArrowUpRight, Award, Code2, Database, Image, Layers, Loader2, Mail, Trash2, Video, Workflow
 } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { IMAGEKIT_URL_ENDPOINT } from '../../config/imagekit';
 
 export const AdminOverview = ({ onNavigateTab }) => {
-  const { 
-    profile, 
-    skills, 
-    projects, 
-    publishedProjects, 
-    youtubeVideos, 
-    achievements,
-    contactMessages, 
-    gallery,
-    deleteContactMessage,
-    syncAllToFirestore 
+  const {
+    profile, skills, projects, publishedProjects, youtubeVideos, achievements, contactMessages,
+    gallery, syncAllToFirestore
   } = usePortfolio();
-
   const [syncing, setSyncing] = useState(false);
-  const [syncSuccess, setSyncSuccess] = useState(false);
-  const [syncMessage, setSyncMessage] = useState('');
+  const [syncResult, setSyncResult] = useState(null);
 
   const handleSyncFirestore = async () => {
+    setSyncing(true);
+    setSyncResult(null);
     try {
-      setSyncing(true);
-      setSyncSuccess(false);
-      const res = await syncAllToFirestore();
-      setSyncMessage(res?.message || 'Data successfully synchronized!');
-      setSyncSuccess(true);
-      setTimeout(() => setSyncSuccess(false), 5000);
-    } catch (err) {
-      alert(`Firestore sync notice: ${err.message}`);
+      const result = await syncAllToFirestore();
+      setSyncResult({ message: result.message });
+    } catch {
+      setSyncResult({ error: true, message: 'Sync failed. Please check your connection and try again.' });
     } finally {
       setSyncing(false);
     }
   };
 
   const stats = [
-    {
-      label: 'Total Skills',
-      val: skills.length,
-      icon: <Layers size={22} className="stat-icon-dev" />,
-      tab: 'skills'
-    },
-    {
-      label: 'Showcase Projects',
-      val: projects.length,
-      icon: <Workflow size={22} className="stat-icon-proj" />,
-      tab: 'projects'
-    },
-    {
-      label: 'Certificates & Awards',
-      val: (achievements || []).length,
-      icon: <Award size={22} style={{ color: '#ffb800' }} />,
-      tab: 'achievements'
-    },
-    {
-      label: 'Published Releases',
-      val: publishedProjects.length,
-      icon: <Code2 size={22} className="stat-icon-pub" />,
-      tab: 'published'
-    },
-    {
-      label: 'YouTube Videos',
-      val: youtubeVideos.length,
-      icon: <Video size={22} className="stat-icon-creator" />,
-      tab: 'creator'
-    },
-    {
-      label: 'Gallery Assets',
-      val: gallery.length,
-      icon: <Image size={22} className="stat-icon-gal" />,
-      tab: 'gallery'
-    },
-    {
-      label: 'Contact Inquiries',
-      val: contactMessages.length,
-      icon: <Mail size={22} className="stat-icon-msg" />,
-      tab: 'messages'
-    }
+    { id: 'messages', label: 'Inbox', count: contactMessages.length, icon: Mail },
+    { id: 'projects', label: 'Projects', count: projects.length, icon: Workflow },
+    { id: 'published', label: 'Published releases', count: publishedProjects.length, icon: Code2 },
+    { id: 'skills', label: 'Skills', count: skills.length, icon: Layers },
+    { id: 'achievements', label: 'Achievements', count: achievements?.length || 0, icon: Award },
+    { id: 'gallery', label: 'Gallery images', count: gallery.length, icon: Image },
+    { id: 'creator', label: 'YouTube videos', count: youtubeVideos.length, icon: Video }
   ];
 
   return (
     <div className="admin-tab-pane">
-      <div className="admin-pane-header">
+      <header className="admin-pane-header">
         <div>
-          <h2 className="admin-pane-title">CMS Dashboard Overview</h2>
-          <p className="admin-pane-desc">
-            Welcome, <strong>{profile?.name}</strong>. Here is the operational state of your personal brand platform.
-          </p>
+          <h2 className="admin-pane-title">Overview</h2>
+          <p className="admin-pane-desc">Manage portfolio content and contact messages{profile?.name ? ` for ${profile.name}` : ''}.</p>
         </div>
+      </header>
 
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleSyncFirestore}
-          disabled={syncing}
-        >
-          {syncing ? (
-            <>
-              <Loader2 size={16} className="spinner-spin" />
-              <span>Syncing Data...</span>
-            </>
-          ) : (
-            <>
-              <Database size={16} />
-              <span>{syncSuccess ? 'Sync Complete!' : 'Sync All Data to Cloud Firestore'}</span>
-            </>
-          )}
-        </button>
-      </div>
-
-      {syncSuccess && (
-        <div className="form-alert success" style={{ padding: '0.85rem 1.25rem', borderRadius: '12px', marginBottom: '1.25rem' }}>
-          <CheckCircle size={18} />
-          <span>{syncMessage || 'All collections successfully synchronized!'}</span>
+      <section aria-labelledby="admin-collection-heading">
+        <h3 className="admin-section-heading" id="admin-collection-heading">Content & activity</h3>
+        <div className="admin-metrics-row">
+          {stats.map(({ id, label, count, icon: Icon }) => (
+            <button type="button" key={id} className="admin-stat-card" onClick={() => onNavigateTab(id)}>
+              <Icon size={20} className="admin-stat-icon" aria-hidden="true" />
+              <span className="stat-card-val">{count}</span>
+              <span className="stat-card-lbl">{label}</span>
+              <ArrowUpRight size={16} className="admin-stat-arrow" aria-hidden="true" />
+            </button>
+          ))}
         </div>
+      </section>
+
+      <details className="admin-card-section admin-integrations">
+        <summary>Data & integrations</summary>
+        <div className="admin-integration-content">
+          <p>ImageKit endpoint <code>{IMAGEKIT_URL_ENDPOINT}</code></p>
+          <p>Sync the bundled defaults to Firestore. This can overwrite existing fields that share the same record IDs.</p>
+          <button type="button" className="btn btn-outline" onClick={handleSyncFirestore} disabled={syncing}>
+            {syncing ? <Loader2 size={16} className="spinner-spin" aria-hidden="true" /> : <Database size={16} aria-hidden="true" />}
+            <span>{syncing ? 'Syncing…' : 'Sync default content'}</span>
+          </button>
+          {syncResult && <p role={syncResult.error ? 'alert' : 'status'}>{syncResult.message}</p>}
+        </div>
+      </details>
+    </div>
+  );
+};
+
+export const AdminInbox = () => {
+  const { contactMessages, inboxError, deleteContactMessage } = usePortfolio();
+  const [deleteError, setDeleteError] = useState(false);
+
+  const handleDelete = async (id) => {
+    setDeleteError(false);
+    try {
+      await deleteContactMessage(id);
+    } catch {
+      setDeleteError(true);
+    }
+  };
+
+  return (
+    <div className="admin-tab-pane">
+      <header className="admin-pane-header">
+        <div>
+          <h2 className="admin-pane-title">Inbox</h2>
+          <p className="admin-pane-desc">Messages from the public contact form.</p>
+        </div>
+      </header>
+
+      {deleteError && <p role="alert">Could not delete the message. Try again.</p>}
+      {inboxError ? (
+        <p role="alert">Could not load contact messages.</p>
+      ) : contactMessages.length === 0 ? (
+        <p className="admin-card-section">No contact messages yet.</p>
+      ) : (
+        <ul className="admin-message-list">
+          {contactMessages.map((message) => {
+            const subject = (typeof message.subject === 'string' ? message.subject.trim() : '') || 'General inquiry';
+            const email = typeof message.email === 'string' ? message.email : '';
+            const replyTo = /^[^\s@,;?&#]+@[^\s@,;?&#]+$/.test(email)
+              ? `mailto:${encodeURIComponent(email).replace('%40', '@')}?subject=${encodeURIComponent(`Re: ${subject}`)}`
+              : '';
+            return (
+              <li className="admin-card-section admin-message" key={message.id}>
+                <div className="admin-message-heading">
+                  <div>
+                    <h3>{subject}</h3>
+                    <p>{typeof message.name === 'string' ? message.name : 'Unknown sender'}{email && ` · ${email}`}</p>
+                  </div>
+                  {typeof message.createdAt === 'string' && <span>{new Date(message.createdAt).toLocaleDateString()}</span>}
+                </div>
+                {typeof message.message === 'string' && <p className="admin-message-body">{message.message}</p>}
+                <div className="admin-message-actions">
+                  {replyTo && <a className="btn btn-outline" href={replyTo}><Mail size={16} aria-hidden="true" /> Reply</a>}
+                  <button type="button" className="btn btn-outline admin-message-delete" onClick={() => handleDelete(message.id)}>
+                    <Trash2 size={16} aria-hidden="true" /> Delete
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
-
-      {/* Cloud Integration Banner */}
-      <div className="cloud-services-banner">
-        <div className="cloud-service-card">
-          <Database size={20} className="service-icon firestore" />
-          <div>
-            <strong className="service-name">Firebase Cloud Firestore</strong>
-            <p className="service-sub">Project: <code>ashinshanaishan-dad93</code> (Realtime Sync Active)</p>
-          </div>
-        </div>
-
-        <div className="cloud-service-card">
-          <Cloud size={20} className="service-icon imagekit" />
-          <div>
-            <strong className="service-name">ImageKit.io Media CDN</strong>
-            <p className="service-sub">Endpoint: <code>{IMAGEKIT_URL_ENDPOINT}</code></p>
-          </div>
-        </div>
-      </div>
-
-      {/* Metrics Grid */}
-      <div className="admin-metrics-row">
-        {stats.map((item) => (
-          <div 
-            key={item.label} 
-            className="admin-stat-card clickable"
-            onClick={() => onNavigateTab(item.tab)}
-          >
-            <div className="stat-card-icon">{item.icon}</div>
-            <div className="stat-card-body">
-              <span className="stat-card-val">{item.val}</span>
-              <span className="stat-card-lbl">{item.label}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Contact Inquiries Inbox */}
-      <div className="admin-card-section" id="messages-inbox">
-        <div className="admin-card-header-row">
-          <div className="header-icon-title">
-            <Mail size={20} />
-            <h3 className="section-title-text">Contact Messages Inbox ({contactMessages.length})</h3>
-          </div>
-        </div>
-
-        {contactMessages.length === 0 ? (
-          <div className="empty-table-notice">
-            <CheckCircle size={32} className="check-empty-icon" />
-            <p>No new contact messages in your inbox. All clear!</p>
-          </div>
-        ) : (
-          <div className="admin-table-responsive">
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Sender</th>
-                  <th>Email</th>
-                  <th>Subject</th>
-                  <th>Message</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contactMessages.map((msg) => (
-                  <tr key={msg.id}>
-                    <td className="cell-nowrap">
-                      {msg.createdAt ? new Date(msg.createdAt).toLocaleDateString() : 'Recent'}
-                    </td>
-                    <td><strong>{msg.name}</strong></td>
-                    <td>
-                      <a href={`mailto:${msg.email}`} className="table-email-link">
-                        {msg.email}
-                      </a>
-                    </td>
-                    <td>{msg.subject || 'General Inquiry'}</td>
-                    <td className="cell-message-preview">{msg.message}</td>
-                    <td className="cell-actions">
-                      <a 
-                        href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject || 'Portfolio Inquiry')}`}
-                        className="btn-action reply"
-                        title="Reply via Email"
-                      >
-                        <Mail size={14} />
-                      </a>
-                      <button
-                        type="button"
-                        className="btn-action delete"
-                        onClick={() => deleteContactMessage(msg.id)}
-                        title="Delete Message"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

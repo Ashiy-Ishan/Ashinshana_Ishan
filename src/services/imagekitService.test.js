@@ -1,8 +1,15 @@
+import { auth } from '../config/firebase';
 import { uploadImageToImageKit, imagekitService } from './imagekitService';
+
+jest.mock('../config/firebase', () => ({
+  auth: { currentUser: null }
+}));
 
 describe('imagekitService Unit Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    auth.currentUser = null;
+    global.fetch = jest.fn();
   });
 
   test('validates and rejects null or empty file', async () => {
@@ -31,6 +38,12 @@ describe('imagekitService Unit Tests', () => {
     expect(imagekitService.formatImageKitUrl(fullUrl)).toBe(fullUrl);
   });
 
+  test('rejects an upload before making a request when signed out', async () => {
+    const file = new File(['image-data'], 'test.png', { type: 'image/png' });
+    await expect(uploadImageToImageKit(file)).rejects.toThrow(/Sign in/);
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   test('successfully executes direct upload when auth params endpoint is available', async () => {
     const mockAuthParams = {
       signature: 'test_sig',
@@ -44,7 +57,8 @@ describe('imagekitService Unit Tests', () => {
       url: 'https://ik.imagekit.io/x2eerczu0/uploads/test.png'
     };
 
-    global.fetch = jest.fn()
+    auth.currentUser = { emailVerified: true, getIdToken: jest.fn().mockResolvedValue('admin-token') };
+    global.fetch
       .mockResolvedValueOnce({
         ok: true,
         json: async () => mockAuthParams
@@ -59,6 +73,11 @@ describe('imagekitService Unit Tests', () => {
 
     expect(uploadedUrl).toBe('https://ik.imagekit.io/x2eerczu0/uploads/test.png');
     expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(global.fetch).toHaveBeenNthCalledWith(1, '/api/imagekit-auth', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer admin-token' }
+    });
+    expect(global.fetch.mock.calls[1][1]).not.toHaveProperty('headers');
   });
 });
 

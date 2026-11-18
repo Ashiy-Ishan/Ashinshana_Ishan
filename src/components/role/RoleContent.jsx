@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { AboutSection } from '../about/AboutSection';
 import { DeveloperSection } from '../developer/DeveloperSection';
 import { CreatorSection } from '../creator/CreatorSection';
@@ -8,36 +8,17 @@ import { usePortfolio } from '../../context/PortfolioContext';
 
 export const RoleContent = ({ selectedRole }) => {
   const { siteSettings } = usePortfolio();
-  const [displayRole, setDisplayRole] = useState(selectedRole);
-  const [transitionState, setTransitionState] = useState('active');
-
-  useEffect(() => {
-    if (selectedRole !== displayRole) {
-      setTransitionState('exiting');
-      const timer = setTimeout(() => {
-        setDisplayRole(selectedRole);
-        setTransitionState('entering');
-        const enterTimer = setTimeout(() => {
-          setTransitionState('active');
-        }, 50);
-        return () => clearTimeout(enterTimer);
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
-  }, [selectedRole, displayRole]);
-
   return (
-    <div className={`role-content-container role-mode-${displayRole} transition-${transitionState}`}>
-      {displayRole === 'developer' && (
+    <div className={`role-content-container role-mode-${selectedRole}`}>
+      {selectedRole === 'developer' && (
         <DeveloperContent siteSettings={siteSettings} />
       )}
 
-      {displayRole === 'creator' && (
+      {selectedRole === 'creator' && (
         <CreatorContent siteSettings={siteSettings} />
       )}
 
-      {displayRole === 'personal' && (
+      {selectedRole === 'personal' && (
         <PersonalContent siteSettings={siteSettings} />
       )}
     </div>

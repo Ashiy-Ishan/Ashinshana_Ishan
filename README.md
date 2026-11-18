@@ -24,3 +24,10 @@ Check out the live site: [https://ashinshanaishan.me](https://ashinshanaishan.me
 - **Firebase Integration:** Powered by Firebase for Authentication, Firestore (database), and Storage.
 - **Responsive Design:** Fully optimized for all device sizes with modern CSS and fluid animations.
 - **Scroll Spy:** Automatic navigation highlighting as you scroll through different sections.
+
+
+## Security deployment
+
+- Publish `firestore.rules` and `storage.rules` in the Firebase project configured by the app.
+- Use the same verified admin email in both rules files and `REACT_APP_ADMIN_EMAIL`.
+- Set `IMAGEKIT_PRIVATE_KEY` in Vercel server environment variables and redeploy. Remove any old `REACT_APP_IMAGEKIT_PRIVATE_KEY` and rotate the key if that variable was previously used.

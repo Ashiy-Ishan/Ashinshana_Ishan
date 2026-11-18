@@ -805,61 +805,22 @@ export const portfolioService = {
   },
 
   // --- Contact Messages ---
-  async submitContactMessage(message) {
-    const record = {
-      ...message,
+  async submitContactMessage({ name, email, subject, message }) {
+    if (!isFirebaseConfigured || !db) throw new Error('Contact form is unavailable.');
+
+    return addDoc(collection(db, 'contactMessages'), {
+      name: name.trim(),
+      email: email.trim(),
+      subject: subject.trim(),
+      message: message.trim(),
       createdAt: new Date().toISOString(),
-      read: false
-    };
-
-    if (isFirebaseConfigured && db) {
-      try {
-        const docRef = await addDoc(collection(db, 'contactMessages'), {
-          ...record,
-          serverTimestamp: serverTimestamp()
-        });
-        record.id = docRef.id;
-      } catch (e) {
-        console.warn('Failed writing message to Firestore, storing locally:', e);
-      }
-    } else {
-      record.id = `msg-${Date.now()}`;
-    }
-
-    const current = getCachedData('contactMessages', []);
-    setCachedData('contactMessages', [record, ...current]);
-    return record;
-  },
-
-  async getContactMessages() {
-    if (isFirebaseConfigured && db) {
-      try {
-        const q = query(collection(db, 'contactMessages'), orderBy('createdAt', 'desc'));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const msgs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setCachedData('contactMessages', msgs);
-          return msgs;
-        }
-      } catch (err) {
-        console.warn('Failed fetching contact messages:', err);
-      }
-    }
-    return getCachedData('contactMessages', []);
+      read: false,
+      serverTimestamp: serverTimestamp()
+    });
   },
 
   async deleteContactMessage(msgId) {
-    if (isFirebaseConfigured && db) {
-      try {
-        await deleteDoc(doc(db, 'contactMessages', msgId));
-      } catch (e) {
-        console.warn('Error deleting message from Firestore:', e);
-      }
-    }
-    const current = getCachedData('contactMessages', []);
-    const updated = current.filter(m => m.id !== msgId);
-    setCachedData('contactMessages', updated);
-    return true;
+    await deleteDoc(doc(db, 'contactMessages', msgId));
   },
 
   // =========================================================================
@@ -1154,27 +1115,11 @@ export const portfolioService = {
 
   // 12. Contact Messages Real-time Listener (for CMS Admin)
   subscribeToContactMessages(onUpdate, onError) {
-    if (!isFirebaseConfigured || !db) {
-      onUpdate && onUpdate(getCachedData('contactMessages', []));
-      return () => {};
-    }
     const q = query(collection(db, 'contactMessages'), orderBy('createdAt', 'desc'));
     return onSnapshot(
       q,
-      (querySnapshot) => {
-        if (!querySnapshot.empty) {
-          const msgs = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-          setCachedData('contactMessages', msgs);
-          onUpdate && onUpdate(msgs);
-        } else {
-          onUpdate && onUpdate([]);
-        }
-      },
-      (err) => {
-        console.warn('Firestore real-time contact messages listener error:', err);
-        if (onError) onError(err);
-        onUpdate && onUpdate(getCachedData('contactMessages', []));
-      }
+      (snapshot) => onUpdate(snapshot.docs.map((item) => ({ ...item.data(), id: item.id }))),
+      onError
     );
   }
 };

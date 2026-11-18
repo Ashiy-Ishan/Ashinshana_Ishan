@@ -2,10 +2,11 @@
 // Vercel Serverless Function for Secure ImageKit Uploads
 const ImageKit = require('imagekit');
 const Busboy = require('busboy');
+const requireAdmin = require('../server/requireAdmin');
 
 // Initialize ImageKit SDK
 function getImageKit() {
-  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY || process.env.REACT_APP_IMAGEKIT_PRIVATE_KEY;
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
   const publicKey = process.env.IMAGEKIT_PUBLIC_KEY || process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY || 'public_key';
   const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT || process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/x2eerczu0';
 
@@ -28,19 +29,14 @@ const config = {
 };
 
 async function handler(req, res) {
-  // CORS
-  const origin = req.headers.origin;
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  res.setHeader('Cache-Control', 'no-store');
 
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
   }
+
+  if (!(await requireAdmin(req, res))) return;
 
   try {
     const imagekit = getImageKit();
@@ -50,7 +46,9 @@ async function handler(req, res) {
       headers: req.headers,
       limits: {
         fileSize: 10 * 1024 * 1024, // 10MB limit
-        files: 1
+        files: 1,
+        fields: 1,
+        fieldSize: 128
       }
     });
 
@@ -71,16 +69,14 @@ async function handler(req, res) {
 
         const allowedMimeTypes = [
           'image/jpeg',
-          'image/jpg',
           'image/png',
           'image/webp',
-          'image/gif',
-          'image/svg+xml'
+          'image/gif'
         ];
 
-        if (mimeType && !allowedMimeTypes.includes(mimeType.toLowerCase()) && !mimeType.startsWith('image/')) {
+        if (fieldname !== 'file' || !allowedMimeTypes.includes(mimeType)) {
           fileStream.resume();
-          return reject(new Error('Invalid file type. Only JPEG, PNG, WEBP, GIF, and SVG images are allowed.'));
+          return reject(Object.assign(new Error('Invalid image file.'), { status: 400 }));
         }
 
         const chunks = [];
@@ -133,9 +129,9 @@ async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('ImageKit upload handler error:', error);
-    return res.status(500).json({
-      error: error.message || 'Internal Server Error during ImageKit file upload.'
+    const status = error.status === 400 ? 400 : 500;
+    return res.status(status).json({
+      error: status === 400 ? 'Invalid image file.' : 'Could not upload the image.'
     });
   }
 }

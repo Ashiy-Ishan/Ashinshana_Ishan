@@ -31,9 +31,9 @@ export const PublishedProjects = () => {
         <div className="published-header-left">
           <Package size={22} className="pub-icon" />
           <div>
-            <h3 className="pub-title">PUBLISHED SOFTWARE & OPEN SOURCE</h3>
+            <h3 className="pub-title">Software releases</h3>
             <p className="pub-desc">
-              Officially published software packages, repositories, release versions, and open source architectures.
+              Published packages, release versions, and open-source projects.
             </p>
           </div>
         </div>
@@ -44,10 +44,10 @@ export const PublishedProjects = () => {
           const badge = getStatusBadge(pub.status);
 
           return (
-            <div key={pub.id || pub.name} className="published-item-card">
+            <article key={pub.id || pub.name} className="published-item-card">
               <div className="pub-item-top">
                 <div className="pub-item-identity">
-                  <span className="pub-name">{pub.name}</span>
+                  <h4 className="pub-name">{pub.name}</h4>
                   {pub.version && (
                     <span className="pub-version-pill">
                       <Tag size={11} /> {pub.version}
@@ -63,7 +63,7 @@ export const PublishedProjects = () => {
 
               <div className="pub-item-meta">
                 <div className="pub-meta-tech">
-                  <span className="meta-label">Engine / Tech:</span>
+                  <span className="meta-label">Technology</span>
                   <span className="meta-val">{pub.technology}</span>
                 </div>
 
@@ -84,7 +84,7 @@ export const PublishedProjects = () => {
                     className="pub-link github"
                   >
                     <Github size={15} />
-                    <span>View Repository</span>
+                    <span>Repository</span>
                   </a>
                 )}
                 {pub.liveDemo && (
@@ -95,11 +95,11 @@ export const PublishedProjects = () => {
                     className="pub-link demo"
                   >
                     <ExternalLink size={15} />
-                    <span>Live Showcase</span>
+                    <span>Live demo</span>
                   </a>
                 )}
               </div>
-            </div>
+            </article>
           );
         })}
       </div>

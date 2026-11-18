@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Users, 
   Eye, 
@@ -12,51 +12,15 @@ import {
 import { Youtube } from '../common/Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
-const AnimatedCounter = ({ value = '0', label = '', icon: Icon, colorClass = 'subscribers' }) => {
-  const [count, setCount] = useState(0);
-
-  const strVal = String(value);
-  const numericVal = parseInt(strVal.replace(/[^0-9]/g, ''), 10) || 0;
-  const suffix = strVal.replace(/[0-9]/g, '').trim();
-
-  useEffect(() => {
-    let startTimestamp = null;
-    let animationFrameId;
-    const duration = 1600;
-
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      // Smooth ease-out cubic
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeOut * numericVal));
-
-      if (progress < 1) {
-        animationFrameId = requestAnimationFrame(step);
-      } else {
-        setCount(numericVal);
-      }
-    };
-
-    animationFrameId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [numericVal]);
-
-  return (
-    <div className="creator-stat-card">
-      <div className={`stat-icon-wrapper ${colorClass}`}>
-        <Icon size={22} />
-      </div>
-      <div className="stat-info">
-        <div className="stat-number-row">
-          <span className="stat-count-number">{count}</span>
-          {suffix && <span className="stat-count-suffix">{suffix}</span>}
-        </div>
-        <span className="stat-label-text">{label}</span>
-      </div>
+const ChannelStat = ({ value, label, icon: Icon, colorClass }) => (
+  <div className="creator-stat-card">
+    <div className={`stat-icon-wrapper ${colorClass}`}><Icon size={22} aria-hidden="true" /></div>
+    <div className="stat-info">
+      <span className="stat-count-number">{value}</span>
+      <span className="stat-label-text">{label}</span>
     </div>
-  );
-};
+  </div>
+);
 
 export const CreatorSection = () => {
   const { youtubeChannel, youtubeVideos } = usePortfolio();
@@ -84,7 +48,7 @@ export const CreatorSection = () => {
           <span>TECHNICAL FLOWS & DEMOS</span>
         </div>
         <h2 className="section-title">
-          COMPETITIONS & <span className="title-gradient creator-gradient">PROJECT DEMOS</span>
+          Competitions &amp; <span className="title-gradient creator-gradient">project demos</span>
         </h2>
         <p className="section-subtext">
           Showcasing competition submissions, hackathon presentations, and focused technical flow explanations of IoT and software architectures.
@@ -100,9 +64,6 @@ export const CreatorSection = () => {
               alt={channel.channelName || 'CURLYmax YouTube Channel'}
               className="creator-avatar-img"
             />
-            <div className="creator-verified-badge" title="Official YouTube Channel">
-              <Youtube size={15} />
-            </div>
           </div>
 
           <div className="creator-profile-text">
@@ -138,19 +99,19 @@ export const CreatorSection = () => {
 
       {/* Channel Insights & Performance Row (with Animated Counters) */}
       <div className="creator-insights-grid">
-        <AnimatedCounter
+        <ChannelStat
           value={channel.subscribers || '60'}
           label="Subscribers"
           icon={Users}
           colorClass="subscribers"
         />
-        <AnimatedCounter
+        <ChannelStat
           value={channel.views || '800+'}
           label="Total Views"
           icon={Eye}
           colorClass="views"
         />
-        <AnimatedCounter
+        <ChannelStat
           value={channel.videos || '3'}
           label="Uploaded Videos"
           icon={Film}
@@ -163,16 +124,15 @@ export const CreatorSection = () => {
         <div className="videos-filter-bar">
           <div className="filter-title-wrap">
             <Video size={20} className="filter-icon creator-icon" />
-            <h3 className="filter-title">COMPETITION & PROJECT PLAYLISTS</h3>
+            <h3 className="filter-title">Video library</h3>
           </div>
 
-          <div className="video-tab-buttons" role="tablist">
+          <div className="video-tab-buttons" role="group" aria-label="Filter videos">
             {filterTabs.map((tab) => (
               <button
                 key={tab}
                 type="button"
-                role="tab"
-                aria-selected={activeTab === tab}
+                aria-pressed={activeTab === tab}
                 className={`video-tab-btn ${activeTab === tab ? 'active' : ''}`}
                 onClick={() => setActiveTab(tab)}
               >
@@ -183,59 +143,37 @@ export const CreatorSection = () => {
           </div>
         </div>
 
-        {/* Video Cards Grid */}
+        {filteredVideos.length === 0 && (
+          <p className="empty-projects-notice">No videos match this filter.</p>
+        )}
+
         <div className="videos-cards-grid">
           {filteredVideos.map((video) => {
             const videoUrl = video.url || `https://www.youtube.com/watch?v=${video.youtubeId}`;
             return (
               <article key={video.id || video.title} className="video-card">
-                {/* Thumbnail Container */}
-                <a 
-                  href={videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="video-thumbnail-container"
-                  title={`Watch ${video.title} on YouTube`}
-                >
-                  <img
-                    src={video.thumbnailUrl}
-                    alt={video.title}
-                    className="video-thumb-img"
-                    loading="lazy"
-                  />
-                  <div className="video-play-overlay">
-                    <div className="play-button-circle">
-                      <Youtube size={26} className="play-yt-icon" fill="white" />
-                    </div>
+                {video.thumbnailUrl && (
+                  <div className="video-thumbnail-container">
+                    <img
+                      key={video.thumbnailUrl}
+                      src={video.thumbnailUrl}
+                      alt=""
+                      className="video-thumb-img"
+                      loading="lazy"
+                      decoding="async"
+                      onError={(event) => { event.currentTarget.hidden = true; }}
+                    />
                   </div>
+                )}
 
-                  {/* Duration Badge */}
-                  {video.duration && (
-                    <span className="video-duration-pill">
-                      <Clock size={11} /> {video.duration}
-                    </span>
-                  )}
-
-                  {/* Featured Badge */}
-                  {video.featured && (
-                    <span className="video-featured-pill">
-                      <Sparkles size={11} /> Featured
-                    </span>
-                  )}
-                </a>
-
-                {/* Video Info */}
                 <div className="video-info-box">
-                  <h4 className="video-headline">
-                    <a
-                      href={videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="video-title-link"
-                    >
-                      {video.title}
-                    </a>
-                  </h4>
+                  {(video.featured || video.duration) && (
+                    <div className="public-card-tags video-card-tags">
+                      {video.featured && <span className="video-featured-pill"><Sparkles size={13} /> Featured</span>}
+                      {video.duration && <span className="video-duration-pill"><Clock size={13} /> {video.duration}</span>}
+                    </div>
+                  )}
+                  <h4 className="video-headline">{video.title}</h4>
 
                   <p className="video-description">{video.description}</p>
 

@@ -15,7 +15,7 @@ export const SkillsGrid = () => {
   ];
 
   const filteredSkills = skills.filter((skill) => {
-    const matchCat = selectedCategory === 'All' || skill.category === selectedCategory;
+    const matchCat = selectedCategory === 'All' || (skill.category || 'Other') === selectedCategory;
     const matchFeatured = !featuredOnly || skill.featured;
     return matchCat && matchFeatured;
   });
@@ -50,11 +50,12 @@ export const SkillsGrid = () => {
   return (
     <div className="skills-showcase-container">
       <div className="skills-control-bar">
-        <div className="category-scroll-container">
+        <div className="category-scroll-container" role="group" aria-label="Filter skills">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
+              aria-pressed={selectedCategory === cat}
               className={`cat-filter-chip ${selectedCategory === cat ? 'active' : ''}`}
               onClick={() => setSelectedCategory(cat)}
             >
@@ -63,7 +64,7 @@ export const SkillsGrid = () => {
               <span className="cat-count">
                 {cat === 'All'
                   ? skills.length
-                  : skills.filter((s) => s.category === cat).length}
+                  : skills.filter((s) => (s.category || 'Other') === cat).length}
               </span>
             </button>
           ))}
@@ -71,6 +72,7 @@ export const SkillsGrid = () => {
 
         <button
           type="button"
+          aria-pressed={featuredOnly}
           className={`featured-toggle-btn ${featuredOnly ? 'active' : ''}`}
           onClick={() => setFeaturedOnly(!featuredOnly)}
           title="Toggle Key Featured Technologies"
@@ -82,7 +84,7 @@ export const SkillsGrid = () => {
 
       <div className="skills-cards-grid">
         {filteredSkills.map((skill) => (
-          <div
+          <article
             key={skill.id || skill.name}
             className={`skill-card-modern ${skill.featured ? 'is-featured' : ''}`}
           >
@@ -110,8 +112,7 @@ export const SkillsGrid = () => {
               )}
             </div>
 
-            <div className="skill-card-hover-border" />
-          </div>
+          </article>
         ))}
       </div>
 

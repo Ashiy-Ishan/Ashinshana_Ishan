@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useId } from 'react';
 import { Upload, Image as ImageIcon, Loader2, Check, X } from 'lucide-react';
 import { uploadImageToImageKit } from '../../services/imagekitService';
 
@@ -15,6 +15,7 @@ export const ImageUploadField = ({
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const fileInputRef = useRef(null);
+  const urlInputId = useId();
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -49,7 +50,7 @@ export const ImageUploadField = ({
   return (
     <div className="image-upload-field-group">
       {label && (
-        <label className="upload-field-label">
+        <label htmlFor={urlInputId} className="upload-field-label">
           <span>{label}</span>
           {required && <span className="text-required">*</span>}
         </label>
@@ -60,6 +61,7 @@ export const ImageUploadField = ({
         <div className="image-preview-thumbnail">
           {value ? (
             <img
+              key={value}
               src={value}
               alt="Preview"
               onError={(e) => {
@@ -78,6 +80,7 @@ export const ImageUploadField = ({
         <div className="image-upload-controls">
           <div className="image-input-action-row">
             <input
+              id={urlInputId}
               type="text"
               value={value || ''}
               onChange={(e) => onChange(e.target.value)}
@@ -91,16 +94,17 @@ export const ImageUploadField = ({
               type="file"
               ref={fileInputRef}
               onChange={handleFileChange}
-              accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+              accept="image/png,image/jpeg,image/webp,image/gif"
               className="hidden-file-input"
-              id={`file-input-${folder}-${label ? label.replace(/\s+/g, '-').toLowerCase() : 'field'}`}
               disabled={uploading}
             />
 
             {/* Upload Button */}
-            <label
-              htmlFor={`file-input-${folder}-${label ? label.replace(/\s+/g, '-').toLowerCase() : 'field'}`}
-              className={`btn-image-upload ${uploading ? 'disabled' : ''}`}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="btn-image-upload"
               title="Upload image to ImageKit CDN"
             >
               {uploading ? (
@@ -114,7 +118,7 @@ export const ImageUploadField = ({
                   <span>Upload</span>
                 </>
               )}
-            </label>
+            </button>
 
             {/* Clear Button */}
             {value && (
@@ -132,18 +136,18 @@ export const ImageUploadField = ({
           {/* Upload Status / Hint */}
           <div className="image-upload-meta">
             {uploadSuccess && (
-              <span className="upload-status success">
+              <span className="upload-status success" role="status">
                 <Check size={13} /> Uploaded to ImageKit CDN successfully!
               </span>
             )}
             {uploadError && (
-              <span className="upload-status error">
+              <span className="upload-status error" role="alert">
                 <X size={13} /> {uploadError}
               </span>
             )}
             {!uploadSuccess && !uploadError && (
               <span className="upload-hint-text">
-                {hint || `Folder: /${folder} • Max size: 10MB (PNG, JPG, WEBP, SVG, GIF)`}
+                {hint || `Folder: /${folder} • Max size: 10MB (PNG, JPG, WebP, GIF)`}
               </span>
             )}
           </div>

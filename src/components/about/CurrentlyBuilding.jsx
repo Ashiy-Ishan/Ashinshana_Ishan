@@ -57,21 +57,17 @@ export const CurrentlyBuilding = () => {
   return (
     <section id="currently" className="currently-building-container">
       <div className="currently-header">
-        <div className="live-pulse-wrapper">
-          <span className="live-pulse-dot" />
-          <span className="live-pulse-text">LIVE ACTIVITY RADAR</span>
-        </div>
         <h3 className="currently-main-title">
-          CURRENTLY <span className="title-gradient">IN MOTION</span>
+          Current projects &amp; interests
         </h3>
         <p className="currently-subtitle">
-          Real-time snapshot of my active projects, systems engineering, content production, and tech explorations.
+          Active projects, technical content, and areas I’m exploring.
         </p>
       </div>
 
       <div className="currently-grid">
         {items.map((item) => (
-          <div key={item.key} className="currently-card">
+          <article key={item.key} className="currently-card">
             <div className="card-top-bar">
               <div className="card-icon-box">{item.icon}</div>
               <span className={`status-pill ${item.badgeClass}`}>{item.badge}</span>
@@ -95,8 +91,7 @@ export const CurrentlyBuilding = () => {
                 </div>
               )}
             </div>
-            <div className="card-accent-line" />
-          </div>
+          </article>
         ))}
       </div>
     </section>

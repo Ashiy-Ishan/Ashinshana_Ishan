@@ -75,7 +75,7 @@ export const AboutSection = () => {
           <span>PERSONAL & JOURNEY</span>
         </div>
         <h2 className="section-title">
-          ABOUT <span className="title-gradient personal-gradient">ASHINSHANA ISHAN</span>
+          About <span className="title-gradient personal-gradient">Ashinshana Ishan</span>
         </h2>
         <p className="section-subtext">
           Undergraduate software engineer and tech creator bridging technical software architecture with visual media.
@@ -91,9 +91,6 @@ export const AboutSection = () => {
               alt={cleanFullName} 
               className="personal-avatar-img"
             />
-            <div className="personal-verified-badge" title="Undergraduate & Tech Creator">
-              <GraduationCap size={15} />
-            </div>
           </div>
 
           <div className="personal-profile-text">

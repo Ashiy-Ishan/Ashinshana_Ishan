@@ -54,7 +54,7 @@ export const PersonalAchievements = () => {
       <div className="section-heading-wrap">
         <span className="section-tag">CREDENTIALS & MILESTONES</span>
         <h2 className="section-title">
-          ACHIEVEMENTS & <span className="title-gradient">BATCH CERTIFICATES</span>
+          Achievements &amp; <span className="title-gradient">certificates</span>
         </h2>
         <p className="section-subtext">
           Verified academic certificates, university batch credentials, professional developer certifications, and competitive honors.
@@ -62,7 +62,7 @@ export const PersonalAchievements = () => {
       </div>
 
       {/* Categorized Filter Tabs */}
-      <div className="project-category-tabs" role="tablist" style={{ justifyContent: 'center', marginBottom: '2.5rem' }}>
+      <div className="project-category-tabs" role="group" aria-label="Filter accomplishments">
         {certificateTypes.map((type) => {
           const count =
             type === 'All'
@@ -75,8 +75,7 @@ export const PersonalAchievements = () => {
             <button
               key={type}
               type="button"
-              role="tab"
-              aria-selected={selectedType === type}
+              aria-pressed={selectedType === type}
               className={`project-tab-btn ${selectedType === type ? 'active' : ''}`}
               onClick={() => setSelectedType(type)}
             >
@@ -95,39 +94,24 @@ export const PersonalAchievements = () => {
           const itemType = getCertType(item);
 
           return (
-            <div key={item.id || item.title} className="achievement-card">
-              {/* Card Cover Image / Certificate Banner */}
-              <div className="achievement-media-box">
-                <img 
-                  src={item.imageUrl || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80'} 
-                  alt={item.title} 
-                  className="achievement-cover-img" 
-                  loading="lazy"
-                />
-                <div className="achievement-badge-pill">
-                  <ShieldCheck size={12} />
-                  <span>{item.badge || 'Verified'}</span>
+            <article key={item.id || item.title} className="achievement-card">
+              {item.imageUrl && (
+                <div className="achievement-media-box">
+                  <img
+                    key={item.imageUrl}
+                    src={item.imageUrl}
+                    alt=""
+                    className="achievement-cover-img"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(event) => { event.currentTarget.hidden = true; }}
+                  />
                 </div>
-              </div>
+              )}
 
-              {/* Card Content Body */}
               <div className="achievement-card-body">
                 <div className="achievement-meta-bar">
-                  <span 
-                    className="achievement-category"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.3rem',
-                      background: itemType === 'Achievement' ? 'rgba(255, 184, 0, 0.15)' : itemType === 'Participation Certificate' ? 'rgba(0, 210, 255, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                      color: itemType === 'Achievement' ? '#ffb800' : itemType === 'Participation Certificate' ? '#00d2ff' : '#10b981',
-                      border: itemType === 'Achievement' ? '1px solid rgba(255, 184, 0, 0.3)' : itemType === 'Participation Certificate' ? '1px solid rgba(0, 210, 255, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: '6px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600
-                    }}
-                  >
+                  <span className="achievement-category">
                     {getTypeIcon(itemType)}
                     {itemType}
                   </span>
@@ -137,6 +121,9 @@ export const PersonalAchievements = () => {
                 </div>
 
                 <h3 className="achievement-title">{item.title}</h3>
+                {item.badge && (
+                  <span className="achievement-badge-pill"><ShieldCheck size={14} />{item.badge}</span>
+                )}
                 
                 {item.category && (
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>
@@ -159,13 +146,13 @@ export const PersonalAchievements = () => {
                       rel="noopener noreferrer"
                       className="btn btn-achievement-verify"
                     >
-                      <span>View Certificate / Credential</span>
+                      <span>View credential</span>
                       <ExternalLink size={14} />
                     </a>
                   </div>
                 )}
               </div>
-            </div>
+            </article>
           );
         })}
       </div>

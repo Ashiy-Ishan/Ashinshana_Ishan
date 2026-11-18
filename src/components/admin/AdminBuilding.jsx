@@ -198,7 +198,7 @@ export const AdminBuilding = () => {
           </div>
         </div>
 
-        <div className="admin-form-sticky-bar">
+        <div className="admin-form-footer">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             <Save size={18} />
             <span>{saving ? 'Updating Radar...' : 'Save Radar Changes'}</span>

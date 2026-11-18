@@ -8,13 +8,11 @@ import { Footer } from './components/common/Footer';
 import { HeroSection } from './components/hero/HeroSection';
 import { RoleContent } from './components/role/RoleContent';
 import { AdminDashboard } from './components/admin/AdminDashboard';
-import { LoadingScreen } from './components/common/LoadingScreen';
 
 function PortfolioApp() {
   const [activeRole, setActiveRole] = useState('personal');
   const [activeSection, setActiveSection] = useState('home');
   const [isAdminView, setIsAdminView] = useState(false);
-  const [appLoading, setAppLoading] = useState(true);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -34,7 +32,7 @@ function PortfolioApp() {
   useEffect(() => {
     if (isAdminView || typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
 
-    const sectionIds = ['home', 'about', 'developer', 'skills', 'projects', 'published', 'creator', 'videos', 'contact'];
+    const sectionIds = ['home', 'about', 'currently', 'achievements', 'developer', 'skills', 'projects', 'published', 'creator', 'videos', 'contact'];
     const observers = [];
 
     sectionIds.forEach((id) => {
@@ -73,10 +71,6 @@ function PortfolioApp() {
 
   return (
     <div className="site-wrapper">
-      {appLoading && (
-        <LoadingScreen onFinished={() => setAppLoading(false)} />
-      )}
-
       <Navbar 
         activeSection={activeSection} 
         activeRole={activeRole} 

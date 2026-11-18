@@ -30,7 +30,7 @@ export const DeveloperSection = () => {
           <span>ENGINEERING & DEVELOPMENT</span>
         </div>
         <h2 className="section-title">
-          SOFTWARE <span className="title-gradient dev-gradient">DEVELOPER EXPERIENCE</span>
+          Software <span className="title-gradient dev-gradient">development</span>
         </h2>
         <p className="section-subtext">
           Turning algorithmic logic and architectural design into robust, performant, human-centric software.
@@ -46,9 +46,6 @@ export const DeveloperSection = () => {
               alt={`${cleanDevName} Software Engineer`}
               className="dev-avatar-img"
             />
-            <div className="dev-verified-badge" title="Full-Stack Developer">
-              <Terminal size={15} />
-            </div>
           </div>
 
           <div className="dev-profile-text">
@@ -129,7 +126,7 @@ export const DeveloperSection = () => {
         <div className="subsection-header">
           <div className="subsection-title-wrap">
             <Layers size={20} className="subsection-icon dev-icon" />
-            <h3 className="subsection-title">TECHNICAL SKILLS & PROFICIENCIES</h3>
+            <h3 className="subsection-title">Technical skills</h3>
           </div>
           <p className="subsection-subtitle">
             Database-driven competency catalog organized across full-stack software development.
@@ -144,7 +141,7 @@ export const DeveloperSection = () => {
         <div className="subsection-header">
           <div className="subsection-title-wrap">
             <Workflow size={20} className="subsection-icon dev-icon" />
-            <h3 className="subsection-title">FEATURED PROJECTS & CASE STUDIES</h3>
+            <h3 className="subsection-title">Projects &amp; case studies</h3>
           </div>
           <p className="subsection-subtitle">
             Explore selected production, backend, and frontend applications with source code and live previews.

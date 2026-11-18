@@ -44,19 +44,19 @@ export const AdminLogin = ({ onCancel }) => {
           <div className="admin-shield-icon">
             <Shield size={32} />
           </div>
-          <h2 className="login-title">Ashinshana Ishan CMS</h2>
-          <p className="login-subtitle">Portfolio Management & Database Portal</p>
+          <h1 className="login-title">Portfolio CMS</h1>
+          <p className="login-subtitle">Sign in to manage your portfolio.</p>
         </div>
 
         {inactivityNotice && !error && (
-          <div className="form-alert warning" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
+          <div className="form-alert warning" role="status" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
             <AlertCircle size={18} />
             <span>Session Timed Out: You were automatically logged out due to 2 minutes of inactivity. Please sign in again.</span>
           </div>
         )}
 
         {error && (
-          <div className="form-alert error" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
+          <div className="form-alert error" role="alert" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
             <AlertCircle size={18} />
             <span>{error}</span>
           </div>
@@ -94,12 +94,13 @@ export const AdminLogin = ({ onCancel }) => {
         {/* Standard Email & Password Login */}
         <form onSubmit={handleSubmit} className="admin-login-form">
           <div className="form-field">
-            <label htmlFor="admin-email">Authorized Email Address</label>
+            <label htmlFor="admin-email">Email address</label>
             <div className="input-icon-wrap">
               <Mail size={18} className="input-icon" />
               <input
                 id="admin-email"
                 type="email"
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ashinshanaishan@gmail.com"
@@ -116,6 +117,7 @@ export const AdminLogin = ({ onCancel }) => {
               <input
                 id="admin-password"
                 type="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -132,7 +134,7 @@ export const AdminLogin = ({ onCancel }) => {
                 <span>Verifying Credentials...</span>
               </>
             ) : (
-              <span>Enter Admin Dashboard</span>
+              <span>Sign in</span>
             )}
           </button>
         </form>
@@ -140,7 +142,7 @@ export const AdminLogin = ({ onCancel }) => {
         <div className="login-footer-actions">
           <a href="#home" className="btn-back-portfolio" onClick={onCancel}>
             <ArrowLeft size={16} />
-            <span>Return to Public Portfolio</span>
+            <span>Back to portfolio</span>
           </a>
         </div>
       </div>

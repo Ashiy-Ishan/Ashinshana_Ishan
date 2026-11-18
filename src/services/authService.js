@@ -7,7 +7,9 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured, AUTHORIZED_ADMIN_EMAIL } from '../config/firebase';
 
-const SESSION_AUTH_KEY = 'ashiy_portfolio_session_auth';
+const isVerifiedAdmin = (user) =>
+  user?.emailVerified === true &&
+  user.email?.toLowerCase() === AUTHORIZED_ADMIN_EMAIL.toLowerCase();
 export const COOKIE_LAST_ACTIVITY = 'admin_last_activity';
 export const COOKIE_SESSION_ACTIVE = 'admin_session_active';
 export const INACTIVITY_TIMEOUT_MS = 2 * 60 * 1000;
@@ -67,143 +69,63 @@ export const authService = {
   },
 
   async login(email, password) {
-    this.validateAdminEmail(email);
+    const normalizedEmail = email.trim();
+    this.validateAdminEmail(normalizedEmail);
+    if (!isFirebaseConfigured || !auth) {
+      throw new Error('Admin authentication is unavailable.');
+    }
 
-    if (isFirebaseConfigured && auth) {
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        if (userCredential.user && userCredential.user.email?.toLowerCase().trim() !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-          await signOut(auth);
-          cookieUtils.clearSessionCookies();
-          throw new Error(`Access Denied: Only ${AUTHORIZED_ADMIN_EMAIL} is authorized to access the CMS.`);
-        }
-        cookieUtils.recordActivity();
-        return userCredential.user;
-      } catch (err) {
-        throw new Error(this.formatAuthError(err));
-      }
-    } else {
-      if (email.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase() && password && password.length >= 6) {
-        const mockUser = {
-          uid: 'admin-ashinshana-001',
-          email: AUTHORIZED_ADMIN_EMAIL,
-          displayName: 'Ashiy Ishan (Admin)',
-          isDemo: false
-        };
-        sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(mockUser));
-        cookieUtils.recordActivity();
-        return mockUser;
-      } else {
-        throw new Error(`Access Denied: Invalid credentials for ${AUTHORIZED_ADMIN_EMAIL}.`);
-      }
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, normalizedEmail, password);
+      return await this.finishLogin(user);
+    } catch (error) {
+      throw new Error(this.formatAuthError(error));
     }
   },
 
   async loginWithGoogle() {
-    if (isFirebaseConfigured && auth && googleProvider) {
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
+    if (!isFirebaseConfigured || !auth || !googleProvider) {
+      throw new Error('Admin authentication is unavailable.');
+    }
 
-        if (!user.email || user.email.toLowerCase().trim() !== AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-          await signOut(auth);
-          cookieUtils.clearSessionCookies();
-          throw new Error(`Access Denied (${user.email}): Only ${AUTHORIZED_ADMIN_EMAIL} is authorized to access the CMS.`);
-        }
-        cookieUtils.recordActivity();
-        return user;
-      } catch (err) {
-        throw new Error(this.formatAuthError(err));
-      }
-    } else {
-      const mockUser = {
-        uid: 'google-admin-ashinshana-001',
-        email: AUTHORIZED_ADMIN_EMAIL,
-        displayName: 'Ashiy Ishan (Google Admin)'
-      };
-      sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(mockUser));
-      cookieUtils.recordActivity();
-      return mockUser;
+    try {
+      const { user } = await signInWithPopup(auth, googleProvider);
+      return await this.finishLogin(user);
+    } catch (error) {
+      throw new Error(this.formatAuthError(error));
     }
   },
 
-  async logout() {
-    if (isFirebaseConfigured && auth) {
-      await signOut(auth);
+  async finishLogin(user) {
+    if (!isVerifiedAdmin(user)) {
+      await this.logout();
+      throw new Error('Sign in with the verified admin account.');
     }
-    sessionStorage.removeItem(SESSION_AUTH_KEY);
-    localStorage.removeItem('ashiy_portfolio_mock_auth');
+    cookieUtils.recordActivity();
+    return user;
+  },
+
+  async logout() {
+    if (auth) await signOut(auth);
     cookieUtils.clearSessionCookies();
     return true;
   },
 
   async resetPassword(email) {
-    this.validateAdminEmail(email);
-    if (isFirebaseConfigured && auth) {
-      await sendPasswordResetEmail(auth, email);
-      return true;
-    } else {
-      return true;
+    const normalizedEmail = email.trim();
+    this.validateAdminEmail(normalizedEmail);
+    if (!isFirebaseConfigured || !auth) {
+      throw new Error('Password reset is unavailable.');
     }
+    await sendPasswordResetEmail(auth, normalizedEmail);
+    return true;
   },
 
   subscribe(callback) {
-    if (isFirebaseConfigured && auth) {
-      callback(this.getCurrentUser());
-      return onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          if (user.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-            callback(user);
-          } else {
-            console.warn(`Unauthorized login attempt by ${user.email}. Signing out.`);
-            await signOut(auth);
-            callback(null);
-          }
-        } else {
-          callback(null);
-        }
-      });
-    } else {
-      const stored = sessionStorage.getItem(SESSION_AUTH_KEY) || localStorage.getItem('ashiy_portfolio_mock_auth');
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored);
-          if (parsed.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-            callback(parsed);
-          } else {
-            sessionStorage.removeItem(SESSION_AUTH_KEY);
-            localStorage.removeItem('ashiy_portfolio_mock_auth');
-            callback(null);
-          }
-        } catch (e) {
-          callback(null);
-        }
-      } else {
-        callback(null);
-      }
-      return () => {};
+    if (auth) {
+      return onAuthStateChanged(auth, (user) => callback(isVerifiedAdmin(user) ? user : null));
     }
-  },
-
-  getCurrentUser() {
-    if (isFirebaseConfigured && auth) {
-      const user = auth.currentUser;
-      if (user && user.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-        return user;
-      }
-      return null;
-    }
-    const stored = sessionStorage.getItem(SESSION_AUTH_KEY) || localStorage.getItem('ashiy_portfolio_mock_auth');
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed.email?.toLowerCase().trim() === AUTHORIZED_ADMIN_EMAIL.toLowerCase()) {
-          return parsed;
-        }
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
+    callback(null);
+    return () => {};
   }
 };

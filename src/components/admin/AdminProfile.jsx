@@ -384,7 +384,7 @@ export const AdminProfile = () => {
         </div>
 
         {/* Form Submit Bar */}
-        <div className="admin-form-sticky-bar">
+        <div className="admin-form-footer">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             <Save size={18} />
             <span>{saving ? 'Saving Changes...' : 'Save Profile Changes'}</span>

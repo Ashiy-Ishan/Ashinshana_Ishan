@@ -1,41 +1,26 @@
-// api/imagekit-auth.js
-// Vercel Serverless Function for ImageKit Client-Side Auth Parameters
 const ImageKit = require('imagekit');
+const requireAdmin = require('../server/requireAdmin');
 
 module.exports = async function handler(req, res) {
-  // CORS
-  const origin = req.headers.origin;
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Use POST.' });
+  }
+  if (!(await requireAdmin(req, res))) return;
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+  const publicKey = process.env.IMAGEKIT_PUBLIC_KEY || process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY;
+  const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT || process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/x2eerczu0';
+  if (!privateKey || !publicKey) {
+    return res.status(503).json({ error: 'Image uploads are unavailable.' });
   }
 
   try {
-    const privateKey = process.env.IMAGEKIT_PRIVATE_KEY || process.env.REACT_APP_IMAGEKIT_PRIVATE_KEY;
-    const publicKey = process.env.IMAGEKIT_PUBLIC_KEY || process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY;
-    const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT || process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/x2eerczu0';
-
-    if (!privateKey) {
-      return res.status(500).json({ error: 'IMAGEKIT_PRIVATE_KEY is missing in Vercel environment variables.' });
-    }
-
-    const imagekit = new ImageKit({
-      publicKey: publicKey || 'public_key',
-      privateKey,
-      urlEndpoint
-    });
-
-    const authParams = imagekit.getAuthenticationParameters();
-    return res.status(200).json({
-      ...authParams,
-      publicKey: publicKey || imagekit.options.publicKey
-    });
-  } catch (error) {
-    console.error('ImageKit auth error:', error);
-    return res.status(500).json({ error: error.message || 'Failed to generate ImageKit authentication parameters.' });
+    const imagekit = new ImageKit({ publicKey, privateKey, urlEndpoint });
+    const expire = Math.floor(Date.now() / 1000) + 120;
+    return res.status(200).json({ ...imagekit.getAuthenticationParameters(undefined, expire), publicKey });
+  } catch {
+    return res.status(500).json({ error: 'Could not authorize the image upload.' });
   }
 };
-

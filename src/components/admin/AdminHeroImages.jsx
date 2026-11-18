@@ -28,9 +28,9 @@ export const AdminHeroImages = () => {
     profileImage: profile?.profileImage || initialData.profile.profileImage || '',
     
     // Hero Standing Role Portraits
-    heroImagePersonal: profile?.heroImagePersonal || profile?.personalImage || initialData.profile.heroImagePersonal || '',
-    heroImageDeveloper: profile?.heroImageDeveloper || profile?.developerImage || initialData.profile.heroImageDeveloper || '',
-    heroImageCreator: profile?.heroImageCreator || profile?.creatorImage || initialData.profile.heroImageCreator || ''
+    heroImagePersonal: profile?.heroImagePersonal || '',
+    heroImageDeveloper: profile?.heroImageDeveloper || '',
+    heroImageCreator: profile?.heroImageCreator || ''
   });
 
   const [uploadingRole, setUploadingRole] = useState(null);
@@ -46,9 +46,9 @@ export const AdminHeroImages = () => {
         developerImage: profile.developerImage || initialData.profile.developerImage || '',
         creatorImage: profile.creatorImage || initialData.profile.creatorImage || '',
         profileImage: profile.profileImage || initialData.profile.profileImage || '',
-        heroImagePersonal: profile.heroImagePersonal || profile.personalImage || initialData.profile.heroImagePersonal || '',
-        heroImageDeveloper: profile.heroImageDeveloper || profile.developerImage || initialData.profile.heroImageDeveloper || '',
-        heroImageCreator: profile.heroImageCreator || profile.creatorImage || initialData.profile.heroImageCreator || ''
+        heroImagePersonal: profile.heroImagePersonal || '',
+        heroImageDeveloper: profile.heroImageDeveloper || '',
+        heroImageCreator: profile.heroImageCreator || ''
       });
     }
   }, [profile]);
@@ -213,7 +213,7 @@ export const AdminHeroImages = () => {
             </h3>
           </div>
 
-          <div className="role-images-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+          <div className="role-images-grid">
             {avatarConfigs.map((config) => {
               const currentUrl = images[config.key];
               const isUploading = uploadingRole === config.key;
@@ -312,7 +312,7 @@ export const AdminHeroImages = () => {
                         )}
                         <input
                           type="file"
-                          accept="image/*"
+                          accept="image/png,image/jpeg,image/webp,image/gif"
                           disabled={isUploading || saving}
                           onChange={(e) => handleFileUpload(config.key, e.target.files[0])}
                           className="file-hidden-input"
@@ -358,14 +358,12 @@ export const AdminHeroImages = () => {
                   {/* Image Live Preview */}
                   <div className="role-preview-container">
                     {currentUrl ? (
-                      <img 
-                        src={currentUrl} 
+                      <img
+                        key={currentUrl}
+                        src={currentUrl}
                         alt={config.title} 
                         className="role-preview-img"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = initialData.profile[config.key] || '';
-                        }}
+                        onError={(event) => { event.currentTarget.hidden = true; }}
                       />
                     ) : (
                       <div className="role-preview-placeholder">
@@ -378,8 +376,9 @@ export const AdminHeroImages = () => {
                   {/* Image URL & File Upload controls */}
                   <div className="role-controls-body">
                     <div className="form-field">
-                      <label>Hero Image CDN URL</label>
+                      <label htmlFor={`hero-url-${config.key}`}>Hero image URL</label>
                       <input
+                        id={`hero-url-${config.key}`}
                         type="url"
                         value={currentUrl}
                         onChange={(e) => handleUrlChange(config.key, e.target.value)}
@@ -407,7 +406,7 @@ export const AdminHeroImages = () => {
                         )}
                         <input
                           type="file"
-                          accept="image/*"
+                          accept="image/png,image/jpeg,image/webp,image/gif"
                           disabled={isUploading || saving}
                           onChange={(e) => handleFileUpload(config.key, e.target.files[0])}
                           className="file-hidden-input"

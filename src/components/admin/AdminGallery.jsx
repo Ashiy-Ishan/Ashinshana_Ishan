@@ -195,20 +195,11 @@ export const AdminGallery = () => {
             <div key={item.id || item.url} className="gallery-admin-card">
               <div className="gallery-media-frame">
                 <img src={item.url} alt={item.title} loading="lazy" />
-                <button
-                  type="button"
-                  className="btn-preview-zoom"
-                  onClick={() => setPreviewItem(item)}
-                  title="Full Preview"
-                >
-                  <Eye size={16} />
-                </button>
-                <span className="gallery-category-badge">{item.category}</span>
               </div>
 
               <div className="gallery-card-body">
                 <h4 className="gallery-item-title">{item.title}</h4>
-                <p className="gallery-item-date">{item.date}</p>
+                <p className="gallery-item-date">{[item.category, item.date].filter(Boolean).join(' · ')}</p>
 
                 {/* Quick Role Assignment Buttons */}
                 <div className="gallery-role-assignment-box">
@@ -217,6 +208,7 @@ export const AdminGallery = () => {
                     <button
                       type="button"
                       className={`btn-assign ${isCurrentProfile ? 'active' : ''}`}
+                      aria-pressed={isCurrentProfile}
                       onClick={() => handleSetAs(item, 'profile')}
                       title="Set as Main Profile Picture"
                     >
@@ -225,6 +217,7 @@ export const AdminGallery = () => {
                     <button
                       type="button"
                       className={`btn-assign ${isCurrentHeroPersonal ? 'active' : ''}`}
+                      aria-pressed={isCurrentHeroPersonal}
                       onClick={() => handleSetAs(item, 'heroPersonal')}
                       title="Set as Split Hero Portrait"
                     >
@@ -233,6 +226,7 @@ export const AdminGallery = () => {
                     <button
                       type="button"
                       className={`btn-assign ${isCurrentHeroDev ? 'active' : ''}`}
+                      aria-pressed={isCurrentHeroDev}
                       onClick={() => handleSetAs(item, 'heroDeveloper')}
                       title="Set as Developer Hero Portrait"
                     >
@@ -241,6 +235,7 @@ export const AdminGallery = () => {
                     <button
                       type="button"
                       className={`btn-assign ${isCurrentHeroCreator ? 'active' : ''}`}
+                      aria-pressed={isCurrentHeroCreator}
                       onClick={() => handleSetAs(item, 'heroCreator')}
                       title="Set as Creator Hero Portrait"
                     >
@@ -250,6 +245,9 @@ export const AdminGallery = () => {
                 </div>
 
                 <div className="gallery-card-footer">
+                  <button type="button" className="btn btn-outline" onClick={() => setPreviewItem(item)}>
+                    <Eye size={15} aria-hidden="true" /> Preview
+                  </button>
                   <button
                     type="button"
                     className="btn-delete-media"

@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { portfolioService } from '../services/portfolioService';
+import { useAuth } from './AuthContext';
 import { initialData } from '../data/initialData';
 
 const PortfolioContext = createContext(null);
 
 export const PortfolioProvider = ({ children }) => {
+  const { currentUser } = useAuth();
   const [profile, setProfile] = useState(initialData.profile);
   const [skills, setSkills] = useState(initialData.skills);
   const [skillCategories] = useState(initialData.skillCategories);
@@ -18,6 +20,7 @@ export const PortfolioProvider = ({ children }) => {
   const [achievements, setAchievements] = useState(initialData.achievements);
   const [siteSettings, setSiteSettings] = useState(initialData.siteSettings);
   const [contactMessages, setContactMessages] = useState([]);
+  const [inboxError, setInboxError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -35,8 +38,7 @@ export const PortfolioProvider = ({ children }) => {
         tl,
         gal,
         certs,
-        settings,
-        msgs
+        settings
       ] = await Promise.all([
         portfolioService.getProfile(),
         portfolioService.getSkills(),
@@ -48,8 +50,7 @@ export const PortfolioProvider = ({ children }) => {
         portfolioService.getTimeline(),
         portfolioService.getGallery(),
         portfolioService.getAchievements(),
-        portfolioService.getSiteSettings(),
-        portfolioService.getContactMessages()
+        portfolioService.getSiteSettings()
       ]);
 
       setProfile(prof);
@@ -63,7 +64,6 @@ export const PortfolioProvider = ({ children }) => {
       setGallery(gal);
       setAchievements(certs);
       setSiteSettings(settings);
-      setContactMessages(msgs);
       setError(null);
     } catch (err) {
       console.warn('Error loading portfolio data, using baseline seed data:', err);
@@ -132,11 +132,6 @@ export const PortfolioProvider = ({ children }) => {
       (err) => isMounted && setError(err.message)
     );
 
-    const unsubMessages = portfolioService.subscribeToContactMessages(
-      (data) => isMounted && setContactMessages(data),
-      (err) => isMounted && setError(err.message)
-    );
-
     setLoading(false);
 
     return () => {
@@ -152,9 +147,29 @@ export const PortfolioProvider = ({ children }) => {
       if (typeof unsubGallery === 'function') unsubGallery();
       if (typeof unsubAchievements === 'function') unsubAchievements();
       if (typeof unsubSettings === 'function') unsubSettings();
-      if (typeof unsubMessages === 'function') unsubMessages();
     };
   }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.removeItem('ashiy_portfolio_data_contactMessages');
+    } catch {
+      // Storage may be disabled in the browser.
+    }
+  }, []);
+
+  useEffect(() => {
+    setInboxError(false);
+    if (!currentUser) {
+      setContactMessages([]);
+      return;
+    }
+
+    return portfolioService.subscribeToContactMessages(setContactMessages, () => {
+      setContactMessages([]);
+      setInboxError(true);
+    });
+  }, [currentUser]);
 
   const updateProfile = async (data) => {
     const updated = await portfolioService.updateProfile(data);
@@ -300,13 +315,6 @@ export const PortfolioProvider = ({ children }) => {
     return updated;
   };
 
-  const submitContactMessage = async (message) => {
-    const res = await portfolioService.submitContactMessage(message);
-    const msgs = await portfolioService.getContactMessages();
-    setContactMessages(msgs);
-    return res;
-  };
-
   const deleteContactMessage = async (msgId) => {
     await portfolioService.deleteContactMessage(msgId);
     setContactMessages((prev) => prev.filter((m) => m.id !== msgId));
@@ -325,7 +333,8 @@ export const PortfolioProvider = ({ children }) => {
     gallery,
     achievements,
     siteSettings,
-    contactMessages,
+    contactMessages: currentUser ? contactMessages : [],
+    inboxError,
     loading,
     error,
     refreshData: loadAllData,
@@ -353,7 +362,7 @@ export const PortfolioProvider = ({ children }) => {
     saveAchievement,
     deleteAchievement,
     updateSiteSettings,
-    submitContactMessage,
+    submitContactMessage: portfolioService.submitContactMessage,
     deleteContactMessage
   };
 

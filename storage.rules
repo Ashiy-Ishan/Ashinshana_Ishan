@@ -5,6 +5,7 @@ service firebase.storage {
     // Helper function to check if the requesting user is the authorized administrator
     function isAdmin() {
       return request.auth != null && 
+             request.auth.token.email_verified == true &&
              request.auth.token.email != null &&
              request.auth.token.email.lower() == 'ashinshanaishan@gmail.com';
     }
@@ -12,7 +13,7 @@ service firebase.storage {
     // Helper function to validate uploaded file size & image format
     function isValidImage() {
       return request.resource.size <= 5 * 1024 * 1024 &&
-             request.resource.contentType.matches('image/.*');
+             request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
     }
 
     match /{allPaths=**} {
