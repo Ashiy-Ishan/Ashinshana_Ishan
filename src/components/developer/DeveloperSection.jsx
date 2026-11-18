@@ -8,6 +8,7 @@ import {
   GitBranch
 } from 'lucide-react';
 import { Github } from '../common/Icons';
+import { RolePortrait } from '../common/RolePortrait';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { SkillsGrid } from './SkillsGrid';
 import { ProjectsShowcase } from './ProjectsShowcase';
@@ -40,13 +41,12 @@ export const DeveloperSection = () => {
       {/* Developer Profile Header Card (Positioned & Symmetrical to Channel Card) */}
       <div className="dev-profile-header">
         <div className="dev-profile-left">
-          <div className="dev-avatar-wrapper">
-            <img
-              src={profile?.developerImage || profile?.heroImageDeveloper || profile?.profileImage}
-              alt={`${cleanDevName} Software Engineer`}
-              className="dev-avatar-img"
-            />
-          </div>
+          <RolePortrait
+            source={profile?.developerImage || profile?.heroImageDeveloper || profile?.profileImage}
+            alt={`${cleanDevName} Software Engineer`}
+            className="dev-avatar-wrapper"
+            imageClassName="dev-avatar-img"
+          />
 
           <div className="dev-profile-text">
             <div className="dev-title-row">

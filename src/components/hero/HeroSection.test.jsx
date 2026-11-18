@@ -15,7 +15,7 @@ test('leaves the hero text-only when only an avatar or old bundled portrait is c
   expect(container.querySelector('#home img')).toBeNull();
 });
 
-test('removes a failed portrait and renders the configured image for the next role', () => {
+test('reveals loaded portraits, removes a failed portrait, and renders the configured image for the next role', () => {
   usePortfolio.mockReturnValue({
     profile: {
       heroImagePersonal: 'https://ik.imagekit.io/example/personal.webp',
@@ -25,12 +25,17 @@ test('removes a failed portrait and renders the configured image for the next ro
   const { container, rerender } = render(<HeroSection activeRole="personal" />);
   const portrait = container.querySelector('#home img');
   expect(portrait).toHaveAttribute('src', 'https://ik.imagekit.io/example/personal.webp');
+  expect(portrait.parentElement).toHaveAttribute('data-image-state', 'loading');
+  fireEvent.load(portrait);
+  expect(portrait.parentElement).toHaveAttribute('data-image-state', 'ready');
 
   fireEvent.error(portrait);
   expect(container.querySelector('#home img')).toBeNull();
 
   rerender(<HeroSection activeRole="developer" />);
-  expect(container.querySelector('#home img')).toHaveAttribute('src', 'https://ik.imagekit.io/example/developer.webp');
+  const developerPortrait = container.querySelector('#home img');
+  expect(developerPortrait).toHaveAttribute('src', 'https://ik.imagekit.io/example/developer.webp');
+  expect(developerPortrait.parentElement).toHaveAttribute('data-image-state', 'loading');
   expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('I build robust software');
 });
 

@@ -469,29 +469,49 @@ body {
   background: color-mix(in srgb, var(--hero-accent) 87%, var(--text-primary));
 }
 
+.role-portrait-frame {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.role-portrait-frame img {
+  display: block;
+  background: transparent;
+}
+
+.role-portrait-frame[data-image-state="loading"] img {
+  opacity: 0;
+}
+
 .hero-visual-col {
-  min-width: 0;
-  padding: clamp(0.65rem, 2vw, 1.35rem);
+  width: clamp(7.75rem, 13vw, 11rem);
+  max-width: 100%;
+  aspect-ratio: 1;
+  margin-top: 1.25rem;
+  padding: 0.45rem;
   border: 1px solid var(--hero-rule);
-  border-radius: 1.6rem;
-  background: color-mix(in srgb, var(--hero-accent) 6%, var(--bg-surface));
+  border-radius: 44% 56% 43% 57% / 56% 46% 54% 44%;
+  background:
+    radial-gradient(ellipse at 70% 25%, var(--hero-wash), transparent 75%),
+    color-mix(in srgb, var(--hero-accent) 10%, var(--bg-surface));
+  box-shadow: var(--surface-shadow);
 }
 
 .hero-portrait {
-  display: block;
   width: 100%;
-  max-height: min(32rem, 64vh);
+  height: 100%;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: inherit;
 }
 
-@media (max-width: 768px) {
-  .hero-content-wrapper {
-    grid-template-columns: minmax(0, 1fr);
+@media (prefers-reduced-motion: no-preference) {
+  .role-portrait-frame[data-image-state="ready"] img {
+    animation: reveal-portrait 0.48s var(--ease-cinematic) both;
   }
 
-  .hero-portrait {
-    max-height: min(22rem, 56vh);
+  @keyframes reveal-portrait {
+    from { opacity: 0; transform: translateY(5px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 }
 
@@ -1645,7 +1665,7 @@ body {
   font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.85rem;
   flex: 1;
 }
 
@@ -1653,7 +1673,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.85rem;
 }
 
 .tech-tag {
@@ -1782,7 +1802,7 @@ body {
   font-size: 0.88rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.85rem;
   flex: 1;
 }
 
@@ -4108,7 +4128,7 @@ body {
   color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.6;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.85rem;
   flex: 1;
 }
 
@@ -4324,7 +4344,7 @@ body {
 /* Public cards */
 .site-wrapper {
   --card-radius: clamp(1.15rem, 2.35vw, 1.85rem);
-  --card-padding: clamp(1rem, 2.3vw, 1.65rem);
+  --card-padding: clamp(0.9rem, 1.85vw, 1.25rem);
 }
 
 .site-wrapper :is(.project-editorial-card, .achievement-card, .video-card, .skill-card-modern, .published-item-card, .currently-card, .contact-panel-card, .contact-form-panel, .personal-stat-card, .dev-stat-card, .creator-stat-card) {
@@ -4357,7 +4377,8 @@ body {
 
 .site-wrapper :is(.project-media-wrapper, .video-thumbnail-container, .achievement-media-box) {
   height: auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 2 / 1;
+  max-height: 14rem;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -4762,8 +4783,8 @@ body {
   }
 
   .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid) > :is(:nth-child(4n + 1), :nth-child(4n), :last-child:nth-child(odd)) > :is(.project-media-wrapper, .achievement-media-box, .video-thumbnail-container) {
-    aspect-ratio: 2.15 / 1;
-    max-height: 18rem;
+    aspect-ratio: 2.65 / 1;
+    max-height: 15rem;
   }
 }
 

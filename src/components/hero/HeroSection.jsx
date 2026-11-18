@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowRight, Code2, User, Video } from 'lucide-react';
-import { getImageKitUrl } from '../../config/imagekit';
+import { RolePortrait } from '../common/RolePortrait';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { roleSections } from '../../data/portfolioNavigation';
 
@@ -37,22 +37,13 @@ const roles = {
   }
 };
 
-const getPortraitUrl = (value) => {
-  if (typeof value !== 'string' || !value.trim()) return '';
-
-  const image = value.trim();
-  if (/^\/?static\/media\/(person|developer|youtuber)\.[\da-f]+\.png$/i.test(image)) return '';
-  if (image.startsWith('/static/')) return image;
-  if (/^(https?:\/\/|\/\/|data:image\/|blob:)/i.test(image)) return image;
-  return getImageKitUrl(image);
-};
+const bundledPortrait = /^\/?static\/media\/(person|developer|youtuber)\.[\da-f]+\.png$/i;
 
 export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveRole }) => {
   const { profile, siteSettings, publishedProjects } = usePortfolio();
-  const [failedPortraits, setFailedPortraits] = useState(() => new Set());
   const current = roles[activeRole] || roles.personal;
-  const portrait = getPortraitUrl(profile?.[current.imageField]);
-  const showPortrait = portrait && !failedPortraits.has(portrait);
+  const source = profile?.[current.imageField];
+  const portrait = typeof source === 'string' ? source.trim() : '';
   const showRoleContent = (activeRole !== 'developer' || siteSettings?.showDeveloperSection !== false) &&
     (activeRole !== 'creator' || siteSettings?.showCreatorSection !== false);
   const showContact = siteSettings?.showContactForm !== false;
@@ -88,17 +79,14 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
               ))}
             </div>
           )}
-          {showPortrait && (
-            <div className="hero-visual-col">
-              <img
-                key={portrait}
-                src={portrait}
-                alt=""
-                className="hero-portrait"
-                fetchPriority="high"
-                onError={() => setFailedPortraits((previous) => new Set(previous).add(portrait))}
-              />
-            </div>
+          {portrait && !bundledPortrait.test(portrait) && (
+            <RolePortrait
+              source={portrait}
+              alt=""
+              className="hero-visual-col"
+              imageClassName="hero-portrait"
+              priority
+            />
           )}
         </div>
 

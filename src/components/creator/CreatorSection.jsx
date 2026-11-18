@@ -10,6 +10,7 @@ import {
   Film 
 } from 'lucide-react';
 import { Youtube } from '../common/Icons';
+import { RolePortrait } from '../common/RolePortrait';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 const ChannelStat = ({ value, label, icon: Icon, colorClass }) => (
@@ -23,7 +24,7 @@ const ChannelStat = ({ value, label, icon: Icon, colorClass }) => (
 );
 
 export const CreatorSection = () => {
-  const { youtubeChannel, youtubeVideos } = usePortfolio();
+  const { youtubeChannel, youtubeVideos, profile } = usePortfolio();
   const [activeTab, setActiveTab] = useState('ALL');
 
   const channel = youtubeChannel || {};
@@ -58,13 +59,12 @@ export const CreatorSection = () => {
       {/* Enhanced Channel Profile Header (Clean, Unboxed, Spacious) */}
       <div className="creator-profile-header">
         <div className="creator-profile-left">
-          <div className="creator-avatar-wrapper">
-            <img
-              src={channel.channelImage || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'}
-              alt={channel.channelName || 'CURLYmax YouTube Channel'}
-              className="creator-avatar-img"
-            />
-          </div>
+          <RolePortrait
+            source={channel.channelImage || profile?.creatorImage || profile?.heroImageCreator}
+            alt={channel.channelName || 'CURLYmax YouTube Channel'}
+            className="creator-avatar-wrapper"
+            imageClassName="creator-avatar-img"
+          />
 
           <div className="creator-profile-text">
             <div className="creator-title-row">

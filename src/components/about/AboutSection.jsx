@@ -12,6 +12,7 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
+import { RolePortrait } from '../common/RolePortrait';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { CurrentlyBuilding } from './CurrentlyBuilding';
 
@@ -85,13 +86,12 @@ export const AboutSection = () => {
       {/* Personal Profile Header Card */}
       <div className="personal-profile-header">
         <div className="personal-profile-left">
-          <div className="personal-avatar-wrapper">
-            <img 
-              src={profile?.personalImage || profile?.heroImagePersonal || profile?.profileImage} 
-              alt={cleanFullName} 
-              className="personal-avatar-img"
-            />
-          </div>
+          <RolePortrait
+            source={profile?.personalImage || profile?.heroImagePersonal || profile?.profileImage}
+            alt={cleanFullName}
+            className="personal-avatar-wrapper"
+            imageClassName="personal-avatar-img"
+          />
 
           <div className="personal-profile-text">
             <div className="personal-title-row">
