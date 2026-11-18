@@ -39,7 +39,7 @@ const roles = {
 
 const bundledPortrait = /^\/?static\/media\/(person|developer|youtuber)\.[\da-f]+\.png$/i;
 
-export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveRole }) => {
+export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveRole, showPortrait = false }) => {
   const { profile, siteSettings, publishedProjects } = usePortfolio();
   const current = roles[activeRole] || roles.personal;
   const source = profile?.[current.imageField];
@@ -96,7 +96,7 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
           <div className="portfolio-map-canvas">
             <div className="portfolio-map-hub" aria-hidden="true">
               <span className="map-hub-monogram">A</span>
-              {portrait && !bundledPortrait.test(portrait) && (
+              {showPortrait && portrait && !bundledPortrait.test(portrait) && (
                 <RolePortrait
                   key={activeRole}
                   source={portrait}

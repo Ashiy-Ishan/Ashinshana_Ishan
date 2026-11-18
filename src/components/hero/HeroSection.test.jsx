@@ -5,13 +5,19 @@ import { HeroSection } from './HeroSection';
 
 jest.mock('../../context/PortfolioContext', () => ({ usePortfolio: jest.fn() }));
 
+test('does not load a configured hero portrait by default', () => {
+  usePortfolio.mockReturnValue({ profile: { heroImagePersonal: 'https://ik.imagekit.io/example/personal.webp' } });
+  const { container } = render(<HeroSection activeRole="personal" />);
+  expect(container.querySelector('#home img')).toBeNull();
+});
+
 test('leaves the hero text-only when only an avatar or old bundled portrait is configured', () => {
   usePortfolio.mockReturnValue({ profile: { profileImage: '/avatar.png' } });
-  const { container, rerender } = render(<HeroSection activeRole="personal" />);
+  const { container, rerender } = render(<HeroSection showPortrait activeRole="personal" />);
   expect(container.querySelector('#home img')).toBeNull();
 
   usePortfolio.mockReturnValue({ profile: { heroImagePersonal: '/static/media/person.e7fd88a0.png' } });
-  rerender(<HeroSection activeRole="personal" />);
+  rerender(<HeroSection showPortrait activeRole="personal" />);
   expect(container.querySelector('#home img')).toBeNull();
 });
 
@@ -22,7 +28,7 @@ test('reveals loaded portraits, removes a failed portrait, and renders the confi
       heroImageDeveloper: 'https://ik.imagekit.io/example/developer.webp'
     }
   });
-  const { container, rerender } = render(<HeroSection activeRole="personal" />);
+  const { container, rerender } = render(<HeroSection showPortrait activeRole="personal" />);
   const portrait = container.querySelector('#portfolio-map .portfolio-map-hub img');
   expect(portrait).toHaveAttribute('src', 'https://ik.imagekit.io/example/personal.webp');
   expect(portrait.parentElement).toHaveAttribute('data-image-state', 'loading');
@@ -32,7 +38,7 @@ test('reveals loaded portraits, removes a failed portrait, and renders the confi
   fireEvent.error(portrait);
   expect(container.querySelector('#home img')).toBeNull();
 
-  rerender(<HeroSection activeRole="developer" />);
+  rerender(<HeroSection showPortrait activeRole="developer" />);
   const developerPortrait = container.querySelector('#portfolio-map .portfolio-map-hub img');
   expect(developerPortrait).toHaveAttribute('src', 'https://ik.imagekit.io/example/developer.webp');
   expect(developerPortrait.parentElement).toHaveAttribute('data-image-state', 'loading');
