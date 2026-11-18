@@ -25,7 +25,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "test:playwright": "node tests/browser/playwright.cjs",
+    "test:selenium": "node tests/browser/selenium.cjs"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +48,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "gh-pages": "^6.3.0",
+    "playwright": "^1.65.1",
+    "selenium-webdriver": "^4.53.0"
   }
 }
