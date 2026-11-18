@@ -37,13 +37,18 @@
   font-size: clamp(2.85rem, 6.2vw, 6.2rem);
 }
 
+.hero-orbit-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
 .portfolio-map {
   min-width: 0;
-  padding: clamp(0.8rem, 2vw, 1.3rem);
-  border: 1px solid var(--border-subtle);
-  border-radius: clamp(1.35rem, 3vw, 2.75rem);
-  background: var(--bg-surface-glass);
-  box-shadow: var(--surface-shadow);
 }
 
 .portfolio-map h2 {
@@ -58,9 +63,8 @@
 
 .portfolio-map-canvas {
   position: relative;
-  min-height: clamp(12rem, 25vw, 17rem);
+  min-height: clamp(15.5rem, 29vw, 22rem);
   isolation: isolate;
-  border-radius: 50% 46% 45% 51% / 50% 51% 46% 45%;
   background: radial-gradient(ellipse closest-side, color-mix(in srgb, var(--hero-accent) 13%, transparent), transparent);
 }
 
@@ -113,14 +117,36 @@
   left: 50%;
   display: grid;
   place-items: center;
-  width: 3rem;
-  height: 3rem;
+  width: clamp(7rem, 14.5vw, 12.5rem);
+  aspect-ratio: 1;
   border: 1px solid var(--hero-rule);
   border-radius: 44% 56% 49% 51% / 55% 48% 52% 45%;
   background: color-mix(in srgb, var(--hero-accent) 12%, var(--bg-surface));
   box-shadow: 0 0 0 0.4rem color-mix(in srgb, var(--hero-accent) 7%, transparent);
   color: var(--hero-accent);
-  font: 600 1.5rem var(--font-display);
+  font: 600 clamp(2rem, 4vw, 3rem) var(--font-display);
+  overflow: hidden;
+}
+
+.map-portrait {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.map-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.map-hub-monogram {
+  transition: opacity var(--transition-fast);
+}
+
+.portfolio-map-hub:has([data-image-state="ready"]) .map-hub-monogram {
+  opacity: 0;
 }
 
 .map-node {
@@ -138,25 +164,25 @@
   font: 700 clamp(0.77rem, 1.5vw, 0.9rem) var(--font-main);
   white-space: nowrap;
   cursor: pointer;
-  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .map-node-personal {
   --node-accent: var(--accent-cyan);
-  top: 16.67%;
+  top: 14%;
   left: 50%;
 }
 
 .map-node-developer {
   --node-accent: var(--accent-dev);
-  top: 72.5%;
-  left: 26.75%;
+  top: 83.33%;
+  left: 19.5%;
 }
 
 .map-node-creator {
   --node-accent: var(--accent-creator);
-  top: 72.5%;
-  left: 73.25%;
+  top: 83.33%;
+  left: 80.5%;
 }
 
 .map-node svg {
@@ -172,6 +198,7 @@
   border-color: var(--node-accent);
   background: var(--node-accent);
   color: var(--accent-ink);
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--node-accent) 18%, transparent);
 }
 
 .map-node[aria-pressed="true"] svg {
@@ -180,8 +207,7 @@
 
 .portfolio-map-branch {
   margin-top: 0.35rem;
-  padding-block: 0.85rem 0.15rem;
-  border-top: 1px solid var(--border-subtle);
+  padding-block: 0.35rem 0.15rem;
   text-align: center;
 }
 

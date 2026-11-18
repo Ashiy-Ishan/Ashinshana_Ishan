@@ -23,7 +23,7 @@ test('reveals loaded portraits, removes a failed portrait, and renders the confi
     }
   });
   const { container, rerender } = render(<HeroSection activeRole="personal" />);
-  const portrait = container.querySelector('#home img');
+  const portrait = container.querySelector('#portfolio-map .portfolio-map-hub img');
   expect(portrait).toHaveAttribute('src', 'https://ik.imagekit.io/example/personal.webp');
   expect(portrait.parentElement).toHaveAttribute('data-image-state', 'loading');
   fireEvent.load(portrait);
@@ -33,7 +33,7 @@ test('reveals loaded portraits, removes a failed portrait, and renders the confi
   expect(container.querySelector('#home img')).toBeNull();
 
   rerender(<HeroSection activeRole="developer" />);
-  const developerPortrait = container.querySelector('#home img');
+  const developerPortrait = container.querySelector('#portfolio-map .portfolio-map-hub img');
   expect(developerPortrait).toHaveAttribute('src', 'https://ik.imagekit.io/example/developer.webp');
   expect(developerPortrait.parentElement).toHaveAttribute('data-image-state', 'loading');
   expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('I build robust software');

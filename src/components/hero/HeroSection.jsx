@@ -55,6 +55,17 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
 
   return (
     <section id="home" className={`hero-section hero-${activeRole}`} aria-label="Introduction">
+      <svg className="hero-orbit-background" viewBox="0 0 1000 780" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <g transform="translate(560 390) scale(1.58 1)">
+          <g className="map-orbit-rotation">
+            <path className="map-orbit" d="M0 -344 C222 -344 352 -205 348 0 C344 204 210 339 0 342 C-210 345 -352 204 -348 0 C-344 -207 -210 -340 0 -344Z" />
+            <ellipse className="map-orbit map-orbit-inner" rx="275" ry="238" transform="rotate(-18)" />
+            <circle className="map-anchor-dot" cx="348" cy="0" r="3" />
+            <circle className="map-anchor-dot" cx="0" cy="-344" r="3" />
+          </g>
+        </g>
+      </svg>
+
       <div className="hero-content-wrapper hero-network-layout">
         <div className="hero-text-col">
           {activeRole === 'personal' && profile?.motto && (
@@ -79,15 +90,6 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
               ))}
             </div>
           )}
-          {portrait && !bundledPortrait.test(portrait) && (
-            <RolePortrait
-              source={portrait}
-              alt=""
-              className="hero-visual-col"
-              imageClassName="hero-portrait"
-              priority
-            />
-          )}
         </div>
 
         <nav className={`portfolio-map map-${activeRole}`} id="portfolio-map" aria-labelledby="portfolio-map-title">
@@ -100,19 +102,22 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
               aria-hidden="true"
               focusable="false"
             >
-              <g transform="translate(200 120) scale(1.58 1)">
-                <g className="map-orbit-rotation">
-                  <path className="map-orbit" d="M0 -104 C62 -104 108 -60 106 0 C105 61 58 101 0 103 C-60 104 -108 60 -106 0 C-105 -63 -57 -102 0 -104Z" />
-                  <ellipse className="map-orbit map-orbit-inner" rx="84" ry="76" transform="rotate(-18)" />
-                  <circle className="map-anchor-dot" cx="106" cy="0" r="2.5" />
-                  <circle className="map-anchor-dot" cx="0" cy="-104" r="2.5" />
-                </g>
-              </g>
-              <path className="map-connector map-personal-line" d="M200 120 C200 92 226 75 200 40" />
-              <path className="map-connector map-developer-line" d="M200 120 C158 113 165 174 107 174" />
-              <path className="map-connector map-creator-line" d="M200 120 C242 113 235 174 293 174" />
+              <path className="map-connector map-personal-line" d="M200 120 C200 92 226 75 200 34" />
+              <path className="map-connector map-developer-line" d="M200 120 C148 110 148 200 78 200" />
+              <path className="map-connector map-creator-line" d="M200 120 C252 110 252 200 322 200" />
             </svg>
-            <span className="portfolio-map-hub" aria-hidden="true">A</span>
+            <div className="portfolio-map-hub" aria-hidden="true">
+              <span className="map-hub-monogram">A</span>
+              {portrait && !bundledPortrait.test(portrait) && (
+                <RolePortrait
+                  key={activeRole}
+                  source={portrait}
+                  alt=""
+                  className="map-portrait"
+                  priority
+                />
+              )}
+            </div>
             <div role="group" aria-label="Portfolio views">
               {Object.entries(roles).map(([id, { icon: Icon, label }]) => (
                 <button

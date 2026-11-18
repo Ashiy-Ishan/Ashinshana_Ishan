@@ -391,10 +391,12 @@ body {
 .hero-section {
   --hero-accent: var(--accent-cyan);
   --hero-rule: color-mix(in srgb, var(--hero-accent) 28%, transparent);
-  margin: clamp(0.35rem, 1.5vw, 1.15rem) clamp(0.5rem, 2.25vw, 2.25rem) 0;
-  padding: clamp(2rem, 6.5vw, 6.75rem) clamp(1rem, 4vw, 2.5rem);
-  border: 1px solid var(--border-subtle);
-  border-radius: clamp(1.45rem, 5vw, 4.35rem);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-height: calc(100svh - 4.5rem);
+  padding: clamp(2rem, 5vw, 5.5rem) clamp(1rem, 4vw, 2.5rem);
   background:
     radial-gradient(ellipse at 83% 17%, var(--hero-wash), transparent 49%),
     radial-gradient(ellipse at 27% 94%, var(--hero-blush), transparent 57%),
@@ -409,7 +411,7 @@ body {
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   align-items: center;
   gap: clamp(1.5rem, 5vw, 5rem);
-  max-width: 1192px;
+  width: min(100%, 1192px);
   margin-inline: auto;
 }
 
@@ -481,27 +483,6 @@ body {
 
 .role-portrait-frame[data-image-state="loading"] img {
   opacity: 0;
-}
-
-.hero-visual-col {
-  width: clamp(7.75rem, 13vw, 11rem);
-  max-width: 100%;
-  aspect-ratio: 1;
-  margin-top: 1.25rem;
-  padding: 0.45rem;
-  border: 1px solid var(--hero-rule);
-  border-radius: 44% 56% 43% 57% / 56% 46% 54% 44%;
-  background:
-    radial-gradient(ellipse at 70% 25%, var(--hero-wash), transparent 75%),
-    color-mix(in srgb, var(--hero-accent) 10%, var(--bg-surface));
-  box-shadow: var(--surface-shadow);
-}
-
-.hero-portrait {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: inherit;
 }
 
 @media (prefers-reduced-motion: no-preference) {
