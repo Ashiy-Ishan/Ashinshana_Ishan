@@ -4551,6 +4551,10 @@ body {
   transform: none;
 }
 
+.site-wrapper .personal-avatar-wrapper {
+  width: clamp(10rem, 17vw, 14rem);
+}
+
 .site-wrapper :is(.personal-avatar-wrapper, .dev-avatar-wrapper, .creator-avatar-wrapper) img {
   border-radius: inherit;
   object-fit: contain;
