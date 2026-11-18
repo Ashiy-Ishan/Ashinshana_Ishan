@@ -90,15 +90,8 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: min(100%, clamp(12rem, 23vw, 19rem));
+  width: min(100%, clamp(13rem, 25vw, 21rem));
   aspect-ratio: 5 / 6;
-  overflow: hidden;
-  border-radius: 48% 48% 1.75rem 1.75rem / 36% 36% 1.75rem 1.75rem;
-  background: linear-gradient(
-    150deg,
-    color-mix(in srgb, var(--hero-accent) 16%, var(--bg-surface)),
-    var(--bg-surface)
-  );
   color: var(--hero-accent);
   font: 600 clamp(2.5rem, 6vw, 4rem) var(--font-display);
 }
@@ -118,6 +111,7 @@
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
+  mask-image: linear-gradient(to bottom, #000 76%, transparent 100%);
 }
 
 .map-role-controls {
