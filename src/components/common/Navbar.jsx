@@ -1,12 +1,15 @@
 import React from 'react';
-import { ArrowDownRight, Mail } from 'lucide-react';
+import { ArrowDownRight, Mail, Moon, Sun } from 'lucide-react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { useTheme } from '../../context/ThemeContext';
 import '../hero/HeroNavigation.css';
 
 export const Navbar = () => {
   const { profile, siteSettings } = usePortfolio();
-  const { theme, changeTheme, themes } = useTheme();
+  const { theme, changeTheme } = useTheme();
+  const isLight = theme === 'light';
+  const ThemeIcon = isLight ? Moon : Sun;
+  const nextTheme = isLight ? 'dark' : 'light';
 
   return (
     <header className="site-header portfolio-header">
@@ -25,11 +28,15 @@ export const Navbar = () => {
               Contact <Mail size={15} aria-hidden="true" />
             </a>
           )}
-          <label className="site-theme-control">
-            <select aria-label="Theme" value={theme} onChange={(event) => changeTheme(event.target.value)}>
-              {themes.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-            </select>
-          </label>
+          <button
+            type="button"
+            className="site-theme-control"
+            onClick={() => changeTheme(nextTheme)}
+            aria-label={`Switch to ${nextTheme} mode`}
+          >
+            <ThemeIcon size={16} aria-hidden="true" />
+            {isLight ? 'Dark' : 'Light'}
+          </button>
         </nav>
       </div>
     </header>

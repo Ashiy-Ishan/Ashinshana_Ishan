@@ -92,20 +92,8 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
           )}
         </div>
 
-        <nav className={`portfolio-map map-${activeRole}`} id="portfolio-map" aria-labelledby="portfolio-map-title">
-          <h2 id="portfolio-map-title">Portfolio map</h2>
+        <nav className={`portfolio-map map-${activeRole}`} id="portfolio-map" aria-label="Portfolio map">
           <div className="portfolio-map-canvas">
-            <svg
-              className="portfolio-map-lines"
-              viewBox="0 0 400 240"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path className="map-connector map-personal-line" d="M200 120 C200 92 226 75 200 34" />
-              <path className="map-connector map-developer-line" d="M200 120 C148 110 148 200 78 200" />
-              <path className="map-connector map-creator-line" d="M200 120 C252 110 252 200 322 200" />
-            </svg>
             <div className="portfolio-map-hub" aria-hidden="true">
               <span className="map-hub-monogram">A</span>
               {portrait && !bundledPortrait.test(portrait) && (
@@ -118,7 +106,7 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
                 />
               )}
             </div>
-            <div role="group" aria-label="Portfolio views">
+            <div className="map-role-controls" role="group" aria-label="Portfolio views">
               {Object.entries(roles).map(([id, { icon: Icon, label }]) => (
                 <button
                   key={id}
@@ -135,8 +123,7 @@ export const HeroSection = ({ activeRole = 'personal', activeSection, setActiveR
           </div>
           {sections.length > 0 && (
             <div className="portfolio-map-branch">
-              <h3 id="portfolio-map-branch-title">{current.label} sections</h3>
-              <ul className="portfolio-map-branches" aria-labelledby="portfolio-map-branch-title">
+              <ul className="portfolio-map-branches" aria-label={`${current.label} sections`}>
                 {sections.map(([label, id]) => (
                   <li key={id}>
                     <a href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined}>

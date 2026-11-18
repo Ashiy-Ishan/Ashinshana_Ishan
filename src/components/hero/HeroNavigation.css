@@ -24,8 +24,23 @@
   color: var(--accent-cyan);
 }
 
-.portfolio-header-actions .site-theme-control select {
+.site-theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   min-height: 44px;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--border-medium);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font: 650 0.86rem var(--font-main);
+  cursor: pointer;
+}
+
+.site-theme-control:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
 }
 
 .hero-content-wrapper.hero-network-layout {
@@ -51,29 +66,10 @@
   min-width: 0;
 }
 
-.portfolio-map h2 {
-  margin: 0.3rem 0 0.25rem;
-  text-align: center;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2vw, 1.65rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
 .portfolio-map-canvas {
-  position: relative;
-  min-height: clamp(15.5rem, 29vw, 22rem);
-  isolation: isolate;
-  background: radial-gradient(ellipse closest-side, color-mix(in srgb, var(--hero-accent) 13%, transparent), transparent);
-}
-
-.portfolio-map-lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  display: grid;
+  justify-items: center;
+  gap: 1.3rem;
 }
 
 .map-orbit {
@@ -86,59 +82,53 @@
   stroke-dasharray: 3 5;
 }
 
-.map-connector {
-  fill: none;
-  stroke: var(--border-medium);
-  stroke-width: 1.25;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-  transition: stroke var(--transition-smooth);
-}
-
-.map-personal .map-personal-line,
-.map-developer .map-developer-line,
-.map-creator .map-creator-line {
-  stroke: var(--hero-accent);
-  stroke-width: 1.75;
-}
-
 .map-anchor-dot {
   fill: var(--text-dim);
 }
 
-.portfolio-map-hub,
-.map-node {
-  position: absolute;
-  translate: -50% -50%;
-}
-
 .portfolio-map-hub {
-  top: 50%;
-  left: 50%;
+  position: relative;
   display: grid;
   place-items: center;
-  width: clamp(7rem, 14.5vw, 12.5rem);
-  aspect-ratio: 1;
-  border: 1px solid var(--hero-rule);
-  border-radius: 44% 56% 49% 51% / 55% 48% 52% 45%;
-  background: color-mix(in srgb, var(--hero-accent) 12%, var(--bg-surface));
-  box-shadow: 0 0 0 0.4rem color-mix(in srgb, var(--hero-accent) 7%, transparent);
-  color: var(--hero-accent);
-  font: 600 clamp(2rem, 4vw, 3rem) var(--font-display);
+  width: min(100%, clamp(12rem, 23vw, 19rem));
+  aspect-ratio: 5 / 6;
   overflow: hidden;
+  border-radius: 48% 48% 1.75rem 1.75rem / 36% 36% 1.75rem 1.75rem;
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--hero-accent) 16%, var(--bg-surface)),
+    var(--bg-surface)
+  );
+  color: var(--hero-accent);
+  font: 600 clamp(2.5rem, 6vw, 4rem) var(--font-display);
+}
+
+.portfolio-map-hub:not(:has(.map-portrait)) {
+  display: none;
 }
 
 .map-portrait {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
 }
 
 .map-portrait img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: inherit;
+  object-position: center bottom;
+}
+
+.map-role-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.65rem;
+  background: var(--bg-surface-glass);
 }
 
 .map-hub-monogram {
@@ -159,7 +149,7 @@
   border: 1px solid var(--border-medium);
   border-radius: 999px;
   background: var(--bg-surface);
-  box-shadow: 0 4px 12px -7px color-mix(in srgb, var(--text-primary) 38%, transparent);
+
   color: var(--text-primary);
   font: 700 clamp(0.77rem, 1.5vw, 0.9rem) var(--font-main);
   white-space: nowrap;
@@ -169,20 +159,14 @@
 
 .map-node-personal {
   --node-accent: var(--accent-cyan);
-  top: 14%;
-  left: 50%;
 }
 
 .map-node-developer {
   --node-accent: var(--accent-dev);
-  top: 83.33%;
-  left: 19.5%;
 }
 
 .map-node-creator {
   --node-accent: var(--accent-creator);
-  top: 83.33%;
-  left: 80.5%;
 }
 
 .map-node svg {
@@ -198,7 +182,7 @@
   border-color: var(--node-accent);
   background: var(--node-accent);
   color: var(--accent-ink);
-  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--node-accent) 18%, transparent);
+
 }
 
 .map-node[aria-pressed="true"] svg {
@@ -209,11 +193,6 @@
   margin-top: 0.35rem;
   padding-block: 0.35rem 0.15rem;
   text-align: center;
-}
-
-.portfolio-map .portfolio-map-branch h3 {
-  color: var(--hero-accent);
-  font: 600 0.73rem var(--font-mono);
 }
 
 .portfolio-map-branches {

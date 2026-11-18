@@ -54,3 +54,15 @@ test('keeps the contact draft when Firebase is unavailable', async () => {
   expect(message).toHaveValue('Can we discuss a project?');
   expect(screen.queryByText('Message sent')).not.toBeInTheDocument();
 });
+
+test('switches between light and dark mode and saves the choice', () => {
+  localStorage.setItem('ashiy_portfolio_theme', 'light');
+  render(<App />);
+
+  fireEvent.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
+  expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+  expect(localStorage.getItem('ashiy_portfolio_theme')).toBe('dark');
+
+  fireEvent.click(screen.getByRole('button', { name: 'Switch to light mode' }));
+  expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+});
