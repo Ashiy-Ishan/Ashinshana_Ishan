@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, ShieldCheck, Heart } from 'lucide-react';
+import { Mail, ShieldCheck, Heart, Network } from 'lucide-react';
 import { Github, Linkedin, Youtube, Instagram, Facebook } from './Icons';
 import { usePortfolio } from '../../context/PortfolioContext';
 
@@ -97,9 +97,14 @@ export const Footer = () => {
           <p className="footer-motto">
             Built with curiosity <Heart size={14} className="heart-icon" /> & precision.
           </p>
-          <a href="#/admin" className="footer-admin-link" title="CMS Admin Portal">
-            <ShieldCheck size={14} /> Admin Portal
-          </a>
+          <nav className="footer-navigation" aria-label="Footer navigation">
+            <a href="#portfolio-map" className="footer-admin-link">
+              <Network size={14} aria-hidden="true" /> Portfolio map
+            </a>
+            <a href="#/admin" className="footer-admin-link">
+              <ShieldCheck size={14} aria-hidden="true" /> Admin portal
+            </a>
+          </nav>
         </div>
       </div>
     </footer>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { usePortfolio } from '../../context/PortfolioContext';
 import { HeroSection } from './HeroSection';
 
@@ -32,4 +32,19 @@ test('removes a failed portrait and renders the configured image for the next ro
   rerender(<HeroSection activeRole="developer" />);
   expect(container.querySelector('#home img')).toHaveAttribute('src', 'https://ik.imagekit.io/example/developer.webp');
   expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('I build robust software');
+});
+
+test('uses graph nodes to select roles and lists the current branch destinations', () => {
+  usePortfolio.mockReturnValue({ profile: {}, publishedProjects: [] });
+  const selectRole = jest.fn();
+  const { rerender } = render(<HeroSection activeRole="personal" setActiveRole={selectRole} />);
+  const map = screen.getByRole('navigation', { name: 'Portfolio map' });
+  expect(within(map).getByRole('button', { name: 'Personal' })).toHaveAttribute('aria-pressed', 'true');
+
+  fireEvent.click(within(map).getByRole('button', { name: 'Developer' }));
+  expect(selectRole).toHaveBeenCalledWith('developer');
+
+  rerender(<HeroSection activeRole="developer" activeSection="skills" setActiveRole={selectRole} />);
+  expect(within(map).getByRole('link', { name: 'Skills' })).toHaveAttribute('aria-current', 'location');
+  expect(within(map).queryByRole('link', { name: 'Releases' })).not.toBeInTheDocument();
 });

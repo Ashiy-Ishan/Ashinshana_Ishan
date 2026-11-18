@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import App from './App';
 
 jest.mock('./config/firebase', () => ({
@@ -14,12 +14,32 @@ test('renders brand name and core roles', () => {
   expect(brandElements.length).toBeGreaterThan(0);
 });
 
-test('renders identity role switcher buttons', () => {
+test('switches views from the portfolio map and exposes their section links', () => {
   render(<App />);
-  const devButtons = screen.getAllByText(/DEVELOPER/i);
-  const creatorButtons = screen.getAllByText(/CREATOR/i);
-  expect(devButtons.length).toBeGreaterThan(0);
-  expect(creatorButtons.length).toBeGreaterThan(0);
+  const map = screen.getByRole('navigation', { name: 'Portfolio map' });
+  const developer = within(map).getByRole('button', { name: 'Developer' });
+
+  fireEvent.click(developer);
+
+  expect(developer).toHaveAttribute('aria-pressed', 'true');
+  expect(within(map).getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '#projects');
+  expect(window.location.hash).toBe('#view-developer');
+  window.history.replaceState(null, '', '/');
+});
+
+test('opens a direct section link in its role and restores a shared anchor’s saved role', () => {
+  window.history.replaceState(null, '', '/#videos');
+  render(<App />);
+
+  const map = screen.getByRole('navigation', { name: 'Portfolio map' });
+  expect(within(map).getByRole('button', { name: 'Creator' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(map).getByRole('link', { name: 'Videos' })).toHaveAttribute('aria-current', 'location');
+
+  window.history.replaceState({ portfolioRole: 'developer' }, '', '/#portfolio-map');
+  fireEvent(window, new HashChangeEvent('hashchange'));
+
+  expect(within(map).getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'true');
+  window.history.replaceState(null, '', '/');
 });
 
 test('keeps the contact draft when Firebase is unavailable', async () => {

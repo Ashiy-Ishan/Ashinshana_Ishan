@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './styles.css';
 import { AuthProvider } from './context/AuthContext';
 import { PortfolioProvider } from './context/PortfolioContext';
@@ -8,79 +8,79 @@ import { Footer } from './components/common/Footer';
 import { HeroSection } from './components/hero/HeroSection';
 import { RoleContent } from './components/role/RoleContent';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { roleSections } from './data/portfolioNavigation';
+
+const portfolioRoles = Object.keys(roleSections);
+const sectionRoles = new Map(
+  Object.entries(roleSections).flatMap(([role, sections]) =>
+    sections.map(([, id]) => [id, role])
+  )
+);
+const sharedAnchors = new Set(['', '#home', '#portfolio-map', '#contact']);
+
+function roleFromLocation(hash) {
+  const id = hash.slice(1);
+  const historyRole = window.history.state?.portfolioRole;
+  return portfolioRoles.find((role) => id === `view-${role}`) ||
+    sectionRoles.get(id) ||
+    (portfolioRoles.includes(historyRole) ? historyRole : null);
+}
 
 function PortfolioApp() {
-  const [activeRole, setActiveRole] = useState('personal');
-  const [activeSection, setActiveSection] = useState('home');
-  const [isAdminView, setIsAdminView] = useState(false);
+  const [hash, setHash] = useState(() => window.location.hash);
+  const [activeRole, setActiveRole] = useState(() => roleFromLocation(hash) || 'personal');
+  const currentRole = useRef(activeRole);
+  const activeSection = hash.slice(1);
+  const isAdminView = hash === '#admin' || hash.startsWith('#/admin');
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#/admin') || hash === '#admin') {
-        setIsAdminView(true);
-      } else {
-        setIsAdminView(false);
+    const syncLocation = () => {
+      const nextHash = window.location.hash;
+      currentRole.current = roleFromLocation(nextHash) || currentRole.current;
+      if (sharedAnchors.has(nextHash) && window.history.state?.portfolioRole !== currentRole.current) {
+        window.history.replaceState({ ...window.history.state, portfolioRole: currentRole.current }, '');
       }
+      setActiveRole(currentRole.current);
+      setHash(nextHash);
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    syncLocation();
+    window.addEventListener('hashchange', syncLocation);
+    return () => window.removeEventListener('hashchange', syncLocation);
   }, []);
 
   useEffect(() => {
-    if (isAdminView || typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+    if (isAdminView || !hash || hash.startsWith('#view-')) return;
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+    const frame = window.requestAnimationFrame(() => target.scrollIntoView?.());
+    return () => window.cancelAnimationFrame(frame);
+  }, [hash, isAdminView]);
 
-    const sectionIds = ['home', 'about', 'currently', 'achievements', 'developer', 'skills', 'projects', 'published', 'creator', 'videos', 'contact'];
-    const observers = [];
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setActiveSection(id);
-              }
-            });
-          },
-          { threshold: 0.2, rootMargin: '-10% 0px -40% 0px' }
-        );
-        observer.observe(el);
-        observers.push({ observer, el });
-      }
-    });
-
-    return () => {
-      observers.forEach(({ observer, el }) => observer.unobserve(el));
-    };
-  }, [isAdminView, activeRole]);
+  const selectRole = (role) => {
+    if (role === activeRole) return;
+    const nextHash = `#view-${role}`;
+    window.history.pushState(null, '', nextHash);
+    currentRole.current = role;
+    setHash(nextHash);
+    setActiveRole(role);
+  };
 
   if (isAdminView) {
     return (
-      <AdminDashboard 
-        onExitAdmin={() => {
-          window.location.hash = '#home';
-          setIsAdminView(false);
-        }} 
-      />
+      <AdminDashboard onExitAdmin={() => { window.location.hash = '#home'; }} />
     );
   }
 
   return (
     <div className="site-wrapper">
-      <Navbar 
-        activeSection={activeSection} 
-        activeRole={activeRole} 
-        onSelectRole={setActiveRole} 
-      />
-      
+      <Navbar />
+
       <main>
-        <HeroSection 
-          activeRole={activeRole} 
-          setActiveRole={setActiveRole} 
+        <HeroSection
+          activeRole={activeRole}
+          activeSection={activeSection}
+          setActiveRole={selectRole}
         />
         <RoleContent selectedRole={activeRole} />
       </main>
