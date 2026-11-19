@@ -1535,6 +1535,9 @@ body {
 }
 
 .project-editorial-card {
+  --project-image-space: clamp(6rem, 12vw, 9rem);
+  position: relative;
+  isolation: isolate;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
@@ -1555,18 +1558,32 @@ body {
 }
 
 .project-media-wrapper {
-  height: 220px;
-  position: relative;
-  overflow: hidden;
-  background: var(--bg-surface-elevated);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.project-media-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--bg-surface) 96%, transparent) var(--project-image-space),
+    var(--bg-surface)
+  );
 }
 
 .project-cover-image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s var(--ease-cinematic);
+  object-position: center top;
 }
+
 .status-pill {
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -4330,7 +4347,11 @@ body {
   padding: var(--card-padding);
 }
 
-.site-wrapper :is(.project-media-wrapper, .video-thumbnail-container, .achievement-media-box) {
+.site-wrapper .project-editorial-card:has(.project-cover-image:not([hidden])) > .project-info-wrapper {
+  padding-block-start: calc(var(--project-image-space) + var(--card-padding));
+}
+
+.site-wrapper :is(.video-thumbnail-container, .achievement-media-box) {
   height: auto;
   aspect-ratio: 2 / 1;
   max-height: 14rem;
@@ -4609,7 +4630,7 @@ body {
   border-color: var(--border-medium);
 }
 
-.site-wrapper :is(.project-media-wrapper, .video-thumbnail-container, .achievement-media-box) {
+.site-wrapper :is(.video-thumbnail-container, .achievement-media-box) {
   background: var(--bg-secondary);
 }
 
@@ -4750,7 +4771,7 @@ body {
     grid-column: 1 / -1;
   }
 
-  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid) > :is(:nth-child(4n + 1), :nth-child(4n), :last-child:nth-child(odd)) > :is(.project-media-wrapper, .achievement-media-box, .video-thumbnail-container) {
+  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid) > :is(:nth-child(4n + 1), :nth-child(4n), :last-child:nth-child(odd)) > :is(.achievement-media-box, .video-thumbnail-container) {
     aspect-ratio: 2.65 / 1;
     max-height: 15rem;
   }
@@ -4801,11 +4822,10 @@ body {
 .creator-role-view .video-tab-buttons {
   background: var(--bg-secondary);
 }
-.site-wrapper .video-thumb-img,
-.site-wrapper .project-cover-image {
+.site-wrapper .video-thumb-img {
   transition: none;
 }
-.site-wrapper :is(.video-card, .project-editorial-card):hover :is(.video-thumb-img, .project-cover-image) {
+.site-wrapper .video-card:hover .video-thumb-img {
   transform: none;
 }
 
