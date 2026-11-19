@@ -4553,11 +4553,16 @@ body {
 
 .site-wrapper .personal-avatar-wrapper {
   width: clamp(10rem, 17vw, 14rem);
+  padding: 0;
 }
 
 .site-wrapper :is(.personal-avatar-wrapper, .dev-avatar-wrapper, .creator-avatar-wrapper) img {
   border-radius: inherit;
   object-fit: contain;
+}
+
+.site-wrapper .personal-avatar-wrapper img {
+  object-fit: cover;
 }
 
 .site-wrapper :is(.btn-personal-resume, .btn-github) {
