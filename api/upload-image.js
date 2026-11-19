@@ -4,6 +4,17 @@ const ImageKit = require('imagekit');
 const Busboy = require('busboy');
 const requireAdmin = require('../server/requireAdmin');
 
+const MAX_PROXY_BYTES = 4 * 1024 * 1024;
+
+function getImageExtension(file, mimeType) {
+  if (mimeType === 'image/jpeg' && file.subarray(0, 3).toString('hex') === 'ffd8ff') return 'jpg';
+  if (mimeType === 'image/png' && file.subarray(0, 8).toString('hex') === '89504e470d0a1a0a') return 'png';
+  if (mimeType === 'image/gif' && ['GIF87a', 'GIF89a'].includes(file.toString('ascii', 0, 6))) return 'gif';
+  if (mimeType === 'image/webp' && file.toString('ascii', 0, 4) === 'RIFF' &&
+    file.toString('ascii', 8, 12) === 'WEBP') return 'webp';
+  return null;
+}
+
 // Initialize ImageKit SDK
 function getImageKit() {
   const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
@@ -45,7 +56,7 @@ async function handler(req, res) {
     const busboy = Busboy({
       headers: req.headers,
       limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB limit
+        fileSize: MAX_PROXY_BYTES + 1, // 10MB limit
         files: 1,
         fields: 1,
         fieldSize: 128
@@ -92,20 +103,27 @@ async function handler(req, res) {
 
       busboy.on('finish', resolve);
       busboy.on('error', reject);
+      req.once('error', reject);
+      req.once('aborted', () => reject(new Error('Upload request aborted.')));
 
       req.pipe(busboy);
     });
 
-    if (fileTooLarge) {
-      return res.status(400).json({ error: 'File size exceeds maximum limit of 10MB.' });
+    if (fileTooLarge || fileBuffer?.length > MAX_PROXY_BYTES) {
+      return res.status(413).json({ error: 'The fallback uploader accepts files up to 4 MB.' });
     }
 
     if (!fileBuffer || !fileMeta) {
       return res.status(400).json({ error: 'No image file found in the request payload.' });
     }
 
-    const safeOriginalName = (fileMeta.filename || 'image.png').replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase();
-    const cleanFileName = `ashiy_${Date.now()}_${safeOriginalName}`;
+    const extension = getImageExtension(fileBuffer, fileMeta.mimeType);
+    if (!extension) {
+      return res.status(400).json({ error: 'The file contents do not match the selected image format.' });
+    }
+    const safeOriginalName = (fileMeta.filename || 'image').replace(/\.[^.]*$/, '')
+      .replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 80).toLowerCase();
+    const cleanFileName = `ashiy_${Date.now()}_${safeOriginalName || 'image'}.${extension}`;
 
     const uploadResponse = await imagekit.upload({
       file: fileBuffer.toString('base64'),

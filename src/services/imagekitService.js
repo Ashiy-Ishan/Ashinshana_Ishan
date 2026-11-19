@@ -24,6 +24,9 @@ export const uploadImageToImageKit = async (file, folderName = 'uploads') => {
   const authResponse = await fetch('/api/imagekit-auth', { method: 'POST', headers });
 
   if (authResponse.status === 404 || authResponse.status === 503) {
+    if (file.size > 4 * 1024 * 1024) {
+      throw new Error('Direct uploads are unavailable. The fallback uploader accepts files up to 4 MB.');
+    }
     const formData = new FormData();
     formData.append('file', file);
     formData.append('folder', folderName);

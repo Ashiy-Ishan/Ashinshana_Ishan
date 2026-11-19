@@ -3,7 +3,9 @@ import {
   signInWithPopup, 
   signOut, 
   onAuthStateChanged,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  setPersistence,
+  browserSessionPersistence
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured, AUTHORIZED_ADMIN_EMAIL } from '../config/firebase';
 
@@ -18,17 +20,19 @@ export const cookieUtils = {
   getCookie(name) {
     if (typeof document === 'undefined') return null;
     const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-    return match ? decodeURIComponent(match[3]) : null;
+    return match?.[3] || null;
   },
 
   setCookie(name, value, maxAgeSeconds = 86400) {
     if (typeof document === 'undefined') return;
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax`;
+    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax${secure}`;
   },
 
   deleteCookie(name) {
     if (typeof document === 'undefined') return;
-    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax${secure}`;
   },
 
   recordActivity() {
@@ -38,9 +42,9 @@ export const cookieUtils = {
 
   isInactive() {
     const lastActive = this.getCookie(COOKIE_LAST_ACTIVITY);
-    if (!lastActive) return false;
-    const elapsed = Date.now() - parseInt(lastActive, 10);
-    return elapsed > INACTIVITY_TIMEOUT_MS;
+    if (!lastActive) return true;
+    const elapsed = Date.now() - Number(lastActive);
+    return !Number.isFinite(elapsed) || elapsed < 0 || elapsed > INACTIVITY_TIMEOUT_MS;
   },
 
   clearSessionCookies() {
@@ -76,9 +80,12 @@ export const authService = {
     }
 
     try {
+      await setPersistence(auth, browserSessionPersistence);
+      cookieUtils.recordActivity();
       const { user } = await signInWithEmailAndPassword(auth, normalizedEmail, password);
       return await this.finishLogin(user);
     } catch (error) {
+      cookieUtils.clearSessionCookies();
       throw new Error(this.formatAuthError(error));
     }
   },
@@ -89,9 +96,12 @@ export const authService = {
     }
 
     try {
+      await setPersistence(auth, browserSessionPersistence);
+      cookieUtils.recordActivity();
       const { user } = await signInWithPopup(auth, googleProvider);
       return await this.finishLogin(user);
     } catch (error) {
+      cookieUtils.clearSessionCookies();
       throw new Error(this.formatAuthError(error));
     }
   },
@@ -106,8 +116,8 @@ export const authService = {
   },
 
   async logout() {
-    if (auth) await signOut(auth);
     cookieUtils.clearSessionCookies();
+    if (auth) await signOut(auth);
     return true;
   },
 

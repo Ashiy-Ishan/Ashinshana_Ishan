@@ -34,6 +34,13 @@ Check out the live site: [https://ashinshanaishan.me](https://ashinshanaishan.me
 
 The npm install step applies a temporary `jwks-rsa` compatibility patch for Vercel. Keep npm lifecycle scripts enabled for deployments until Firebase Admin ships the upstream fix.
 
+### Production hardening
+
+- Publish with a Firebase account authorized for the production project. Run `firebase deploy --only firestore:rules --project ashinshanaishan-dad93` for Firestore. Deploy `storage` rules separately if the project uses a provisioned Firebase Storage bucket. Neither command deploys the Vercel app.
+- For contact abuse protection, register the production web app with Firebase App Check using reCAPTCHA Enterprise. Set `REACT_APP_FIREBASE_APP_CHECK_SITE_KEY` in Vercel and deploy the client. Verify that legitimate requests receive App Check tokens before enabling Cloud Firestore enforcement in the Firebase console.
+- Admin API and rules access require a verified admin sign-in within the past 12 hours. To have Vercel also check Firebase token revocation on upload requests, give the functions application default credentials with Firebase Auth user-read access and set `FIREBASE_CHECK_REVOKED=true`.
+- Deploy the Vercel build to activate the updated Content Security Policy. After deploying, verify Google sign-in, a normal contact submission, and an ImageKit upload.
+
 ## Browser smoke tests
 
 Use a current Node.js 22.x or 24.x LTS release and install Google Chrome. Both scripts use the installed Chrome. Selenium Manager downloads a matching driver on the first run, so that run may need internet access.

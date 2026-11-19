@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = authService.subscribe((user) => {
       if (user) {
         if (cookieUtils.isInactive()) {
-          authService.logout();
+          authService.logout().catch(() => {});
           setCurrentUser(null);
           setInactivityNotice(true);
           setLoading(false);
@@ -43,7 +43,16 @@ export const AuthProvider = ({ children }) => {
     updateActivityCookie();
     let lastThrottledTime = Date.now();
 
+    const expireSession = () => {
+      authService.logout().catch(() => {});
+      setCurrentUser(null);
+      setInactivityNotice(true);
+    };
     const onUserAction = () => {
+      if (cookieUtils.isInactive()) {
+        expireSession();
+        return;
+      }
       const now = Date.now();
       if (now - lastThrottledTime > 2000) {
         lastThrottledTime = now;
@@ -58,9 +67,7 @@ export const AuthProvider = ({ children }) => {
 
     const inactivityInterval = setInterval(() => {
       if (cookieUtils.isInactive()) {
-        authService.logout();
-        setCurrentUser(null);
-        setInactivityNotice(true);
+        expireSession();
       }
     }, 2000);
 

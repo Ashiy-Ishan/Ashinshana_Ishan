@@ -4,6 +4,8 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth != null &&
              request.auth.token.email_verified == true &&
+             request.auth.token.auth_time is int &&
+             request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(12, 'h') &&
              request.auth.token.email != null &&
              request.auth.token.email.lower() == 'ashinshanaishan@gmail.com';
     }

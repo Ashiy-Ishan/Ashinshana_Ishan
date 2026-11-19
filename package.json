@@ -52,5 +52,13 @@
     "gh-pages": "^6.3.0",
     "playwright": "^1.65.1",
     "selenium-webdriver": "^4.53.0"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "1.14.7"
+    },
+    "imagekit": {
+      "uuid": "^11.1.1"
+    }
   }
 }

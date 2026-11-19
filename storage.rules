@@ -6,6 +6,8 @@ service firebase.storage {
     function isAdmin() {
       return request.auth != null && 
              request.auth.token.email_verified == true &&
+             request.auth.token.auth_time is int &&
+             request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(12, 'h') &&
              request.auth.token.email != null &&
              request.auth.token.email.lower() == 'ashinshanaishan@gmail.com';
     }
@@ -17,8 +19,8 @@ service firebase.storage {
     }
 
     match /{allPaths=**} {
-      // Anyone can read images
-      allow read: if true;
+      allow get: if isAdmin() || resource.contentType.matches('image/(jpeg|png|webp|gif)');
+      allow list: if isAdmin();
       // Only authorized admin can upload/update/delete images with size & format validation
       allow create, update: if isAdmin() && isValidImage();
       allow delete: if isAdmin();
