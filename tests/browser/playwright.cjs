@@ -27,7 +27,21 @@ async function main() {
 
     const hasOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     assert.equal(hasOverflow, false, 'The Creator view should fit a 390 px viewport');
-    console.log('Playwright passed: mobile role navigation, Videos link, saved theme, and layout.');
+    await page.locator('#videos').scrollIntoViewIfNeeded();
+    const roleToggle = page.getByRole('button', { name: 'Switch portfolio role' });
+    await roleToggle.click();
+    const roleMenu = page.getByRole('navigation', { name: 'Switch portfolio role' });
+    await roleMenu.getByRole('link', { name: /^developer$/i }).focus();
+    await page.keyboard.press('Escape');
+    assert.equal(await roleToggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(await roleToggle.evaluate((button) => button === document.activeElement), true);
+
+    await roleToggle.click();
+    await roleMenu.getByRole('link', { name: /^developer$/i }).click();
+    await page.waitForURL('**/#developer');
+    await page.locator('#developer').waitFor({ state: 'visible' });
+
+    console.log('Playwright passed: mobile role navigation, Videos link, saved theme, layout, and the floating role switch.');
   } finally {
     await browser.close();
   }

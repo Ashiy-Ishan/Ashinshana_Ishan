@@ -5,6 +5,7 @@ import { PortfolioProvider } from './context/PortfolioContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
+import { FloatingRoleSwitch } from './components/common/FloatingRoleSwitch';
 import { HeroSection } from './components/hero/HeroSection';
 import { RoleContent } from './components/role/RoleContent';
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -51,7 +52,9 @@ function PortfolioApp() {
 
   useEffect(() => {
     if (isAdminView || !hash || hash.startsWith('#view-')) return;
-    const target = document.getElementById(hash.slice(1));
+    const id = hash.slice(1);
+    const target = document.getElementById(id) ||
+      (sectionRoles.has(id) && document.getElementById('role-content'));
     if (!target) return;
     const frame = window.requestAnimationFrame(() => target.scrollIntoView?.());
     return () => window.cancelAnimationFrame(frame);
@@ -85,6 +88,7 @@ function PortfolioApp() {
         <RoleContent selectedRole={activeRole} />
       </main>
 
+      <FloatingRoleSwitch activeRole={activeRole} />
       <Footer />
     </div>
   );

@@ -9,7 +9,7 @@ import { usePortfolio } from '../../context/PortfolioContext';
 export const RoleContent = ({ selectedRole }) => {
   const { siteSettings } = usePortfolio();
   return (
-    <div className={`role-content-container role-mode-${selectedRole}`}>
+    <div id="role-content" className={`role-content-container role-mode-${selectedRole}`}>
       {selectedRole === 'developer' && (
         <DeveloperContent siteSettings={siteSettings} />
       )}
