@@ -1535,7 +1535,7 @@ body {
 }
 
 .project-editorial-card {
-  --project-image-space: clamp(6rem, 12vw, 9rem);
+  --project-image-space: clamp(7.5rem, 14vw, 10rem);
   position: relative;
   isolation: isolate;
   background: var(--bg-surface);
@@ -1570,9 +1570,9 @@ body {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    transparent,
-    color-mix(in srgb, var(--bg-surface) 96%, transparent) var(--project-image-space),
-    var(--bg-surface)
+    transparent calc(var(--project-image-space) * 0.42),
+    color-mix(in srgb, var(--bg-surface) 28%, transparent) calc(var(--project-image-space) * 0.72),
+    var(--bg-surface) calc(var(--project-image-space) + 0.35rem)
   );
 }
 
