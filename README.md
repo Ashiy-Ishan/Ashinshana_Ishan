@@ -32,6 +32,8 @@ Check out the live site: [https://ashinshanaishan.me](https://ashinshanaishan.me
 - Use the same verified admin email in both rules files and `REACT_APP_ADMIN_EMAIL`.
 - Set `IMAGEKIT_PRIVATE_KEY` in Vercel server environment variables and redeploy. Remove any old `REACT_APP_IMAGEKIT_PRIVATE_KEY` and rotate the key if that variable was previously used.
 
+The npm install step applies a temporary `jwks-rsa` compatibility patch for Vercel. Keep npm lifecycle scripts enabled for deployments until Firebase Admin ships the upstream fix.
+
 ## Browser smoke tests
 
 Use a current Node.js 22.x or 24.x LTS release and install Google Chrome. Both scripts use the installed Chrome. Selenium Manager downloads a matching driver on the first run, so that run may need internet access.
