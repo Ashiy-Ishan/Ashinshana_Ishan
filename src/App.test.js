@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import App from './App';
 
 jest.mock('./config/firebase', () => ({
@@ -65,4 +65,33 @@ test('switches between light and dark mode and saves the choice', () => {
 
   fireEvent.click(screen.getByRole('button', { name: 'Switch to light mode' }));
   expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+});
+
+test('follows the browser theme until the visitor sets a preference', () => {
+  const originalMatchMedia = window.matchMedia;
+  let onThemeChange;
+  const media = {
+    matches: true,
+    addEventListener: jest.fn((type, listener) => { onThemeChange = listener; }),
+    removeEventListener: jest.fn()
+  };
+  window.matchMedia = jest.fn(() => media);
+  localStorage.removeItem('ashiy_portfolio_theme');
+
+  try {
+    render(<App />);
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(localStorage.getItem('ashiy_portfolio_theme')).toBeNull();
+
+    act(() => onThemeChange({ matches: false }));
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
+    expect(media.removeEventListener).toHaveBeenCalledWith('change', onThemeChange);
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(localStorage.getItem('ashiy_portfolio_theme')).toBe('dark');
+  } finally {
+    window.matchMedia = originalMatchMedia;
+    localStorage.removeItem('ashiy_portfolio_theme');
+  }
 });

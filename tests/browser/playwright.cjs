@@ -5,7 +5,7 @@ async function main() {
   const browser = await chromium.launch({ channel: 'chrome', headless: process.env.HEADED !== '1' });
 
   try {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', colorScheme: 'light' });
     await page.goto(process.env.BASE_URL || 'http://localhost:3000', { waitUntil: 'domcontentloaded' });
 
     const map = page.getByRole('navigation', { name: 'Portfolio map' });
@@ -15,8 +15,13 @@ async function main() {
     await page.waitForURL('**/#videos');
     await page.locator('#videos').waitFor({ state: 'visible' });
 
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.locator('html[data-theme="dark"]').waitFor({ state: 'attached' });
+    await page.getByRole('button', { name: 'Switch to light mode' }).click();
+    await page.locator('html[data-theme="light"]').waitFor({ state: 'attached' });
     await page.getByRole('button', { name: 'Switch to dark mode' }).click();
     await page.locator('html[data-theme="dark"]').waitFor({ state: 'attached' });
+    await page.emulateMedia({ colorScheme: 'light' });
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.getByRole('button', { name: 'Switch to light mode' }).waitFor();
 
