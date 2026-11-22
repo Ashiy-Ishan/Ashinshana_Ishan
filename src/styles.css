@@ -1530,8 +1530,8 @@ body {
 
 .projects-editorial-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: clamp(0.85rem, 2vw, 1.25rem);
 }
 
 .project-editorial-card {
@@ -1555,8 +1555,8 @@ body {
 }
 
 .project-media-wrapper {
-  aspect-ratio: 2.35 / 1;
-  max-height: 12rem;
+  position: relative;
+  aspect-ratio: 16 / 9;
   flex-shrink: 0;
   overflow: hidden;
   background: var(--bg-secondary);
@@ -1564,6 +1564,8 @@ body {
 }
 
 .project-cover-image {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -3822,7 +3824,7 @@ body {
     flex-shrink: 0;
   }
 
-  .projects-editorial-grid, .achievements-grid, .published-grid, .videos-grid {
+  .achievements-grid, .published-grid, .videos-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
@@ -4456,7 +4458,7 @@ body {
   margin-bottom: 1.1rem;
 }
 
-.site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid, .published-cards-list) {
+.site-wrapper :is(.achievements-grid, .videos-cards-grid, .published-cards-list) {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 19.5rem), 1fr));
   gap: clamp(0.85rem, 2vw, 1.5rem);
 }
@@ -4754,24 +4756,24 @@ body {
 
 /* Alternate wide and compact tiles without moving cards out of reading order. */
 @media (min-width: 680px) {
-  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) {
+  .site-wrapper :is(.achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) > * {
+  .site-wrapper :is(.achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) > * {
     grid-column: span 2;
   }
 
-  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) > :is(:nth-child(4n + 1), :nth-child(4n)) {
+  .site-wrapper :is(.achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) > :is(:nth-child(4n + 1), :nth-child(4n)) {
     grid-column: span 3;
   }
 
-  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) > :last-child:nth-child(odd) {
+  .site-wrapper :is(.achievements-grid, .videos-cards-grid, .published-cards-list, .currently-grid) > :last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
 
-  .site-wrapper :is(.projects-editorial-grid, .achievements-grid, .videos-cards-grid) > :is(:nth-child(4n + 1), :nth-child(4n), :last-child:nth-child(odd)) > :is(.achievement-media-box, .video-thumbnail-container) {
+  .site-wrapper :is(.achievements-grid, .videos-cards-grid) > :is(:nth-child(4n + 1), :nth-child(4n), :last-child:nth-child(odd)) > :is(.achievement-media-box, .video-thumbnail-container) {
     aspect-ratio: 2.65 / 1;
     max-height: 15rem;
   }
